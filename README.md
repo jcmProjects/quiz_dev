@@ -1,7 +1,3 @@
-# quiz_dev
-
-ClassQuiz system development.
-
-# Blog
+# ClassQuiz development blog
 
 https://classquiz.wordpress.com/
