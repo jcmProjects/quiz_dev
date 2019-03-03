@@ -6,11 +6,11 @@
 /* Includes */
 #include <SPI.h>
 #include <MFRC522.h>
-// #include <ESP8266WiFi.h>
-// #include <ESP8266mDNS.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 // #include <WiFi.h>
-// #include <MySQL_Connection.h>
-// #include <MySQL_Cursor.h>
+#include <MySQL_Connection.h>
+#include <MySQL_Cursor.h>
 
 
 /* Prototypes */
@@ -49,8 +49,8 @@ bool connection = false;            /**< TRUE if connected to server. FALSE if n
 // const char* ssid = "DLink-782A77";  /**< Network SSID. */
 // const char* password = "password";  /**< Network Password. */
 
-// char ssid[] = "DLink-782A77";       /**< Network SSID. */
-// char password[] = "password";       /**< Network Password. */
+char ssid[] = "DLink-782A77";       /**< Network SSID. */
+char password[] = "password";       /**< Network Password. */
 
 
 /*
@@ -75,7 +75,7 @@ int StateQ2 = 0;        /**< State of input 2. */
  * ----------------------------------------------------- 
  */
 // WiFiClient ClientEsp;
-// WiFiClient client;
+WiFiClient client;
 // char server_ip[] = "192.168.10.2";
 
 
@@ -84,15 +84,15 @@ int StateQ2 = 0;        /**< State of input 2. */
  * -                       Database                    -
  * ----------------------------------------------------- 
  */
-// IPAddress server_addr(192,168,10,2);        /**< IP of the MySQL *server*. */
-// char userSQL[] = "terminal";                /**< MySQL user login username. */
-// char passwordSQL[] = "password";            /**< MySQL user login password. */
+IPAddress server_addr(192,168,10,2);        /**< IP of the MySQL *server*. */
+char userSQL[] = "terminal";                /**< MySQL user login username. */
+char passwordSQL[] = "password";            /**< MySQL user login password. */
 
-// MySQL_Connection conn((Client *)&client);   /**< MySQL connection. */
-// MySQL_Cursor cur = MySQL_Cursor(&conn);     /**< MySQL cursor. */
+MySQL_Connection conn( (Client *)&client );   /**< MySQL connection. */
+MySQL_Cursor cur = MySQL_Cursor(&conn);     /**< MySQL cursor. */
 
-// // Sample query
-// char query[] = "SELECT nmec FROM authentication.students WHERE uid = '04 43 C6 32 34 31 80'";
+// Sample query
+char query[] = "SELECT nmec FROM authentication.students WHERE uid = '04 43 C6 32 34 31 80'";
 
 
 /* 
@@ -118,23 +118,22 @@ void setup(void) {
     delay(100);
     mfrc522.PCD_Init();   // Initiate MFRC522
     
-    
     /* WiFi */
-    // if (debug)
-    //     Serial.print("Trying to establish WiFi connection...");
-    // WiFi.begin(ssid, password);
+    if (debug)
+        Serial.print("Trying to establish WiFi connection...");
+    WiFi.begin(ssid, password);
     
     /* Wait for Connection */
-    // while (WiFi.status() != WL_CONNECTED) {
-    //     delay(200);
-    //     if (debug)
-    //         Serial.print(".");
-    // }
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(200);
+        if (debug)
+            Serial.print(".");
+    }
     
     /* Connection Established */
-    // if (debug)
-    //     Serial.print("\nConnection Established!\n");
-    // delay(200);
+    if (debug)
+        Serial.print("\nConnection Established!\n");
+    delay(200);
 
 
     /* Connection to Server */
@@ -156,14 +155,14 @@ void setup(void) {
 
 
     /* Connection to Database */
-    // if (debug)
-    //     Serial.println("Connecting...");
-    // if (conn.connect(server_addr, 3306, userSQL, passwordSQL))
-    //     delay(1000);
-    // else {
-    //     if (debug)
-    //         Serial.println("Connection failed.");
-    // }
+    if (debug)
+        Serial.println("Connecting to database...");
+    if ( conn.connect(server_addr, 3306, userSQL, passwordSQL) )
+        delay(1000);
+    else {
+        if (debug)
+            Serial.println("Connection failed.");
+    }
     // conn.close();
 }
 
@@ -186,41 +185,60 @@ void loop(void) {
 
     /* Database SELECT Example */
     /* ----------------------------------------------------------------------- */
-    // MySQL:
+    MySQL:
     
-    // row_values *row = NULL;
-    // long nmec = 0;
-    // delay(1000);
+    row_values *row = NULL;
+    long nmec = 0;
+    delay(1000);
 
-    // if (debug)
-    //     Serial.println("1) Demonstrating using a cursor dynamically allocated.");
+    if ( conn.connected() ) {
+        if (debug)
+            Serial.println("1) Demonstrating using a cursor dynamically allocated.");
 
-    // // Initiate the query class instance
-    // MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
-    
-    // // Execute the query
-    // cur_mem->execute(query);
-    
-    // // Fetch the columns (required) but we don't use them.
-    // column_names *columns = cur_mem->get_columns();
-    
-    // // Read the row (we are only expecting the one)
-    // do {
-    //     row = cur_mem->get_next_row();
-    //     if (row != NULL)
-    //         nmec = atol(row->values[0]);
-    // } while (row != NULL);
-    
-    // // Deleting the cursor also frees up memory used
-    // delete cur_mem;
-    
-    // // Show the result
-    // if (debug) {
-    //     Serial.print(" Número Mecanográfico = ");
-    //     Serial.println(nmec);
-    // }
+        // Initiate the query class instance
+        MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
+        
+        // Execute the query
+        cur_mem->execute(query);
+        
+        // Fetch the columns (required) but we don't use them.
+        column_names *columns = cur_mem->get_columns();
+        
+        // Read the row (we are only expecting the one)
+        do {
+            row = cur_mem->get_next_row();
+            if (row != NULL)
+                nmec = atol(row->values[0]);
+        } while (row != NULL);
+        
+        // Deleting the cursor also frees up memory used
+        
+        delete cur_mem;
+        
+        // Show the result
+        if (debug) {
+            Serial.print("Número Mecanográfico = ");
+            Serial.println(nmec);
+        }
+    } 
+    else {
+        conn.close();
+        if (debug)
+            Serial.println("Connecting...");
+        if (conn.connect(server_addr, 3306, userSQL, passwordSQL)) {
+            delay(500);
+            if (debug)
+                Serial.println("Successful reconnect!");
+        } 
+        else {
+            if (debug)
+                Serial.println("Cannot reconnect! Drat.");
+        }
+    }
 
-    // goto MySQL;
+    
+
+    goto MySQL;
     /* ----------------------------------------------------------------------- */
 
  
