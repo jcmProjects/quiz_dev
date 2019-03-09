@@ -1,4 +1,4 @@
-/.vscode
-/blank_firmware
+/.vscode/*
+/blank_firmware/*
 .gitignore
 instructions.md
