@@ -79,9 +79,9 @@ char query[128];
 
 
 /* 
- ! =====================================================
- ! =                        Setup                      =
- ! ===================================================== 
+ ? =====================================================
+ ? =                        Setup                      =
+ ? ===================================================== 
  */
 /**
  * @brief Setup function. Runs once.
@@ -128,9 +128,9 @@ void setup(void) {
 
 
 /*
- ! =====================================================
- ! =                        Loop                       =
- ! ===================================================== 
+ ? =====================================================
+ ? =                        Loop                       =
+ ? ===================================================== 
  */
 /**
  * @brief Loop function.
@@ -160,7 +160,7 @@ void loop(void) {
 
         content.toUpperCase();
         (content.substring(1)).toCharArray(UID, 21);
-        Serial.print("\nChecking authorization for card:\n");
+        Serial.println("\nChecking authorization for card:");
         Serial.println(UID);
 
         /* Query Database */
@@ -173,14 +173,12 @@ void loop(void) {
         /* Card Authorized */
         if (authorized) {
             digitalWrite(ledGreen, HIGH);
-            
             Serial.println("Card authorized!");
         }
         else {
             digitalWrite(ledRed, HIGH);
             delay(500);
             digitalWrite(ledRed, LOW);
-
             Serial.println("Invalid card!");
         }
     }
@@ -261,9 +259,9 @@ void loop(void) {
 
 
 /*
- ! =====================================================
- ! =                     Functions                     =
- ! ===================================================== 
+ ? =====================================================
+ ? =                     Functions                     =
+ ? ===================================================== 
  */
 /** 
  *  @brief Checks if a valid card is present.
@@ -374,7 +372,7 @@ long query_db(char UID[], row_values *row, long nmec) {
  */
 
 
-/* FIXME:
+/*  FIXME:
  * 
  * 
  */
