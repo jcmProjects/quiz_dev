@@ -24,3 +24,14 @@ class Quiz(models.Model):
 
     def get_absolute_url(self):
         return reverse('quiz-detail', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        # Resize Image
+        if img.height>600 or img.width>600:
+            output_size = (600, 600)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
