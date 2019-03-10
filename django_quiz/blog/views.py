@@ -22,9 +22,9 @@ class PostListView(ListView):
 
 class UserPostListView(ListView):
     model = Post
-    template_name = 'blog/user_posts.html'    # <app>/<model>_<viewtype>.html
+    template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'posts'
-    paginate_by = 4                     # number of posts per page
+    paginate_by = 4                         # number of posts per page
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))

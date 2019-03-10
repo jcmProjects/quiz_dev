@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+                <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                {% if object.author == user %}
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                {% endif %}
+            </div>
+            <!-- Quiz -->
+            <div class="row justify-content-center">
+                <h2 class="article-title">{{ object.question }}</h2>
+                {% if quiz.image != "default_profile_pic.jpg" %}
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <img class="quiz-detail-img" src="{{ object.image.url }}">
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm">
+                            <div class="col"><b>a)  </b> {{ object.ansA }}</div>
+                            <div class="col"><b>b)  </b> {{ object.ansB }}</div>
+                            <div class="col"><b>c)  </b> {{ object.ansC }}</div>
+                            <div class="col"><b>d)  </b> {{ object.ansD }}</div>
+                            <div class="col"><b>e)  </b> {{ object.ansE }}</div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="col"><b>Duration:</b> {{ object.duration }} sec.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock content %}

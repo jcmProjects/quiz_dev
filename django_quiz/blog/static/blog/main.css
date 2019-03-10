@@ -50,8 +50,8 @@ body {
   }
   
   .article-img {
-    height: 65px;
-    width: 65px;
+    height: 64px;
+    width: 64px;
     margin-right: 16px;
   }
   
@@ -82,4 +82,9 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
-  
+
+  .quiz-detail-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }

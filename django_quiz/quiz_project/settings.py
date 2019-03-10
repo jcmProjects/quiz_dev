@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',     # added application (Blog)
     'users.apps.UsersConfig',   # added application (Users)
+    'quiz.apps.QuizConfig',   # added application (Quiz)
     'crispy_forms',             # installed app (Crispy Forms) - Check bottom of the file!! (bootstrap4)
     'django.contrib.admin',
     'django.contrib.auth',
@@ -133,12 +134,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'blog-home'
+LOGIN_REDIRECT_URL = 'quiz-home'
 LOGIN_URL = 'login'
 
 #! E-MAIL NOT WORKING
