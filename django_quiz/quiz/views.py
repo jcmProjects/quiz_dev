@@ -51,3 +51,15 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         else:
             return False
+
+
+class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Quiz
+    success_url = '/'
+
+    def test_func(self):
+        quiz = self.get_object()
+        if self.request.user == quiz.author:
+            return True
+        else:
+            return False

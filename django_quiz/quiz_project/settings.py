@@ -31,9 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'quiz.apps.QuizConfig',     # added application (Quiz)
     'blog.apps.BlogConfig',     # added application (Blog)
     'users.apps.UsersConfig',   # added application (Users)
-    'quiz.apps.QuizConfig',   # added application (Quiz)
     'crispy_forms',             # installed app (Crispy Forms) - Check bottom of the file!! (bootstrap4)
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,13 +76,6 @@ WSGI_APPLICATION = 'quiz_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 DATABASES = {
     'default': {

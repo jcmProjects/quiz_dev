@@ -1,17 +1,17 @@
 {% extends "blog/base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
         <form method="POST">    <!-- must be "POST" for some reason... -->
             {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">
-                    Create a Quiz
+                    Delete Quiz
                 </legend>
-                {{ form|crispy }}
+                <h4>Are you sure ou want to delete quiz "{{ object.question }}" from course "{{ object.course }}"?</h4>
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Create</button>
+                <button class="btn btn-outline-danger" type="submit">Delete</button>
+                <a class="btn btn-outline-secondary" href="{% url 'quiz-detail' object.id %}">Cancel</a>
             </div>
         </form>
     </div>
