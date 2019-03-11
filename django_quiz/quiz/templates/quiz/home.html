@@ -1,11 +1,12 @@
 {% extends "blog/base.html" %}
 {% block content %}
+    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for course...">
+    <div id="myItems">
     {% for quiz in quizzes %}
         <div class="card card-signin my-5">
             <div class="card-body">
                 <article class="media">
                     <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
-                    {% comment %} <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}"> {% endcomment %}
                     <div class="media-body">
                         <div class="article-metadata">
                             <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
@@ -18,6 +19,24 @@
             </div>
         </div>
     {% endfor %}
+    </div>
+    <script>
+        function myFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("myFilter");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body p.article-content");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
     <!-- Pagination -->
     {% if is_paginated %}
         {% if page_obj.has_previous %}
