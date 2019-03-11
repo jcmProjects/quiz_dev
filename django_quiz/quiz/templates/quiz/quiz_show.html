@@ -10,11 +10,15 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <article class="media content-section" id="myQuiz">
+                <article class="media content-section align-items-center" id="myQuiz">
                     <div class="media-body">
                         <!-- Quiz -->
                         <div class="row justify-content-center">
-                            <h2 class="article-title">{{ object.question }}</h2>
+                            <div class="container">
+                                <div class="row justify-content-center align-items-center">
+                                    <h2 class="article-title">{{ object.question }}</h2>
+                                </div>
+                            </div>
                             {% if quiz.image != "no_image.jpg" %}
                                 <div class="container">
                                     <div class="row justify-content-center">
