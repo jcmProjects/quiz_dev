@@ -1,17 +1,22 @@
 {% extends "blog/base.html" %}
 {% block content %}
     {% for quiz in quizzes %}
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
-                    <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
-                </div>
-                <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
-                <p class="article-content">{{ quiz.course }}</p>
+        <div class="card card-signin my-5">
+            <div class="card-body">
+                <article class="media">
+                    <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
+                    {% comment %} <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}"> {% endcomment %}
+                    <div class="media-body">
+                        <div class="article-metadata">
+                            <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
+                            <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                        </div>
+                        <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
+                        <p class="article-content">{{ quiz.course }}</p>
+                    </div>
+                </article>
             </div>
-        </article>
+        </div>
     {% endfor %}
     <!-- Pagination -->
     {% if is_paginated %}

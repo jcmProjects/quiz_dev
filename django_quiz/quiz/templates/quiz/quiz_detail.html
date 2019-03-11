@@ -1,6 +1,8 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <article class="media content-section">
+    <div class="card card-signin my-5">
+    <div class="card-body">
+    <article class="media">
         <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
         <div class="media-body">
             <div class="article-metadata">
@@ -15,7 +17,7 @@
             <!-- Quiz -->
             <div class="row justify-content-center">
                 <h2 class="article-title">{{ object.question }}</h2>
-                {% if quiz.image != "default_profile_pic.jpg" %}
+                {% if quiz.image != "no_image.jpg" %}
                     <div class="container">
                         <div class="row justify-content-center">
                             <img class="quiz-detail-img" src="{{ object.image.url }}">
@@ -39,4 +41,6 @@
             </div>
         </div>
     </article>
+    </div>
+    </div>
 {% endblock content %}

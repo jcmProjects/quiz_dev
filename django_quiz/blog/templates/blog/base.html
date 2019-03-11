@@ -36,12 +36,41 @@
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
                         {% if user.is_authenticated %}
-                            {% comment %} <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a> {% endcomment %}
-                            <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                            <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                            <!-- Quiz Dropdown Menu -->
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav ml-auto">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Quiz
+                                        </a>
+                                    <!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! -->
+                                    <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'quiz-create' %}">Create New</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'user-quiz' user.username %}">Quizzes</a>
+                                    </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Account Dropdown Menu -->
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav ml-auto">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{ request.user.username }}
+                                        </a>
+                                        <!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! -->
+                                        <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         {% else %}
-                            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                             <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                         {% endif %}
                     </div>
                 </div>
@@ -51,8 +80,8 @@
 
     <!-- Content -->
     <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-9">
+        <div class="row align-items-center">
+            <div class="col-md-9 mx-auto">
                 {% if messages %}
                     {% for messages in messages %}
                         <div class="alert alert-{{ messages.tags }}">
@@ -63,7 +92,7 @@
                 {% block content %}
                 {% endblock %}
             </div>
-            {% if user.is_authenticated %}
+            {% comment %} {% if user.is_authenticated %}
                 <div class="col-md-3">
                     <div class="content-section">
                         <h3>Quiz Sidebar</h3>
@@ -76,7 +105,7 @@
                         </p>
                     </div>
                 </div>
-            {% endif %}
+            {% endif %} {% endcomment %}
         </div>
     </main>
 

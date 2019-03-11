@@ -17,7 +17,7 @@ class Quiz(models.Model):
     duration = models.IntegerField()
     date_created = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default_profile_pic.jpg', upload_to='quiz_img')
+    image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
 
     def __str__(self):
         return self.question

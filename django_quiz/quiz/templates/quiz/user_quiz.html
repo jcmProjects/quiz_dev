@@ -2,25 +2,30 @@
 {% block content %}
     <h1 class="mb-3">Quizzes by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
     {% for quiz in quizzes %}
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}">
-            <div class="media-body">
-                <div class="article-title">
-                    <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
-                    <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
-                    <!-- Quiz -->
-                    <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
-                    <h6>{{ quiz.course }}</h6>
-                    <!-- Buttons -->
-                    {% comment %} {% if quiz.author == user %}
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'quiz-edit' quiz.id %}">Edit</a>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'quiz-delete' quiz.id %}">Delete</a>
+        <div class="card card-signin my-5">
+            <div class="card-body">
+                <article class="media">
+                    <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
+                    {% comment %} <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}"> {% endcomment %}
+                    <div class="media-body">
+                        <div class="article-title">
+                            <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
+                            <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                            <!-- Quiz -->
+                            <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
+                            <h6>{{ quiz.course }}</h6>
+                            <!-- Buttons -->
+                            {% comment %} {% if quiz.author == user %}
+                                <div>
+                                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'quiz-edit' quiz.id %}">Edit</a>
+                                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'quiz-delete' quiz.id %}">Delete</a>
+                                </div>
+                            {% endif %} {% endcomment %}
                         </div>
-                    {% endif %} {% endcomment %}
-                </div>
+                    </div>
+                </article>
             </div>
-        </article>
+        </div>
     {% endfor %}
     <!-- Pagination -->
     {% if is_paginated %}
