@@ -9,6 +9,11 @@ class QuizDetailView(DetailView):
     model = Quiz
 
 
+class QuizShowView(DetailView):
+    model = Quiz
+    template_name = 'quiz/quiz_show.html'
+
+
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
     fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'duration', 'image']
