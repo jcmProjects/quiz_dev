@@ -31,7 +31,7 @@ class Quiz(models.Model):
         img = Image.open(self.image.path)
 
         # Resize Image
-        if img.height>600 or img.width>600:
-            output_size = (600, 600)
+        if img.height>768 or img.width>768:
+            output_size = (768, 768)
             img.thumbnail(output_size)
             img.save(self.image.path)

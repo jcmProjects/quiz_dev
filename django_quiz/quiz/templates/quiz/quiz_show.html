@@ -15,19 +15,19 @@
                         <!-- Quiz -->
                         <div class="row justify-content-center">
                             <div class="container">
-                                <div class="row justify-content-center align-items-center">
+                                <div class="row justify-content-center align-items-center mb-5">
                                     <h2 class="article-title">{{ object.question }}</h2>
                                 </div>
                             </div>
                             {% if quiz.image != "no_image.jpg" %}
                                 <div class="container">
                                     <div class="row justify-content-center">
-                                        <img class="quiz-detail-img" src="{{ object.image.url }}">
+                                        <img class="quiz-show-img" src="{{ object.image.url }}">
                                     </div>
                                 </div>
                             {% endif %}
                             <div class="container">
-                                <div class="row justify-content-center align-items-center">
+                                <div class="row justify-content-center align-items-center mt-5">
                                     <div class="col-sm">
                                         <div class="col text-left"><b>a)  </b> {{ object.ansA }}</div>
                                         <div class="col text-left"><b>b)  </b> {{ object.ansB }}</div>

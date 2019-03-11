@@ -1,6 +1,41 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for course...">
+
+    <div class="row searchFilter">
+    <div class="col-sm-12">
+    <div class="input-group">
+    <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search for course...">
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="label-icon"></span>
+                <span class="caret">&nbsp;</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+            <ul class="category_filters">
+                <li>
+                    <label class="category-label" for="Course">
+                        <input type="radio" name="radios" id="courseRadio" value="Course">
+                        Course
+                    </label>
+                </li>
+                <li>
+                    <input type="radio" name="radios" id="authorRadio" value="Author">
+                    <label class="category-label" for="Author">Author</label>
+                </li>
+                <li>
+                    <input type="radio" name="radios" id="questionRadio" value="Question">
+                    <label class="category-label" for="Question">Question</label>
+                </li>
+            </ul>
+            </div>
+            <button id="searchBtn" type="button" class="btn btn-secondary btn-search">
+                <span class="glyphicon glyphicon-search">&nbsp;</span>
+                <span class="label-icon" >Search</span>
+            </button>
+        </div>
+    </div>
+    </div>
+    </div>
     <div id="myItems">
     {% for quiz in quizzes %}
         <div class="card card-signin my-5">
@@ -22,18 +57,43 @@
     </div>
     <!-- Filter by 'course' - JavaScript function -->
     <script>
-        function myFunction() {
+        function filterFunction() {
             var input, filter, cards, cardContainer, p, title, i;
             input = document.getElementById("myFilter");
             filter = input.value.toUpperCase();
             cardContainer = document.getElementById("myItems");
             cards = cardContainer.getElementsByClassName("card");
-            for (i = 0; i < cards.length; i++) {
-                title = cards[i].querySelector(".card-body p.article-content");
-                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
+            /* Author */
+            if(document.getElementById("authorRadio").checked == true) {
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector(".card-body a");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+            /* Course */
+            if(document.getElementById("courseRadio").checked == true) {
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector(".card-body p.article-content");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+            /* Question */
+            if(document.getElementById("questionRadio").checked == true) {
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector(".card-body a.article-title");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
                 }
             }
         }
