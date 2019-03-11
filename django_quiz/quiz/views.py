@@ -9,9 +9,16 @@ class QuizDetailView(DetailView):
     model = Quiz
 
 
-class QuizShowView(DetailView):
+class QuizShowView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Quiz
     template_name = 'quiz/quiz_show.html'
+
+    def test_func(self):
+        quiz = self.get_object()
+        if self.request.user == quiz.author:
+            return True
+        else:
+            return False
 
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
