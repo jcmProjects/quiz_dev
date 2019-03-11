@@ -1,6 +1,8 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <h1 class="mb-3">Quizzes by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
+    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for course...">
+    <div id="myItems">
     {% for quiz in quizzes %}
         <div class="card card-signin my-5">
             <div class="card-body">
@@ -13,20 +15,32 @@
                             <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
                             <!-- Quiz -->
                             <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
-                            <h6>{{ quiz.course }}</h6>
-                            <!-- Buttons -->
-                            {% comment %} {% if quiz.author == user %}
-                                <div>
-                                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'quiz-edit' quiz.id %}">Edit</a>
-                                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'quiz-delete' quiz.id %}">Delete</a>
-                                </div>
-                            {% endif %} {% endcomment %}
+                            <p class="article-content">{{ quiz.course }}</p>
                         </div>
                     </div>
                 </article>
             </div>
         </div>
     {% endfor %}
+    </div>
+    <!-- Filter by 'course' - JavaScript function -->
+    <script>
+        function myFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("myFilter");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body p.article-content");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
     <!-- Pagination -->
     {% if is_paginated %}
         {% if page_obj.has_previous %}
