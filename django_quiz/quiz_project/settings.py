@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'quiz.apps.QuizConfig',     # added application (Quiz)
-    'blog.apps.BlogConfig',     # added application (Blog)
     'users.apps.UsersConfig',   # added application (Users)
     'crispy_forms',             # installed app (Crispy Forms) - Check bottom of the file!! (bootstrap4)
     'django.contrib.admin',
