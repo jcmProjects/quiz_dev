@@ -1,22 +1,42 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <h1 class="mb-3">Quizzes by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
-    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for course...">
+    <div class="row searchFilter">
+    <div class="col-sm-12">
+    <div class="input-group">
+    <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
+        <div class="nav-item dropdown">
+            <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="label-icon"></span>
+                <span class="caret">&nbsp;</span>
+            </button>
+            <div class="dropdown-menu">
+                <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-light active">
+                        <input type="radio" name="options" id="courseFilter" autocomplete="off" checked> Course
+                    </label>
+                    <label class="btn btn-light">
+                        <input type="radio" name="options" id="questionFilter" autocomplete="off"> Question
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
     <div id="myItems">
     {% for quiz in quizzes %}
         <div class="card card-signin my-5">
             <div class="card-body">
                 <article class="media">
                     <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
-                    {% comment %} <img class="rounded-circle article-img" src="{{ quiz.author.profile.image.url }}"> {% endcomment %}
                     <div class="media-body">
-                        <div class="article-title">
+                        <div class="article-metadata">
                             <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
                             <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
-                            <!-- Quiz -->
-                            <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
-                            <p class="article-content">{{ quiz.course }}</p>
                         </div>
+                        <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
+                        <p class="article-content">{{ quiz.course }}</p>
                     </div>
                 </article>
             </div>
@@ -25,18 +45,32 @@
     </div>
     <!-- Filter by 'course' - JavaScript function -->
     <script>
-        function myFunction() {
+        function filterFunction() {
             var input, filter, cards, cardContainer, p, title, i;
             input = document.getElementById("myFilter");
             filter = input.value.toUpperCase();
             cardContainer = document.getElementById("myItems");
             cards = cardContainer.getElementsByClassName("card");
-            for (i = 0; i < cards.length; i++) {
-                title = cards[i].querySelector(".card-body p.article-content");
-                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
+            /* Course */
+            if(document.getElementById("courseFilter").checked == true) {
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector(".card-body p.article-content");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+            /* Question */
+            if(document.getElementById("questionFilter").checked == true) {
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector(".card-body a.article-title");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
                 }
             }
         }
