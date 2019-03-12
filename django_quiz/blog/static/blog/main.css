@@ -35,6 +35,14 @@ body {
     border-radius: 3px;
     margin-bottom: 20px;
   }
+
+  .quiz-content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
   
   .article-title {
     color: #444444;
