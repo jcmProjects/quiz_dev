@@ -25,14 +25,14 @@ class QuizListView(ListView):
     template_name = 'quiz/home.html'    # <app>/<model>_<viewtype>.html
     context_object_name = 'quizzes'
     ordering = ['-date_created']        # - to inverse ordering
-    paginate_by = 10                    # number of posts per page
+    paginate_by = 5                    # number of posts per page
 
 
 class UserQuizListView(ListView):
     model = Quiz
     template_name = 'quiz/user_quiz.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'quizzes'
-    paginate_by = 10                       # number of quizzes per page
+    paginate_by = 5                       # number of quizzes per page
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
