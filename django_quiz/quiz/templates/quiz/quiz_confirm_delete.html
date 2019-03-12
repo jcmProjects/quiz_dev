@@ -1,18 +1,22 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">    <!-- must be "POST" for some reason... -->
-            {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">
-                    Delete Quiz
-                </legend>
-                <h4>Are you sure ou want to delete quiz "{{ object.question }}" from course "{{ object.course }}"?</h4>
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-danger" type="submit">Delete</button>
-                <a class="btn btn-outline-secondary" href="{% url 'quiz-detail' object.id %}">Cancel</a>
+    <div class="card card-signin my-5">
+        <div class="card-body">
+            <div class="quiz-content-section">
+                <form method="POST">    <!-- must be "POST" for some reason... -->
+                    {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">
+                            <h1>Delete Quiz</h1>
+                        </legend>
+                        <h4>Are you sure you want to delete quiz "{{ object.question }}" from course "{{ object.course }}"?</h4>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger" type="submit">Delete</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'quiz-detail' object.id %}">Cancel</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock content %}

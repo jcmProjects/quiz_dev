@@ -1,18 +1,23 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST" enctype="multipart/form-data">    <!-- enctype="multipart/form-data" IS NECESSARY for images !! -->
-            {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">
-                    Create a Quiz
-                </legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Submit</button>
+    <div class="card card-signin my-5">
+        <div class="card-body">
+            <div class="quiz-content-section">
+                <form method="POST" enctype="multipart/form-data">    <!-- enctype="multipart/form-data" IS NECESSARY for images !! -->
+                    {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">
+                            Create a Quiz
+                        </legend>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                        <a class="btn btn-outline-secondary" href="javascript:history.back()">Cancel</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 {% endblock content %}

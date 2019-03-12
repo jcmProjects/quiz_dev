@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Quiz
 
@@ -15,6 +16,7 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully created.')
         return super().form_valid(form)
 
 
@@ -43,6 +45,7 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully updated.')
         return super().form_valid(form)
 
     def test_func(self):
