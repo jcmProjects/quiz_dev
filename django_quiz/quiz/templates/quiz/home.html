@@ -1,37 +1,27 @@
 {% extends "blog/base.html" %}
 {% block content %}
-
     <div class="row searchFilter">
     <div class="col-sm-12">
     <div class="input-group">
-    <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search for course...">
-        <div class="input-group-btn">
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
+        <div class="nav-item dropdown">
+            <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="label-icon"></span>
                 <span class="caret">&nbsp;</span>
             </button>
-            <div class="dropdown-menu dropdown-menu-right">
-            <ul class="category_filters">
-                <li>
-                    <label class="category-label" for="Course">
-                        <input type="radio" name="radios" id="courseRadio" value="Course">
-                        Course
+            <div class="dropdown-menu">
+                <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-light active">
+                        <input type="radio" name="options" id="courseFilter" autocomplete="off" checked> Course
                     </label>
-                </li>
-                <li>
-                    <input type="radio" name="radios" id="authorRadio" value="Author">
-                    <label class="category-label" for="Author">Author</label>
-                </li>
-                <li>
-                    <input type="radio" name="radios" id="questionRadio" value="Question">
-                    <label class="category-label" for="Question">Question</label>
-                </li>
-            </ul>
+                    <label class="btn btn-light">
+                        <input type="radio" name="options" id="authorFilter" autocomplete="off"> Author
+                    </label>
+                    <label class="btn btn-light">
+                        <input type="radio" name="options" id="questionFilter" autocomplete="off"> Question
+                    </label>
+                </div>
             </div>
-            <button id="searchBtn" type="button" class="btn btn-secondary btn-search">
-                <span class="glyphicon glyphicon-search">&nbsp;</span>
-                <span class="label-icon" >Search</span>
-            </button>
         </div>
     </div>
     </div>
@@ -64,7 +54,7 @@
             cardContainer = document.getElementById("myItems");
             cards = cardContainer.getElementsByClassName("card");
             /* Author */
-            if(document.getElementById("authorRadio").checked == true) {
+            if(document.getElementById("authorFilter").checked == true) {
                 for (i = 0; i < cards.length; i++) {
                     title = cards[i].querySelector(".card-body a");
                     if (title.innerText.toUpperCase().indexOf(filter) > -1) {
@@ -75,7 +65,7 @@
                 }
             }
             /* Course */
-            if(document.getElementById("courseRadio").checked == true) {
+            if(document.getElementById("courseFilter").checked == true) {
                 for (i = 0; i < cards.length; i++) {
                     title = cards[i].querySelector(".card-body p.article-content");
                     if (title.innerText.toUpperCase().indexOf(filter) > -1) {
@@ -86,7 +76,7 @@
                 }
             }
             /* Question */
-            if(document.getElementById("questionRadio").checked == true) {
+            if(document.getElementById("questionFilter").checked == true) {
                 for (i = 0; i < cards.length; i++) {
                     title = cards[i].querySelector(".card-body a.article-title");
                     if (title.innerText.toUpperCase().indexOf(filter) > -1) {
