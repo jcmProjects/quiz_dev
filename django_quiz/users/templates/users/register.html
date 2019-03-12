@@ -1,7 +1,7 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="card card-signin my-5">
+    <div class="card card-signin my-3">
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->

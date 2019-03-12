@@ -3,7 +3,7 @@
     <main role="main" class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-signin my-5">
+                <div class="card card-signin my-3">
                 <div class="card-body">
                 <!-- Author / Options -->
                 <article class="media">
@@ -46,7 +46,7 @@
                                         <div class="col text-left"><b>e)  </b> {{ object.ansE }}</div>
                                     </div>
                                     <div class="col-sm">
-                                        <div class="col text-center font-weight-bold display-1">{{ object.duration }}</div>
+                                        <div class="col text-center font-weight-bold display-1"> <span id="time">{{ object.duration }}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -76,5 +76,35 @@
                 }
             });
         </script>
+
+        <!-- Timer - JavaScript Function -->
+        <script>
+        function startTimer(duration, display) {
+            var start = Date.now(),
+                diff,
+                minutes,
+                seconds;
+            function timer() {
+                // get the number of seconds that have elapsed since 
+                // startTimer() was called
+                diff = duration - (((Date.now() - start) / 1000) | 0);
+
+                if (diff <= 0) {
+                    diff = 0;
+                }
+                display.textContent = diff;
+            };
+            // we don't want to wait a full second before the timer starts
+            timer();
+            setInterval(timer, 1000);
+        }
+
+        document.getElementById("start_btn").addEventListener("click", function () {
+            var timeRemaining = {{ object.duration }},
+                display = document.querySelector('#time');
+            startTimer(timeRemaining, display);
+        });
+        </script>
+
     </main>
 {% endblock content %}

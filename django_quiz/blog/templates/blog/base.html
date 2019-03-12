@@ -92,20 +92,6 @@
                 {% block content %}
                 {% endblock %}
             </div>
-            {% comment %} {% if user.is_authenticated %}
-                <div class="col-md-3">
-                    <div class="content-section">
-                        <h3>Quiz Sidebar</h3>
-                        <p class='text-muted'>You can put any information here you'd like.
-                            <ul class="list-group">
-                                <a class="list-group-item list-group-item-light" href="{% url 'quiz-create' %}">Create</a>
-                                <a class="list-group-item list-group-item-light" href="{% url 'user-quiz' user.username %}">Quizzes</a> 
-                                <a class="list-group-item list-group-item-light" href="#">Show</a>
-                            </ul>
-                        </p>
-                    </div>
-                </div>
-            {% endif %} {% endcomment %}
         </div>
     </main>
 
