@@ -1,5 +1,5 @@
 {% extends "quiz/base.html" %}
-{% load crispy_forms_tags %}
+{% load bootstrap %}
 {% block content %}
     <main role="main" class="container">
         <div class="row align-items-center">
@@ -12,7 +12,7 @@
                                 <legend class="border-bottom mb-4">
                                     Log In
                                 </legend>
-                                {{ form|crispy }}
+                                {{ form|bootstrap }}
                             </fieldset>
                             <div class="form-group">
                                 <button class="btn btn-outline-info" type="submit">Login</button>

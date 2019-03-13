@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'quiz.apps.QuizConfig',     # added application (Quiz)
     'users.apps.UsersConfig',   # added application (Users)
     'crispy_forms',             # installed app (Crispy Forms) - Check bottom of the file!! (bootstrap4)
+    'django_filters',
+    'bootstrapform',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

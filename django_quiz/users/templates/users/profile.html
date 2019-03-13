@@ -1,5 +1,5 @@
 {% extends "quiz/base.html" %}
-{% load crispy_forms_tags %}
+{% load bootstrap %}
 {% block content %}
     <div class="card card-signin my-3">
         <div class="card-body">
@@ -17,8 +17,8 @@
                         <legend class="border-bottom mb-4">
                             Profile Info
                         </legend>
-                        {{ u_form|crispy }} <!-- User form -->
-                        {{ p_form|crispy }} <!-- Profile form -->
+                        {{ u_form|bootstrap }} <!-- User form -->
+                        {{ p_form|bootstrap }} <!-- Profile form -->
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Update</button>

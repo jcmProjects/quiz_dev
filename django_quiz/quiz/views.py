@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Quiz
+# from .filters import QuizFilter
 
 
 class QuizDetailView(DetailView):
@@ -26,6 +27,11 @@ class QuizListView(ListView):
     context_object_name = 'quizzes'
     ordering = ['-date_created']        # - to inverse ordering
     # paginate_by = 5                     # number of posts per page
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
+    #     return context
 
 
 class UserQuizListView(ListView):

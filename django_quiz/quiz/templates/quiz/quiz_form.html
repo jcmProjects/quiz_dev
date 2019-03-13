@@ -1,5 +1,5 @@
 {% extends "quiz/base.html" %}
-{% load crispy_forms_tags %}
+{% load bootstrap %}
 {% block content %}
     <div class="card card-signin my-3">
         <div class="card-body">
@@ -10,7 +10,7 @@
                         <legend class="border-bottom mb-4">
                             Create a Quiz
                         </legend>
-                        {{ form|crispy }}
+                        {{ form|bootstrap }}
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Submit</button>
