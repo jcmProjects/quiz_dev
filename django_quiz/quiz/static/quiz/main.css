@@ -15,6 +15,9 @@ body {
   .bg-steel {
     background-color: #3c7390; /* #5f788a */
   }
+  .bg-steel-2 {
+    background-color: #5f788a;
+  }
   .bg-cyan {
     background-color: #00fff2;
   }
