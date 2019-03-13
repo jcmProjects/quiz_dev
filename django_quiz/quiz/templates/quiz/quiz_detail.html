@@ -1,6 +1,6 @@
 {% extends "quiz/base.html" %}
 {% block content %}
-    <main role="main" class="container">
+    <main role="main" class="container-flex">
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-signin my-3">
@@ -22,26 +22,26 @@
                     </div>
                 </article>
                 <!-- Quiz -->
-                <article class="media quiz-content-section align-items-center" id="myQuiz">
+                <article class="media quiz-content-section align-items-start quiz-body" id="myQuiz"> <!-- align-items-center -->
                     <div class="media-body">
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center quiz-body bg-steel"> 
                             <!-- Question -->
                             <div class="container">
-                                <div class="row justify-content-center align-items-center mb-5">
+                                <div class="row justify-content-center my-3 bg-pink">
                                     <h2 class="article-title">{{ object.question }}</h2>
                                 </div>
                             </div>
                             <!-- Image -->
-                            {% if quiz.image != "no_image.jpg" %}
-                                <div class="container quiz-detail-img">
-                                    <div class="row justify-content-center">
+                            <div class="container">
+                                <div class="row justify-content-center quiz-show-img  bg-cyan">
+                                    {% if quiz.image != "no_image.jpg" %}
                                         <img class="quiz-show-img" src="{{ object.image.url }}">
-                                    </div>
+                                    {% endif %}
                                 </div>
-                            {% endif %}
+                            </div>
                             <!-- Answers / Timer -->
                             <div class="container">
-                                <div class="row justify-content-center align-items-center mt-5">
+                                <div class="row justify-content-start align-items-center mt-3 bg-green">
                                     <!-- Answers -->
                                     <div class="col-sm">
                                         <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
@@ -51,13 +51,15 @@
                                         <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
                                     </div>
                                     <!-- Timer -->
-                                    <div class="col-sm">
+                                    <div class="row justify-content-end">
                                         <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
                                     </div>
                                 </div>
-                                <!-- Footer Buttons -->
-                                <div class="row justify-content-end mt-3">
-                                    <button class="btn btn-outline-info btn-sm btn-block mt-1 mb-1" type="button" id="play_btn">Play</button>
+                            </div>
+                            <!-- Footer Buttons -->
+                            <div class"container">
+                                <div class="quiz-footer bg-red" id="btn_footer">
+                                    <button class="btn btn-outline-info btn-sm" type="button" id="play_btn">Play</button>
                                 </div>
                             </div>
                         </div>
@@ -84,6 +86,7 @@
                 else if (elem.webkitRequestFullscreen) {
                     elem.webkitRequestFullscreen();
                 }
+                document.getElementById("btn_footer").style.visibility = "visible"
             });
         </script>
 

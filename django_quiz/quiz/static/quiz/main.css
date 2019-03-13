@@ -15,6 +15,21 @@ body {
   .bg-steel {
     background-color: #3c7390; /* #5f788a */
   }
+  .bg-cyan {
+    background-color: #00fff2;
+  }
+  .bg-green {
+    background-color: #5f8a66;
+  }
+  .bg-dark-green {
+    background-color: #044f2c;
+  }
+  .bg-pink {
+    background-color: #8a5f7f;
+  }
+  .bg-red {
+    background-color: #ff0000;
+  }
   
   .site-header .navbar-nav .nav-link {
     color: #93d1e8; /* #cbd5db */
@@ -42,6 +57,7 @@ body {
     border: none;
     border-radius: 3px;
     margin-bottom: 20px;
+    height: 100vh;
   }
   
   .article-title {
@@ -99,11 +115,18 @@ body {
   }
 
   .quiz-show-img {
+    height: 100%;
+    max-height: 33vh;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  /* .quiz-show-img {
     width: 100%;
     max-width: 768px;
     height: auto;
     object-fit: contain;
-  }
+  } */
 
   .card-signin {
     border: 0;
@@ -298,3 +321,15 @@ body {
     font-size: 150%;
   }
 
+  .quiz-body {
+    height: 98vh;  
+  }
+
+  .quiz-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: end;
+    visibility: hidden;
+  }
