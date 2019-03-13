@@ -5,13 +5,14 @@
             <div class="col-md-12">
                 <div class="card card-signin my-3">
                 <div class="card-body">
-                <!-- Author / Options -->
+                <!-- Author-->
                 <article class="media">
                     <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
                     <div class="media-body">
                         <div class="article-metadata">
                             <a class="mr-2" href="{% url 'user-quiz' object.author.username %}">{{ object.author }}</a>
                             <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                            <!-- Options -->
                             {% if object.author == user %}
                                 <a class="btn btn-outline-danger btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-delete' object.id %}">Delete</a>
                                 <a class="btn btn-outline-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
@@ -24,30 +25,39 @@
                 <article class="media quiz-content-section align-items-center" id="myQuiz">
                     <div class="media-body">
                         <div class="row justify-content-center">
+                            <!-- Question -->
                             <div class="container">
                                 <div class="row justify-content-center align-items-center mb-5">
                                     <h2 class="article-title">{{ object.question }}</h2>
                                 </div>
                             </div>
+                            <!-- Image -->
                             {% if quiz.image != "no_image.jpg" %}
-                                <div class="container">
+                                <div class="container quiz-detail-img">
                                     <div class="row justify-content-center">
                                         <img class="quiz-show-img" src="{{ object.image.url }}">
                                     </div>
                                 </div>
                             {% endif %}
+                            <!-- Answers / Timer -->
                             <div class="container">
                                 <div class="row justify-content-center align-items-center mt-5">
+                                    <!-- Answers -->
                                     <div class="col-sm">
-                                        <div class="col text-left"><b>a)  </b> {{ object.ansA }}</div>
-                                        <div class="col text-left"><b>b)  </b> {{ object.ansB }}</div>
-                                        <div class="col text-left"><b>c)  </b> {{ object.ansC }}</div>
-                                        <div class="col text-left"><b>d)  </b> {{ object.ansD }}</div>
-                                        <div class="col text-left"><b>e)  </b> {{ object.ansE }}</div>
+                                        <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
+                                        <div class="col ans-text text-left"><b>b)    </b>{{ object.ansB }}</div>
+                                        <div class="col ans-text text-left"><b>c)    </b>{{ object.ansC }}</div>
+                                        <div class="col ans-text text-left"><b>d)    </b>{{ object.ansD }}</div>
+                                        <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
                                     </div>
+                                    <!-- Timer -->
                                     <div class="col-sm">
-                                        <div class="col text-center font-weight-bold display-1"> <span id="time">{{ object.duration }}</span></div>
+                                        <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
                                     </div>
+                                </div>
+                                <!-- Footer Buttons -->
+                                <div class="row justify-content-end mt-3">
+                                    <button class="btn btn-outline-info btn-sm btn-block mt-1 mb-1" type="button" id="play_btn">Play</button>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +109,7 @@
             setInterval(timer, 1000);
         }
 
-        document.getElementById("start_btn").addEventListener("click", function () {
+        document.getElementById("play_btn").addEventListener("click", function () {
             var timeRemaining = {{ object.duration }},
                 display = document.querySelector('#time');
             startTimer(timeRemaining, display);
