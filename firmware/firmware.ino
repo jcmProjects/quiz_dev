@@ -174,6 +174,10 @@ void loop(void) {
         if (authorized) {
             digitalWrite(ledGreen, HIGH);
             Serial.println("Card authorized!");
+            Serial.print("MAC: ");
+            Serial.print(WiFi.macAddress());
+            Serial.print(", UID: ");
+            Serial.println(UID);
         }
         else {
             digitalWrite(ledRed, HIGH);
