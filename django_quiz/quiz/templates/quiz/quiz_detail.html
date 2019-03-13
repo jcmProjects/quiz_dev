@@ -86,7 +86,20 @@
                 else if (elem.webkitRequestFullscreen) {
                     elem.webkitRequestFullscreen();
                 }
-                document.getElementById("btn_footer").style.visibility = "visible"
+
+                document.getElementById("btn_footer").style.visibility = "visible";
+            });
+        </script>
+
+        <!-- Esc Pressed / Fullscreen Exit - JavaScript function -->
+        <script>
+            document.addEventListener("fullscreenchange", function(event) {
+                if (document.fullscreenElement) {
+                    // Window is in fullscren. Do nothin.
+                }
+                else {
+                    document.getElementById("btn_footer").style.visibility = "hidden";
+                }
             });
         </script>
 
