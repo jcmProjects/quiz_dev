@@ -11,5 +11,4 @@ urlpatterns = [
     path('quiz/new/', login_required(QuizCreateView.as_view()), name='quiz-create'),
     path('quiz/<int:pk>/edit/', login_required(QuizEditView.as_view()), name='quiz-edit'),
     path('quiz/<int:pk>/delete/', login_required(QuizDeleteView.as_view()), name='quiz-delete'),
-    # path('about/', views.about, name='blog-about'),
 ]

@@ -22,18 +22,26 @@
                     </div>
                 </article>
                 <!-- Quiz -->
-                <article class="media quiz-content-section align-items-start quiz-body" id="myQuiz"> <!-- align-items-center -->
+                <article class="media quiz-content-section align-items-start" id="myQuiz"> <!-- align-items-center -->
                     <div class="media-body">
-                        <div class="row justify-content-center quiz-body bg-steel"> 
+                        <div class="row justify-content-center quiz-body"> 
                             <!-- Question -->
                             <div class="container">
-                                <div class="row justify-content-center my-3 bg-pink">
+                                {% if quiz.image != "no_image.jpg" %}
+                                <div class="row justify-content-center mt-8">
+                                {% else %}
+                                <div class="row justify-content-center mt-10">
+                                {% endif %}
                                     <h2 class="article-title">{{ object.question }}</h2>
                                 </div>
                             </div>
                             <!-- Image -->
                             <div class="container">
-                                <div class="row justify-content-center quiz-show-img  bg-cyan">
+                                {% if quiz.image != "no_image.jpg" %}
+                                <div class="row justify-content-center quiz-show-img">
+                                {% else %}
+                                <div class="row justify-content-center quiz-show-img my-5">
+                                {% endif %}
                                     {% if quiz.image != "no_image.jpg" %}
                                         <img class="quiz-show-img" src="{{ object.image.url }}">
                                     {% endif %}
@@ -41,24 +49,28 @@
                             </div>
                             <!-- Answers / Timer -->
                             <div class="container">
-                                <div class="row justify-content-start align-items-center mt-3 bg-green">
+                                {% if quiz.image != "no_image.jpg" %}
+                                <div class="row justify-content-start align-items-center mt-3">
+                                {% else %}
+                                <div class="row justify-content-start align-items-center mt-5">
+                                {% endif %}
                                     <!-- Answers -->
                                     <div class="col-sm">
-                                        <div class="col ans-text text-left bg-steel-2"><b>a)    </b>{{ object.ansA }}</div>
-                                        <div class="col ans-text text-left bg-steel-2"><b>b)    </b>{{ object.ansB }}</div>
-                                        <div class="col ans-text text-left bg-steel-2"><b>c)    </b>{{ object.ansC }}</div>
-                                        <div class="col ans-text text-left bg-steel-2"><b>d)    </b>{{ object.ansD }}</div>
-                                        <div class="col ans-text text-left bg-steel-2"><b>e)    </b>{{ object.ansE }}</div>
+                                        <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
+                                        <div class="col ans-text text-left"><b>b)    </b>{{ object.ansB }}</div>
+                                        <div class="col ans-text text-left"><b>c)    </b>{{ object.ansC }}</div>
+                                        <div class="col ans-text text-left"><b>d)    </b>{{ object.ansD }}</div>
+                                        <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
                                     </div>
                                     <!-- Timer -->
-                                    <div class="row justify-content-end bg-dark-green">
+                                    <div class="row justify-content-end">
                                         <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Footer Buttons -->
                             <div class"container">
-                                <div class="quiz-footer bg-red" id="btn_footer">
+                                <div class="quiz-footer" id="btn_footer">
                                     <button class="btn btn-outline-info btn-sm mb-1 mr-1" type="button" id="play_btn">Play</button>
                                 </div>
                             </div>
