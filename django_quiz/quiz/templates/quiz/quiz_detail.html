@@ -4,83 +4,116 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-signin my-3">
-                <div class="card-body">
-                <!-- Author-->
-                <article class="media">
-                    <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
-                    <div class="media-body">
-                        <div class="article-metadata">
-                            <a class="mr-2" href="{% url 'user-quiz' object.author.username %}">{{ object.author }}</a>
-                            <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
-                            <!-- Options -->
-                            {% if object.author == user %}
-                                <a class="btn btn-outline-danger btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-delete' object.id %}">Delete</a>
-                                <a class="btn btn-outline-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
-                                <button class="btn btn-outline-info btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
-                            {% endif %}
-                        </div>
-                    </div>
-                </article>
-                <!-- Quiz -->
-                <article class="media quiz-content-section align-items-start" id="myQuiz"> <!-- align-items-center -->
-                    <div class="media-body">
-                        <div class="row justify-content-center quiz-body"> 
-                            <!-- Question -->
-                            <div class="container">
-                                {% if quiz.image != "no_image.jpg" %}
-                                <div class="row justify-content-center mt-8">
-                                {% else %}
-                                <div class="row justify-content-center mt-10">
-                                {% endif %}
-                                    <h2 class="article-title">{{ object.question }}</h2>
-                                </div>
-                            </div>
-                            <!-- Image -->
-                            <div class="container">
-                                {% if quiz.image != "no_image.jpg" %}
-                                <div class="row justify-content-center quiz-show-img">
-                                {% else %}
-                                <div class="row justify-content-center quiz-show-img my-5">
-                                {% endif %}
-                                    {% if quiz.image != "no_image.jpg" %}
-                                        <img class="quiz-show-img" src="{{ object.image.url }}">
+                    <div class="card-body">
+
+                        <!-- Author-->
+                        <div class="media">
+                            <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+                            <div class="media-body">
+                                <div class="article-metadata">
+                                    <a class="mr-2" href="{% url 'user-quiz' object.author.username %}">{{ object.author }}</a>
+                                    <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                                    <!-- Options -->
+                                    {% if object.author == user %}
+                                        <a class="btn btn-outline-danger btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-delete' object.id %}">Delete</a>
+                                        <a class="btn btn-outline-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
+                                        <button class="btn btn-outline-info btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
                                     {% endif %}
                                 </div>
                             </div>
-                            <!-- Answers / Timer -->
-                            <div class="container">
-                                {% if quiz.image != "no_image.jpg" %}
-                                <div class="row justify-content-start align-items-center mt-3">
-                                {% else %}
-                                <div class="row justify-content-start align-items-center mt-5">
-                                {% endif %}
-                                    <!-- Answers -->
-                                    <div class="col-sm">
-                                        <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
-                                        <div class="col ans-text text-left"><b>b)    </b>{{ object.ansB }}</div>
-                                        <div class="col ans-text text-left"><b>c)    </b>{{ object.ansC }}</div>
-                                        <div class="col ans-text text-left"><b>d)    </b>{{ object.ansD }}</div>
-                                        <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
-                                    </div>
-                                    <!-- Timer -->
-                                    <div class="row justify-content-end">
-                                        <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
+                        </div>
+
+                        <!-- DETAIL -->
+                        <!-- Quiz -->
+                        <div class="container align-items-start bg-white"> <!-- align-items-center -->
+                            <div class="row justify-content-center bg-steel">  <!-- quiz-body  -->
+                                <!-- Question -->
+                                <div class="container">
+                                    <div class="row justify-content-center bg-pink" style="margin-top: 3.75vh;">
+                                        <h2 class="article-title">{{ object.question }}</h2>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Footer Buttons -->
-                            <div class"container">
-                                <div class="quiz-footer" id="btn_footer">
-                                    <button class="btn btn-outline-info btn-sm mb-1 mr-1" type="button" id="play_btn">Play</button>
+                                <!-- Image -->
+                                {% if quiz.image != "no_image.jpg" %}
+                                    <div class="container">
+                                        <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 3.75vh;">
+                                            <img class="quiz-show-img" src="{{ object.image.url }}">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <!-- Answers / Timer -->
+                                <div class="container">
+                                    <div class="row justify-content-start align-items-center" style="margin-top: 3.75vh;">
+                                        <!-- Answers -->
+                                        <div class="col-sm bg-green">
+                                            <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
+                                            <div class="col ans-text text-left"><b>b)    </b>{{ object.ansB }}</div>
+                                            <div class="col ans-text text-left"><b>c)    </b>{{ object.ansC }}</div>
+                                            <div class="col ans-text text-left"><b>d)    </b>{{ object.ansD }}</div>
+                                            <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row justify-content-center align-items-center">
+                                        <!-- Timer -->
+                                        <div class="row justify-content-end bg-dark-green">
+                                            <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
-                </article>
-                </div>
                 </div>
             </div>
         </div>
+
+        <!-- FULLSCREEN -->
+        <!-- Quiz -->
+        <div class="container align-items-start bg-white" style="visibility: hidden;" id="myQuiz"> <!-- align-items-center -->
+            <div class="row justify-content-center bg-steel">  <!-- quiz-body  -->
+                <!-- Question -->
+                <div class="container">
+                    <div class="row justify-content-center bg-pink" style="margin-top: 3.75vh;">
+                        <h2 class="article-title" style="height: 10vh;">{{ object.question }}</h2>
+                    </div>
+                </div>
+                <!-- Image -->
+                <div class="container">
+                    <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 3.75vh;">
+                        {% if quiz.image != "no_image.jpg" %}
+                            <img class="quiz-show-img" src="{{ object.image.url }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Answers / Timer -->
+                <div class="container">
+                    <div class="row justify-content-start align-items-center" style="margin-top: 3.75vh;">
+                        <!-- Answers -->
+                        <div class="col-sm bg-green" style="height: 25vh;">
+                            <div class="col ans-text text-left" style="height: 5vh;"><b>a)    </b>{{ object.ansA }}</div>
+                            <div class="col ans-text text-left" style="height: 5vh;"><b>b)    </b>{{ object.ansB }}</div>
+                            <div class="col ans-text text-left" style="height: 5vh;"><b>c)    </b>{{ object.ansC }}</div>
+                            <div class="col ans-text text-left" style="height: 5vh;"><b>d)    </b>{{ object.ansD }}</div>
+                            <div class="col ans-text text-left" style="height: 5vh;"><b>e)    </b>{{ object.ansE }}</div>
+                        </div>
+                        <!-- Timer -->
+                        <div class="row justify-content-end bg-dark-green">
+                            <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer Buttons -->
+                <div class"container">
+                    <div class="quiz-footer bg-red" id="btn_footer">
+                        <button class="btn btn-outline-info btn-sm mb-1 mr-1" type="button" id="play_btn">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         
         <!-- Go Fullscreen - JavaScript function -->
         <script>
@@ -100,6 +133,7 @@
                 }
 
                 document.getElementById("btn_footer").style.visibility = "visible";
+                document.getElementById("myQuiz").style.visibility = "visible";
             });
         </script>
 
@@ -111,6 +145,7 @@
                 }
                 else {
                     document.getElementById("btn_footer").style.visibility = "hidden";
+                    document.getElementById("myQuiz").style.visibility = "hidden";
                 }
             });
         </script>

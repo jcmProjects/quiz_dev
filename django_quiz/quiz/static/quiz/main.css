@@ -34,6 +34,9 @@ body {
   .bg-red {
     background-color: #ff0000;
   }
+  .bg-white {
+    background-color: #ffffff;
+  }
   
   .site-header .navbar-nav .nav-link {
     color: #93d1e8; /* #cbd5db */
@@ -119,8 +122,7 @@ body {
   }
 
   .quiz-show-img {
-    height: 100%;
-    max-height: 33vh;
+    height: 50vh;
     width: auto;
     
   }
@@ -340,6 +342,7 @@ body {
     width: 100%;
     text-align: end;
     visibility: hidden;
+    height: 3.25vh;
   }
 
   .mt-8{

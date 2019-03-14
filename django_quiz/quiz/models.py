@@ -19,12 +19,12 @@ class Quiz(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
 
+    # Right Answer
     A = 'A'
     B = 'B'
     C = 'C'
     D = 'D'
     E = 'E'
-
     RIGHT_ANSWER_CHOICES = (
         (A, 'a)'),
         (B, 'b)'),
@@ -50,16 +50,7 @@ class Quiz(models.Model):
         img = Image.open(self.image.path)
 
         # Resize Image
-        # if img.width>768:
-        #     output_size = (768, (768*img.height/img.width))
-        #     img.thumbnail(output_size)
-        #     img.save(self.image.path)
-        # elif img.height>576:
-        #     output_size = ((576*img.width/img.height), 576)
-        #     img.thumbnail(output_size)
-        #     img.save(self.image.path)
-
-        # if img.height>768 or img.width>768:
-        #     output_size = (768, 768)
-        #     img.thumbnail(output_size)
-        #     img.save(self.image.path)
+        if img.height>768 or img.width>768:
+            output_size = (768, 768)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
