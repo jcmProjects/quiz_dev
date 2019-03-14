@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.db.models import Q
 from .models import Quiz
-# from .filters import QuizFilter
+from .filters import QuizFilter
 
 
 class QuizDetailView(DetailView):
@@ -26,19 +28,21 @@ class QuizListView(ListView):
     template_name = 'quiz/home.html'    # <app>/<model>_<viewtype>.html
     context_object_name = 'quizzes'
     ordering = ['-date_created']        # - to inverse ordering
-    # paginate_by = 5                     # number of posts per page
+    # paginate_by = 3                     # number of quizzes per page
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
-    #     return context
+    # Filter -> Method 1
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
+        return context
 
 
 class UserQuizListView(ListView):
     model = Quiz
-    template_name = 'quiz/user_quiz.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'quiz/user_quiz.html'   # <app>/<model>_<viewtype>.html
     context_object_name = 'quizzes'
-    # paginate_by = 5                        # number of quizzes per page
+    ordering = ['-date_created']            # - to inverse ordering
+    # paginate_by = 3                         # number of quizzes per page
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))

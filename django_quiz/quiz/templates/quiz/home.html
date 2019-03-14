@@ -1,6 +1,9 @@
 {% extends "quiz/base.html" %}
+{% load bootstrap %}
 {% block content %}
-    <div class="row searchFilter">
+
+    <!-- Old Filter -->
+    {% comment %} <div class="row searchFilter">
     <div class="col-sm-12">
     <div class="input-group">
         <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
@@ -25,9 +28,17 @@
         </div>
     </div>
     </div>
-    </div>
+    </div> {% endcomment %}
+
+    <!-- New Filter -->
+    <form action="" method="GET" id="myFilter2">
+        {{ filter.form|bootstrap}}
+        <button type="submit" class="btn btn-info">Search</button>
+    </form>
+
+    <!-- Quizzes -->
     <div id="myItems">
-    {% for quiz in quizzes %}
+    {% for quiz in filter.qs %}  {% comment %}  {% for quiz in quizzes %} {% endcomment %}
         <div class="card card-signin my-3">
             <div class="card-body">
                 <article class="media">
@@ -45,7 +56,14 @@
         </div>
     {% endfor %}
     </div>
-    <!-- Filter by 'course' - JavaScript function -->
+    
+    <script>
+        function autoSubmit() {
+            document.getElementById("myFilter2").submit();
+        }
+    </script>
+
+    <!-- Filter by '...' - JavaScript function -->
     <script>
         function filterFunction() {
             var input, filter, cards, cardContainer, p, title, i;
@@ -88,6 +106,7 @@
             }
         }
     </script>
+
     <!-- Pagination -->
     {% if is_paginated %}
         {% if page_obj.has_previous %}

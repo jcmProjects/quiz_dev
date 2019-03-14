@@ -144,3 +144,16 @@ EMAIL_PORT = 587
 EMAIL_USER_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+
+# Filters Verbose Lookups
+# https://django-filter.readthedocs.io/en/master/ref/settings.html#verbose-lookups-setting
+
+def FILTERS_VERBOSE_LOOKUPS():
+    from django_filters.conf import DEFAULTS
+
+    verbose_lookups = DEFAULTS['VERBOSE_LOOKUPS'].copy()
+    verbose_lookups.update({
+        'icontains': '',
+    })
+    return verbose_lookups
