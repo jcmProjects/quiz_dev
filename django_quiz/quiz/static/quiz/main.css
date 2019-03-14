@@ -114,26 +114,6 @@ body {
     font-size: 2.5rem;
   }
 
-  .quiz-detail-img {
-    width: 100%;
-    max-width: 800px;
-    height: 50vh;
-    object-fit: contain;
-  }
-
-  .quiz-show-img {
-    height: 50vh;
-    width: auto;
-    
-  }
-  
-  /* .quiz-show-img {
-    width: 100%;
-    max-width: 768px;
-    height: auto;
-    object-fit: contain;
-  } */
-
   .card-signin {
     border: 0;
     border-radius: 1rem;
@@ -323,18 +303,42 @@ body {
     }
   }
 
+  .question-text {
+    font-size: calc(1.5 * (8px + 6 * ((100vw - 320px) / 680)));
+  }
   .ans-text {
     font-size: 150%;
   }
+  .ans-text2 {
+    font-size: calc(8px + 6 * ((100vw - 320px) / 680));
+  }
+  .timer-text {
+    font-size: calc(3 * (8px + 6 * ((100vw - 320px) / 680)));
+  }
 
+  .quiz-detail-img {
+    width: 100%;
+    max-width: 800px;
+    height: 50vh;
+    object-fit: contain;
+  }
+  .quiz-show-img {
+    height: 50vh;
+    width: auto;
+    object-fit: contain;
+  }
+  /* .quiz-show-img {
+    width: 100%;
+    max-width: 768px;
+    height: auto;
+    object-fit: contain;
+  } */
   .quiz-body {
     height: 98vh;
   }
-
   .quiz-body2 {
     width: 100vw;
   }
-
   .quiz-footer {
     position: fixed;
     left: 0;

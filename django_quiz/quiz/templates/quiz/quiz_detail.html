@@ -29,36 +29,32 @@
                             <div class="row justify-content-center bg-steel">  <!-- quiz-body  -->
                                 <!-- Question -->
                                 <div class="container">
-                                    <div class="row justify-content-center bg-pink" style="margin-top: 3.75vh;">
-                                        <h2 class="article-title">{{ object.question }}</h2>
+                                    <div class="row justify-content-center bg-pink" style="margin-top: 1.5vh;">
+                                        <div class="col text-center font-weight-bold question-text">{{ object.question }}</div>
                                     </div>
                                 </div>
                                 <!-- Image -->
                                 {% if quiz.image != "no_image.jpg" %}
                                     <div class="container">
-                                        <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 3.75vh;">
+                                        <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 1.5vh;">
                                             <img class="quiz-show-img" src="{{ object.image.url }}">
                                         </div>
                                     </div>
                                 {% endif %}
                                 <!-- Answers / Timer -->
                                 <div class="container">
-                                    <div class="row justify-content-start align-items-center" style="margin-top: 3.75vh;">
+                                    <div class="row justify-content-start align-items-center" style="margin-top: 1.5vh;">
                                         <!-- Answers -->
-                                        <div class="col-sm bg-green">
-                                            <div class="col ans-text text-left"><b>a)    </b>{{ object.ansA }}</div>
-                                            <div class="col ans-text text-left"><b>b)    </b>{{ object.ansB }}</div>
-                                            <div class="col ans-text text-left"><b>c)    </b>{{ object.ansC }}</div>
-                                            <div class="col ans-text text-left"><b>d)    </b>{{ object.ansD }}</div>
-                                            <div class="col ans-text text-left"><b>e)    </b>{{ object.ansE }}</div>
+                                        <div class="col bg-green">
+                                            <div class="text-left ans-text2"><b>a)    </b>{{ object.ansA }}</div>
+                                            <div class="text-left ans-text2"><b>b)    </b>{{ object.ansB }}</div>
+                                            <div class="text-left ans-text2"><b>c)    </b>{{ object.ansC }}</div>
+                                            <div class="text-left ans-text2"><b>d)    </b>{{ object.ansD }}</div>
+                                            <div class="text-left ans-text2"><b>e)    </b>{{ object.ansE }}</div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="container">
-                                    <div class="row justify-content-center align-items-center">
                                         <!-- Timer -->
-                                        <div class="row justify-content-end bg-dark-green">
-                                            <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
+                                        <div class="col bg-dark-green">
+                                            <div class="text-center font-weight-bold timer-text">{{ object.duration }}</span></div>
                                         </div>
                                     </div>
                                 </div>
