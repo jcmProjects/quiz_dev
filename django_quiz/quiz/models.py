@@ -19,6 +19,25 @@ class Quiz(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
 
+    A = 'A'
+    B = 'B'
+    C = 'C'
+    D = 'D'
+    E = 'E'
+
+    RIGHT_ANSWER_CHOICES = (
+        (A, 'a)'),
+        (B, 'b)'),
+        (C, 'c)'),
+        (D, 'd)'),
+        (E, 'e)'),
+    )
+    right_ans = models.CharField(
+        max_length=1,
+        choices=RIGHT_ANSWER_CHOICES,
+        default=A,
+    )
+
     def __str__(self):
         return self.question
 
