@@ -26,17 +26,17 @@
                         <!-- DETAIL -->
                         <!-- Quiz -->
                         <div class="container align-items-start bg-white"> <!-- align-items-center -->
-                            <div class="row justify-content-center bg-steel">  <!-- quiz-body  -->
+                            <div class="row justify-content-center">  <!-- quiz-body  -->
                                 <!-- Question -->
                                 <div class="container">
-                                    <div class="row justify-content-center bg-pink" style="margin-top: 1.5vh;">
+                                    <div class="row justify-content-center" style="margin-top: 1.5vh;">
                                         <div class="col text-center font-weight-bold question-text">{{ object.question }}</div>
                                     </div>
                                 </div>
                                 <!-- Image -->
                                 {% if quiz.image != "no_image.jpg" %}
                                     <div class="container">
-                                        <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 1.5vh;">
+                                        <div class="row justify-content-center quiz-detail-img" style="margin-top: 1.5vh;">
                                             <img class="quiz-show-img" src="{{ object.image.url }}">
                                         </div>
                                     </div>
@@ -45,7 +45,7 @@
                                 <div class="container">
                                     <div class="row justify-content-start align-items-center" style="margin-top: 1.5vh;">
                                         <!-- Answers -->
-                                        <div class="col bg-green">
+                                        <div class="col">
                                             <div class="text-left ans-text2"><b>a)    </b>{{ object.ansA }}</div>
                                             <div class="text-left ans-text2"><b>b)    </b>{{ object.ansB }}</div>
                                             <div class="text-left ans-text2"><b>c)    </b>{{ object.ansC }}</div>
@@ -53,7 +53,7 @@
                                             <div class="text-left ans-text2"><b>e)    </b>{{ object.ansE }}</div>
                                         </div>
                                         <!-- Timer -->
-                                        <div class="col bg-dark-green">
+                                        <div class="col">
                                             <div class="text-center font-weight-bold timer-text">{{ object.duration }}</span></div>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
                 </div>
                 <!-- Image -->
                 <div class="container">
-                    <div class="row justify-content-center quiz-show-img bg-cyan" style="margin-top: 3.75vh;">
+                    <div class="row justify-content-center quiz-detail-img bg-cyan" style="margin-top: 3.75vh;">
                         {% if quiz.image != "no_image.jpg" %}
                             <img class="quiz-show-img" src="{{ object.image.url }}">
                         {% endif %}

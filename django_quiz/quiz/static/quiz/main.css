@@ -317,13 +317,13 @@ body {
   }
 
   .quiz-detail-img {
-    width: 100%;
-    max-width: 800px;
     height: 50vh;
+    width: auto;
     object-fit: contain;
   }
   .quiz-show-img {
     height: 50vh;
+    max-width: 100%;
     width: auto;
     object-fit: contain;
   }
