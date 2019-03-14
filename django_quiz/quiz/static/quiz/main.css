@@ -64,7 +64,6 @@ body {
     border: none;
     border-radius: 3px;
     margin-bottom: 20px;
-    height: 100vh;
   }
   
   .article-title {
@@ -306,14 +305,32 @@ body {
   .question-text {
     font-size: calc(1.5 * (8px + 6 * ((100vw - 320px) / 680)));
   }
+  .question-text2 {
+    font-size: calc(1.5 * (8px + 6 * ((100vh - 160px) / 320)));
+  }
+  .question-text3 {
+    font-size: calc(2 * (8px + 6 * ((100vh - 160px) / 320)));
+  }
   .ans-text {
     font-size: 150%;
   }
   .ans-text2 {
     font-size: calc(8px + 6 * ((100vw - 320px) / 680));
   }
+  .ans-text3 {
+    font-size: calc(8px + 6 * ((100vh - 160px) / 320));
+  }
+  .ans-text4 {
+    font-size: calc(1.15 * (8px + 6 * ((100vh - 160px) / 320)));
+  }
   .timer-text {
     font-size: calc(3 * (8px + 6 * ((100vw - 320px) / 680)));
+  }
+  .timer-text2 {
+    font-size: calc(3 * (8px + 6 * ((100vh - 160px) / 320)));
+  }
+  .timer-text3 {
+    font-size: calc(3.75 * (8px + 6 * ((100vh - 160px) / 320)));
   }
 
   .quiz-detail-img {
@@ -346,7 +363,7 @@ body {
     width: 100%;
     text-align: end;
     visibility: hidden;
-    height: 3.25vh;
+    height: 3vh;
   }
 
   .mt-8{

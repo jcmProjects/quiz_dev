@@ -69,16 +69,18 @@
         <!-- FULLSCREEN -->
         <!-- Quiz -->
         <div class="container align-items-start bg-white" style="visibility: hidden;" id="myQuiz"> <!-- align-items-center -->
-            <div class="row justify-content-center bg-steel">  <!-- quiz-body  -->
+            <div class="row justify-content-center">  <!-- quiz-body  -->
+                {% if quiz.image != "no_image.jpg" %}
                 <!-- Question -->
                 <div class="container">
-                    <div class="row justify-content-center bg-pink" style="margin-top: 3.75vh;">
-                        <h2 class="article-title" style="height: 10vh;">{{ object.question }}</h2>
+                    <div class="row justify-content-center" style="margin-top: 4vh;">
+                        {% comment %} <h2 class="article-title" style="height: 15vh;">{{ object.question }}</h2> {% endcomment %}
+                        <div class="col text-center font-weight-bold question-text2" style="height: 15vh; word-wrap: break-word;">{{ object.question }}</div>
                     </div>
                 </div>
                 <!-- Image -->
                 <div class="container">
-                    <div class="row justify-content-center quiz-detail-img bg-cyan" style="margin-top: 3.75vh;">
+                    <div class="row justify-content-center quiz-detail-img" style="margin-top: 1vh;">
                         {% if quiz.image != "no_image.jpg" %}
                             <img class="quiz-show-img" src="{{ object.image.url }}">
                         {% endif %}
@@ -86,24 +88,53 @@
                 </div>
                 <!-- Answers / Timer -->
                 <div class="container">
-                    <div class="row justify-content-start align-items-center" style="margin-top: 3.75vh;">
+                    <div class="row justify-content-start align-items-center" style="margin-top: 1vh; margin-bottom: 1vh;">
                         <!-- Answers -->
-                        <div class="col-sm bg-green" style="height: 25vh;">
-                            <div class="col ans-text text-left" style="height: 5vh;"><b>a)    </b>{{ object.ansA }}</div>
-                            <div class="col ans-text text-left" style="height: 5vh;"><b>b)    </b>{{ object.ansB }}</div>
-                            <div class="col ans-text text-left" style="height: 5vh;"><b>c)    </b>{{ object.ansC }}</div>
-                            <div class="col ans-text text-left" style="height: 5vh;"><b>d)    </b>{{ object.ansD }}</div>
-                            <div class="col ans-text text-left" style="height: 5vh;"><b>e)    </b>{{ object.ansE }}</div>
+                        <div class="col-sm" style="height: 25vh;">
+                            <div class="col ans-text3 text-left" style="height: 5vh; word-wrap: break-word;"><b>a)    </b>{{ object.ansA }}</div>
+                            <div class="col ans-text3 text-left" style="height: 5vh; word-wrap: break-word;"><b>b)    </b>{{ object.ansB }}</div>
+                            <div class="col ans-text3 text-left" style="height: 5vh; word-wrap: break-word;"><b>c)    </b>{{ object.ansC }}</div>
+                            <div class="col ans-text3 text-left" style="height: 5vh; word-wrap: break-word;"><b>d)    </b>{{ object.ansD }}</div>
+                            <div class="col ans-text3 text-left" style="height: 5vh; word-wrap: break-word;"><b>e)    </b>{{ object.ansE }}</div>
                         </div>
                         <!-- Timer -->
-                        <div class="row justify-content-end bg-dark-green">
-                            <div class="col text-center font-weight-bold display-1"><span id="time">{{ object.duration }}</span></div>
+                        <div class="row justify-content-end">
+                            <div class="col text-center font-weight-bold timer-text2"><span id="time">{{ object.duration }}</span></div>
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <!-- Question -->
+                <div class="container">
+                    <div class="row justify-content-center" style="margin-top: 12.5vh;">
+                        <div class="col text-center font-weight-bold question-text3" style="height: 25vh; word-wrap: break-word;">{{ object.question }}</div>
+                    </div>
+                </div>
+                 <!-- Answers / Timer -->
+                <div class="container">
+                    <div class="row justify-content-start align-items-center" style="margin-top: 7.5vh;">
+                        <!-- Answers -->
+                        <div class="col-sm" style="height: 35vh;">
+                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>a)    </b>{{ object.ansA }}</div>
+                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>b)    </b>{{ object.ansB }}</div>
+                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>c)    </b>{{ object.ansC }}</div>
+                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>d)    </b>{{ object.ansD }}</div>
+                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>e)    </b>{{ object.ansE }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Timer -->
+                <div class="container">
+                    <div class="row justify-content-center align-items-center" style="margin-top: 5vh;">
+                        <div class="row justify-content-end" style="height: 15vh;">
+                            <div class="col text-center font-weight-bold timer-text3"><span id="time">{{ object.duration }}</span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
                 <!-- Footer Buttons -->
                 <div class"container">
-                    <div class="quiz-footer bg-red" id="btn_footer">
+                    <div class="quiz-footer" id="btn_footer">
                         <button class="btn btn-outline-info btn-sm mb-1 mr-1" type="button" id="play_btn">Play</button>
                     </div>
                 </div>
