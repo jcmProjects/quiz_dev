@@ -17,7 +17,8 @@
                                     {% if object.author == user %}
                                         <a class="btn btn-outline-danger btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-delete' object.id %}">Delete</a>
                                         <a class="btn btn-outline-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
-                                        <button class="btn btn-outline-info btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
+                                        <button class="btn btn-outline-info btn-sm mt-1 mb-1 mr-1" type="button" onClick=="showDetail()" id="show_btn">Show</button>
+                                        <button class="btn btn-outline-success btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -25,7 +26,7 @@
 
                         <!-- DETAIL -->
                         <!-- Quiz -->
-                        <div class="container align-items-start bg-white"> <!-- align-items-center -->
+                        <div class="container align-items-start bg-white" id="quiz_detail" style="display: none;"> <!-- align-items-center -->
                             <div class="row justify-content-center">  <!-- quiz-body  -->
                                 <!-- Question -->
                                 <div class="container">
@@ -68,13 +69,12 @@
 
         <!-- FULLSCREEN -->
         <!-- Quiz -->
-        <div class="container align-items-start bg-white" style="visibility: hidden;" id="myQuiz"> <!-- align-items-center -->
+        <div class="container align-items-start bg-white" style="display: none;" id="myQuiz"> <!-- align-items-center -->
             <div class="row justify-content-center">  <!-- quiz-body  -->
                 {% if quiz.image != "no_image.jpg" %}
                 <!-- Question -->
                 <div class="container">
                     <div class="row justify-content-center" style="margin-top: 4vh;">
-                        {% comment %} <h2 class="article-title" style="height: 15vh;">{{ object.question }}</h2> {% endcomment %}
                         <div class="col text-center font-weight-bold question-text2" style="height: 15vh; word-wrap: break-word;">{{ object.question }}</div>
                     </div>
                 </div>
@@ -141,8 +141,19 @@
             </div>
         </div>
 
+        <!-- Toggle Detail - JavaScript Function -->
+        <script>
+            document.getElementById("show_btn").addEventListener('click', function showDetail(){
+                if (document.getElementById("quiz_detail").style.display == "none") {
+                    document.getElementById("quiz_detail").style.display = "block";
+                }
+                else {
+                    document.getElementById("quiz_detail").style.display = "none";
+                }
+            });
+        </script>
         
-        <!-- Go Fullscreen - JavaScript function -->
+        <!-- Go Fullscreen - JavaScript Function -->
         <script>
             document.getElementById("start_btn").addEventListener("click", function goFullscreen() {
                 var elem = document.getElementById("myQuiz");
@@ -159,20 +170,20 @@
                     elem.webkitRequestFullscreen();
                 }
 
-                document.getElementById("btn_footer").style.visibility = "visible";
-                document.getElementById("myQuiz").style.visibility = "visible";
+                document.getElementById("btn_footer").style.display = "block";
+                document.getElementById("myQuiz").style.display = "block";
             });
         </script>
 
-        <!-- Esc Pressed / Fullscreen Exit - JavaScript function -->
+        <!-- Esc Pressed / Fullscreen Exit - JavaScript Function -->
         <script>
             document.addEventListener("fullscreenchange", function(event) {
                 if (document.fullscreenElement) {
                     // Window is in fullscren. Do nothin.
                 }
                 else {
-                    document.getElementById("btn_footer").style.visibility = "hidden";
-                    document.getElementById("myQuiz").style.visibility = "hidden";
+                    document.getElementById("btn_footer").style.display = "none";
+                    document.getElementById("myQuiz").style.display = "none";
                 }
             });
         </script>
