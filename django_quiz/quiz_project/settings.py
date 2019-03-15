@@ -25,7 +25,7 @@ SECRET_KEY = 'p#jcau(y13o=f(bss$4s8=ddy&1k$r$*3k8no2=(xv98)cqrq1'
 #! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

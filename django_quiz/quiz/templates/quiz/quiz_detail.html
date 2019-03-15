@@ -1,5 +1,6 @@
 {% extends "quiz/base.html" %}
 {% block content %}
+{% csrf_token %}
     <main role="main" class="container-flex">
         <div class="row">
             <div class="col-md-12">
@@ -211,6 +212,16 @@
         }
 
         document.getElementById("play_btn").addEventListener("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "start_quiz/",
+                data: { "quiz_id": {{ object.id }} },
+                dataType: 'json',
+                success: function(data, textStatus) {
+                    console.log("test");
+                }
+             });
+            
             var timeRemaining = {{ object.duration }},
                 display = document.querySelector('#time');
             startTimer(timeRemaining, display);

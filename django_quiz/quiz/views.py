@@ -8,6 +8,12 @@ from django.db.models import Q
 from .models import Quiz
 from .filters import QuizFilter
 
+import json
+import datetime
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
+
 
 class QuizDetailView(DetailView):
     model = Quiz
@@ -76,3 +82,24 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return False
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def start_quiz(request, *args, **kwargs):
+    #! study why this returns error:
+    #json_data = json.loads(request.body)
+    print("Test: ")# + json_data.quiz_id)
+
+    to_return = {'type': 'success', 'msg': 'done', 'code': 200}
+    return HttpResponse(json.dumps(to_return), content_type='application/json')
+
+
+# Respostas vindas do microcontrolador
+@csrf_exempt
+@require_http_methods(["POST"])
+def receive_response(request):
+    date_now = datetime.datetime.now()
+
+    json_data = json.loads(request.body)
+
