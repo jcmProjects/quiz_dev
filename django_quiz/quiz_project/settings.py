@@ -26,6 +26,9 @@ SECRET_KEY = 'p#jcau(y13o=f(bss$4s8=ddy&1k$r$*3k8no2=(xv98)cqrq1'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# Access Django from another device: 
+#   - change the ip above to the one the the server (ifconfig to check), or just '*'
+#   - python3 manage.py runserver 0.0.0.0:8000
 
 
 # Application definition
