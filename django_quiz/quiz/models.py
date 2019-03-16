@@ -3,11 +3,13 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
+from users.models import Course
 
 
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
-    course = models.CharField(max_length=100)
+    #course = models.CharField(max_length=100)
+    course = models.ManyToManyField(Course)
     question = models.CharField(max_length=100)
     ansA = models.CharField(max_length=50)
     ansB = models.CharField(max_length=50)
