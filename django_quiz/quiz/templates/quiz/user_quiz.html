@@ -38,7 +38,7 @@
                             <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
                         </div>
                         <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
-                        <p class="article-content">{{ quiz.course }}</p>
+                        <p class="article-content">{{ quiz.course.all|join:", " }}</p>
                     </div>
                 </article>
             </div>
