@@ -28,8 +28,14 @@ class Course(models.Model):
     id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return '{}'.format(self.course_name)
+
 
 class ProfileCourse(models.Model):
     id = models.AutoField(primary_key=True)
     profile = models.ForeignKey('Profile', on_delete=models.DO_NOTHING)
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return '{}'.format(self.course)
