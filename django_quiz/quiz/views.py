@@ -48,14 +48,8 @@ class QuizListView(ListView):
         auth_user = self.request.user;
 
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
-        #* IT'S WORKING (i think)
         q1 = Course.objects.filter(profile=auth_user.id)
         q2 = Quiz.objects.filter(course__in=q1)
-        print(q1)
-        print(q2)
-        #* --------------------------------------------------------
-
-        #return Quiz.objects.filter(author=user).order_by('-date_created')
         return q2.order_by('-date_created')
 
 
@@ -71,14 +65,9 @@ class UserQuizListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
 
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
-        #* IT'S WORKING (i think)
         q1 = Course.objects.filter(profile=auth_user.id)
         q2 = Quiz.objects.filter(author=user).filter(course__in=q1)
-        print(q1)
-        print(q2)
-        #* --------------------------------------------------------
 
-        #return Quiz.objects.filter(author=user).order_by('-date_created')
         return q2.order_by('-date_created')
         
 
