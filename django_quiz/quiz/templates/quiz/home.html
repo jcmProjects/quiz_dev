@@ -2,34 +2,6 @@
 {% load bootstrap %}
 {% block content %}
 
-    <!-- Old Filter -->
-    {% comment %} <div class="row searchFilter">
-    <div class="col-sm-12">
-    <div class="input-group">
-        <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
-        <div class="nav-item dropdown">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="label-icon"></span>
-                <span class="caret">&nbsp;</span>
-            </button>
-            <div class="dropdown-menu">
-                <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-light active">
-                        <input type="radio" name="options" id="courseFilter" autocomplete="off" checked> Course
-                    </label>
-                    <label class="btn btn-light">
-                        <input type="radio" name="options" id="authorFilter" autocomplete="off"> Author
-                    </label>
-                    <label class="btn btn-light">
-                        <input type="radio" name="options" id="questionFilter" autocomplete="off"> Question
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    </div> {% endcomment %}
-
     <!-- New Filter -->
     <form action="" method="GET" id="myFilter2">
         {{ filter.form|bootstrap}}

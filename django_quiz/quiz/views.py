@@ -7,6 +7,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.db.models import Q
 from .models import Quiz
 from .filters import QuizFilter
+from users.models import Course, ProfileCourse, Profile
+from itertools import chain
 
 import json
 import datetime
@@ -21,7 +23,7 @@ class QuizDetailView(DetailView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -51,13 +53,41 @@ class UserQuizListView(ListView):
     # paginate_by = 3                         # number of quizzes per page
 
     def get_queryset(self):
+        auth_user = self.request.user;
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Quiz.objects.filter(author=user).order_by('-date_created')
+        auth_user_courses = ProfileCourse.objects.filter(profile_id=auth_user.id)
+        user_courses = ProfileCourse.objects.filter(profile_id=user.id)
+
+        print("{}".format( Quiz.objects.filter(author=user).filter(course__id=auth_user.id).order_by('-date_created') ))
+        print("auth_user = {}".format(auth_user))
+        print("page_user = {}".format(user))
+        print("auth_user_courses = {}".format(auth_user_courses))
+        print("page_user_courses = {}".format(user_courses))
+
+        print( Quiz.objects.filter(author=user).filter(course__course_name="Teste") )   # Perguntas do author "user" com curso "Teste"
+        print( Course.objects.filter(profile=auth_user.id) )                            # Cursos do auth_user
+
+        # Encadear querysets
+        q2 = Course.objects.filter(profile=auth_user.id).values_list('course_name')
+        q1 = Quiz.objects.filter(course__course_name=q2[1])
+        print(q2)
+        print(q1)
+
+        #* IT'S WORKING (i think)
+        q3 = Course.objects.filter(profile=auth_user.id)
+        q4 = Quiz.objects.filter(author=user).filter(course__in=q3)
+        print(q3)
+        print(q4)
+        #* --------------------------------------------------------
+
+        #return Quiz.objects.filter(author=user).order_by('-date_created')
+        return q4.order_by('-date_created')
+        
 
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
 
     def form_valid(self, form):
         form.instance.author = self.request.user

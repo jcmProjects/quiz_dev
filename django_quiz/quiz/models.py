@@ -3,13 +3,14 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
-from users.models import Course
+from users.models import Course, ProfileCourse
 
 
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
-    #course = models.CharField(max_length=100)
+    # course = models.CharField(max_length=100)
     course = models.ManyToManyField(Course)
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE)  #! Dá barraca. NÃO USAR!!
     question = models.CharField(max_length=100)
     ansA = models.CharField(max_length=50)
     ansB = models.CharField(max_length=50)
@@ -59,10 +60,10 @@ class Quiz(models.Model):
             img.save(self.image.path)
 
 
-class Results(models.Model):
-    id = models.AutoField(primary_key=True)
-    quiz_id = models.ForeignKey('Quiz', on_delete=models.DO_NOTHING)
-    student = models.CharField(max_length=100)
-    mac_address = models.CharField(max_length=100)
-    answer = models.CharField(max_length=100)
-    date_time = models.DateTimeField(default=timezone.now)
+# class Results(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     quiz_id = models.ForeignKey('Quiz', on_delete=models.DO_NOTHING)
+#     student = models.CharField(max_length=100)
+#     mac_address = models.CharField(max_length=100)
+#     answer = models.CharField(max_length=100)
+#     date_time = models.DateTimeField(default=timezone.now)

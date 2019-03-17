@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',             # installed app (Crispy Forms) - Check bottom of the file!! (bootstrap4)
     'django_filters',           # installed app (Django Filters)
     'bootstrapform',            # installed app (Bootstrap Forms)
+    'django_archive',           # installed app (Django Archives)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
