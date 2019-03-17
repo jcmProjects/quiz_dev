@@ -44,6 +44,20 @@ class QuizListView(ListView):
         context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
+    def get_queryset(self):
+        auth_user = self.request.user;
+
+        # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
+        #* IT'S WORKING (i think)
+        q1 = Course.objects.filter(profile=auth_user.id)
+        q2 = Quiz.objects.filter(course__in=q1)
+        print(q1)
+        print(q2)
+        #* --------------------------------------------------------
+
+        #return Quiz.objects.filter(author=user).order_by('-date_created')
+        return q2.order_by('-date_created')
+
 
 class UserQuizListView(ListView):
     model = Quiz
@@ -55,33 +69,17 @@ class UserQuizListView(ListView):
     def get_queryset(self):
         auth_user = self.request.user;
         user = get_object_or_404(User, username=self.kwargs.get('username'))
-        auth_user_courses = ProfileCourse.objects.filter(profile_id=auth_user.id)
-        user_courses = ProfileCourse.objects.filter(profile_id=user.id)
 
-        print("{}".format( Quiz.objects.filter(author=user).filter(course__id=auth_user.id).order_by('-date_created') ))
-        print("auth_user = {}".format(auth_user))
-        print("page_user = {}".format(user))
-        print("auth_user_courses = {}".format(auth_user_courses))
-        print("page_user_courses = {}".format(user_courses))
-
-        print( Quiz.objects.filter(author=user).filter(course__course_name="Teste") )   # Perguntas do author "user" com curso "Teste"
-        print( Course.objects.filter(profile=auth_user.id) )                            # Cursos do auth_user
-
-        # Encadear querysets
-        q2 = Course.objects.filter(profile=auth_user.id).values_list('course_name')
-        q1 = Quiz.objects.filter(course__course_name=q2[1])
-        print(q2)
-        print(q1)
-
+        # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
         #* IT'S WORKING (i think)
-        q3 = Course.objects.filter(profile=auth_user.id)
-        q4 = Quiz.objects.filter(author=user).filter(course__in=q3)
-        print(q3)
-        print(q4)
+        q1 = Course.objects.filter(profile=auth_user.id)
+        q2 = Quiz.objects.filter(author=user).filter(course__in=q1)
+        print(q1)
+        print(q2)
         #* --------------------------------------------------------
 
         #return Quiz.objects.filter(author=user).order_by('-date_created')
-        return q4.order_by('-date_created')
+        return q2.order_by('-date_created')
         
 
 

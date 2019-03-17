@@ -10,7 +10,7 @@
 
     <!-- Quizzes -->
     <div id="myItems">
-    {% for quiz in filter.qs %}  {% comment %}  {% for quiz in quizzes %} {% endcomment %}
+    {% for quiz in filter.qs %}  {% comment %}  {% for quiz in quizzes %} {% for quiz in filter.qs %} {% endcomment %}
         <div class="card card-signin my-3">
             <div class="card-body">
                 <article class="media">
