@@ -17,8 +17,10 @@
                                     <!-- Options -->
                                     {% if object.author == user %}
                                         <a class="btn btn-outline-danger btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-delete' object.id %}">Delete</a>
-                                        <a class="btn btn-outline-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
-                                        <button class="btn btn-outline-info btn-sm mt-1 mb-1 mr-1" type="button" onClick=="showDetail()" id="show_btn">Show</button>
+                                        <a class="btn btn-outline-secondary btn-sm mt-1 mb-1" href="{% url 'quiz-edit' object.id %}">Edit</a>
+                                    {% endif %}
+                                    <button class="btn btn-outline-info btn-sm mt-1 mb-1 ml-1 mr-1" type="button" onClick=="showDetail()" id="show_btn">Show</button>
+                                    {% if object.author == user %}
                                         <button class="btn btn-outline-success btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
                                     {% endif %}
                                 </div>

@@ -2,15 +2,46 @@
 {% load bootstrap %}
 {% block content %}
 
-    <!-- New Filter -->
+    {% comment %} <!-- New Filter -->
     <form action="" method="GET" id="myFilter2">
         {{ filter.form|bootstrap}}
         <button type="submit" class="btn btn-info">Search</button>
-    </form>
+    </form> {% endcomment %}
+
+    <div class="row searchFilter">
+    <div class="col-sm-12">
+    <div class="input-group">
+        <div id="filterTab" class="container">	
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a class="nav-link active" href="#1" data-toggle="tab">Course</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#2" data-toggle="tab">Question</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#3" data-toggle="tab">Author</a>
+                </li>
+            </ul>
+            <div class="tab-content ">
+                <div class="tab-pane active" id="1">
+                    <input type="text" id="courseInput" class="form-control" onkeyup="filterCourseFunction()" placeholder="Search course...">
+                </div>
+                <div class="tab-pane" id="2">
+                    <input type="text" id="questionInput" class="form-control" onkeyup="filterQuestionFunction()" placeholder="Search question...">
+                </div>
+                <div class="tab-pane" id="3">
+                    <input type="text" id="authorInput" class="form-control" onkeyup="filterAuthorFunction()" placeholder="Search author...">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
 
     <!-- Quizzes -->
     <div id="myItems">
-    {% for quiz in filter.qs %}  {% comment %}  {% for quiz in quizzes %} {% for quiz in filter.qs %} {% endcomment %}
+    {% for quiz in quizzes %}  {% comment %}  {% for quiz in quizzes %} {% for quiz in filter.qs %} {% endcomment %}
         <div class="card card-signin my-3">
             <div class="card-body">
                 <article class="media">
@@ -35,45 +66,53 @@
         }
     </script>
 
-    <!-- Filter by '...' - JavaScript function -->
+    <!-- Filter - JavaScript function -->
     <script>
-        function filterFunction() {
+        function filterCourseFunction() {
             var input, filter, cards, cardContainer, p, title, i;
-            input = document.getElementById("myFilter");
+            input = document.getElementById("courseInput");
             filter = input.value.toUpperCase();
             cardContainer = document.getElementById("myItems");
             cards = cardContainer.getElementsByClassName("card");
-            /* Author */
-            if(document.getElementById("authorFilter").checked == true) {
-                for (i = 0; i < cards.length; i++) {
-                    title = cards[i].querySelector(".card-body a");
-                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = "";
-                    } else {
-                        cards[i].style.display = "none";
-                    }
-                }
-            }
             /* Course */
-            if(document.getElementById("courseFilter").checked == true) {
-                for (i = 0; i < cards.length; i++) {
-                    title = cards[i].querySelector(".card-body p.article-content");
-                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = "";
-                    } else {
-                        cards[i].style.display = "none";
-                    }
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body p.article-content");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
                 }
             }
-            /* Question */
-            if(document.getElementById("questionFilter").checked == true) {
-                for (i = 0; i < cards.length; i++) {
-                    title = cards[i].querySelector(".card-body a.article-title");
-                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = "";
-                    } else {
-                        cards[i].style.display = "none";
-                    }
+        }
+        function filterQuestionFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("questionInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body a.article-title");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        function filterAuthorFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("authorInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body a.mr-2");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
                 }
             }
         }

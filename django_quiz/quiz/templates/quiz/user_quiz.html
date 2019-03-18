@@ -5,7 +5,27 @@
     <div class="row searchFilter">
     <div class="col-sm-12">
     <div class="input-group">
-        <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
+
+        <div id="filterTab" class="container">	
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a class="nav-link active" href="#1" data-toggle="tab">Course</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#2" data-toggle="tab">Question</a>
+                </li>
+            </ul>
+            <div class="tab-content ">
+                <div class="tab-pane active" id="1">
+                    <input type="text" id="courseInput" class="form-control" onkeyup="filterCourseFunction()" placeholder="Search course...">
+                </div>
+                <div class="tab-pane" id="2">
+                    <input type="text" id="questionInput" class="form-control" onkeyup="filterQuestionFunction()" placeholder="Search question...">
+                </div>
+            </div>
+        </div>
+
+        {% comment %} <input type="text" id="myFilter" class="form-control" onkeyup="filterFunction()" placeholder="Search...">
         <div class="nav-item dropdown">
             <button type="button" class="btn btn-outline-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="label-icon"></span>
@@ -21,7 +41,8 @@
                     </label>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
+
     </div>
     </div>
     </div>
@@ -45,7 +66,42 @@
         </div>
     {% endfor %}
     </div>
-    <!-- Filter by 'course' - JavaScript function -->
+    <!-- Filter - JavaScript function -->
+    <script>
+        function filterCourseFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("courseInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body p.article-content");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        function filterQuestionFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("questionInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body a.article-title");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+    <!-- Filter by '...' - JavaScript function -->
     <script>
         function filterFunction() {
             var input, filter, cards, cardContainer, p, title, i;

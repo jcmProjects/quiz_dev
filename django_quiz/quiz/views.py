@@ -57,7 +57,7 @@ class QuizListView(ListView):
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
         q1 = Course.objects.filter(profile=auth_user.id)
         q2 = Quiz.objects.filter(course__in=q1)
-        return q2.order_by('-date_created')
+        return q2.order_by('-date_created').distinct()
 
 
 class UserQuizListView(ListView):
@@ -75,7 +75,7 @@ class UserQuizListView(ListView):
         q1 = Course.objects.filter(profile=auth_user.id)
         q2 = Quiz.objects.filter(author=user).filter(course__in=q1)
 
-        return q2.order_by('-date_created')
+        return q2.order_by('-date_created').distinct()
         
 
 
