@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_filters',           # installed app (Django Filters)
     'bootstrapform',            # installed app (Bootstrap Forms)
     'django_archive',           # installed app (Django Archives)
+    'import_export',            # installed app (Django Import Export)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

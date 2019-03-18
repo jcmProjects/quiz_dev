@@ -21,7 +21,7 @@
                                     {% endif %}
                                     <button class="btn btn-outline-info btn-sm mt-1 mb-1 ml-1 mr-1" type="button" onClick=="showDetail()" id="show_btn">Show</button>
                                     {% if object.author == user %}
-                                        <button class="btn btn-outline-success btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" id="start_btn">Start</button>
+                                        <button class="btn btn-outline-success btn-sm mt-1 mb-1" type="button" onClick=="goFullscreen()" style="visibility: visible;" id="start_btn">Start</button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -155,6 +155,21 @@
                 }
             });
         </script>
+
+        <!-- Detect Mobile - JavaScript Function -->
+        <script>
+            $(document).ready(function(){
+                if( navigator.userAgent.match(/Android/i)
+                || navigator.userAgent.match(/webOS/i)
+                || navigator.userAgent.match(/iPhone/i)
+                || navigator.userAgent.match(/iPad/i)
+                || navigator.userAgent.match(/iPod/i)
+                || navigator.userAgent.match(/BlackBerry/i)
+                || navigator.userAgent.match(/Windows Phone/i) ) {
+                    document.getElementById("start_btn").style.visibility = "hidden";
+                }
+            })
+        </script>
         
         <!-- Go Fullscreen - JavaScript Function -->
         <script>
@@ -193,41 +208,42 @@
 
         <!-- Timer - JavaScript Function -->
         <script>
-        function startTimer(duration, display) {
-            var start = Date.now(),
-                diff,
-                minutes,
-                seconds;
-            function timer() {
-                // get the number of seconds that have elapsed since 
-                // startTimer() was called
-                diff = duration - (((Date.now() - start) / 1000) | 0);
+            function startTimer(duration, display) {
+                var start = Date.now(),
+                    diff,
+                    minutes,
+                    seconds;
+                function timer() {
+                    // get the number of seconds that have elapsed since 
+                    // startTimer() was called
+                    diff = duration - (((Date.now() - start) / 1000) | 0);
 
-                if (diff <= 0) {
-                    diff = 0;
-                }
-                display.textContent = diff;
-            };
-            // we don't want to wait a full second before the timer starts
-            timer();
-            setInterval(timer, 1000);
-        }
+                    if (diff <= 0) {
+                        diff = 0;
+                    }
+                    display.textContent = diff;
+                };
+                // we don't want to wait a full second before the timer starts
+                timer();
+                setInterval(timer, 1000);
+            }
 
-        document.getElementById("play_btn").addEventListener("click", function () {
-            $.ajax({
-                type: "POST",
-                url: "start_quiz/",
-                data: { "quiz_id": {{ object.id }} },
-                dataType: 'json',
-                success: function(data, textStatus) {
-                    console.log("test");
-                }
-             });
-            
-            var timeRemaining = {{ object.duration }},
-                display = document.querySelector('#time');
-            startTimer(timeRemaining, display);
-        });
+            /* Play_btn (Abade) */
+            document.getElementById("play_btn").addEventListener("click", function () {
+                $.ajax({
+                    type: "POST",
+                    url: "start_quiz/",
+                    data: { "quiz_id": {{ object.id }} },
+                    dataType: 'json',
+                    success: function(data, textStatus) {
+                        console.log("test");
+                    }
+                });
+                
+                var timeRemaining = {{ object.duration }},
+                    display = document.querySelector('#time');
+                startTimer(timeRemaining, display);
+            });
         </script>
 
     </main>
