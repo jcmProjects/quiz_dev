@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from .models import Quiz
+from .forms import ChooseCourseForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
 from itertools import chain
@@ -23,7 +24,13 @@ class QuizDetailView(DetailView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+    fields = ['question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+
+    def get_context_data(self, **kwargs):
+        auth_user = self.request.user;
+        context = super().get_context_data(**kwargs)
+        context['course_form'] = ChooseCourseForm(auth_user)
+        return context
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -74,7 +81,13 @@ class UserQuizListView(ListView):
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+    fields = ['question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+
+    def get_context_data(self, **kwargs):
+        auth_user = self.request.user;
+        context = super().get_context_data(**kwargs)
+        context['course_form'] = ChooseCourseForm(auth_user)
+        return context
 
     def form_valid(self, form):
         form.instance.author = self.request.user
