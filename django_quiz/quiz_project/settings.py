@@ -162,3 +162,6 @@ def FILTERS_VERBOSE_LOOKUPS():
         'icontains': '',
     })
     return verbose_lookups
+
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True

@@ -1,15 +1,18 @@
+#import csv, io
+from tablib import Dataset  # for Quiz Upload
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Q
+#from django.db.models import Q
 from .models import Quiz
-from .forms import ChooseCourseForm
+from .forms import ChooseCourseForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
-from itertools import chain
+from .resources import QuizResource
+#from itertools import chain
 
 import json
 import datetime
@@ -46,10 +49,10 @@ class QuizListView(ListView):
     # paginate_by = 3                     # number of quizzes per page
 
     # Filter -> Method 1
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
+    #     return context
 
     def get_queryset(self):
         auth_user = self.request.user;
@@ -112,6 +115,32 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return False
+
+
+@login_required
+def quiz_upload(request):
+    template = 'quiz/quiz_upload.html'
+    auth_user = request.user
+    form = QuizUploadForm(auth_user)
+
+    if request.method == "POST":
+        quiz_resource = QuizResource()
+        dataset = Dataset()
+        json_file = request.FILES['file']
+
+        imported_data = dataset.load(json_file.read())
+        print( imported_data )
+        result = quiz_resource.import_data(dataset, dry_run=True)   # Test the data import
+
+        if not result.has_errors():
+            quiz_resource.import_data(dataset, dry_run=False)       # Actually import now
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
+
 
 
 @csrf_exempt

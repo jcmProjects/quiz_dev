@@ -12,3 +12,15 @@ class ChooseCourseForm(forms.ModelForm):
     class Meta:
         model = Quiz
         fields = ['course']
+
+
+class QuizUploadForm(forms.ModelForm):
+
+    def __init__(self, auth_user, *args, **kwargs):
+        super(QuizUploadForm, self).__init__(*args, **kwargs)
+        self.fields['author'] = forms.IntegerField(widget=forms.HiddenInput(), initial=auth_user.id)
+
+    class Meta:
+        model = Quiz
+        fields = ['author', 'date_created', 'execution_date']
+        

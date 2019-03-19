@@ -8,9 +8,7 @@ from users.models import Course, ProfileCourse
 
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
-    # course = models.CharField(max_length=100)
     course = models.ManyToManyField(Course)
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE)  #! Dá barraca. NÃO USAR!!
     question = models.CharField(max_length=100)
     ansA = models.CharField(max_length=50)
     ansB = models.CharField(max_length=50)
