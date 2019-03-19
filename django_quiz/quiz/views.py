@@ -24,6 +24,14 @@ from django.http import HttpResponse
 class QuizDetailView(DetailView):
     model = Quiz
 
+    def get_queryset(self):
+        auth_user = self.request.user;
+
+        # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
+        q1 = Course.objects.filter(profile=auth_user.id)
+        q2 = Quiz.objects.filter(course__in=q1)
+        return q2.distinct()
+
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
