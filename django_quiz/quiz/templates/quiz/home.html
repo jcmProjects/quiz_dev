@@ -1,0 +1,140 @@
+{% extends "quiz/base.html" %}
+{% load bootstrap %}
+{% block content %}
+
+    {% comment %} <!-- New Filter -->
+    <form action="" method="GET" id="myFilter2">
+        {{ filter.form|bootstrap}}
+        <button type="submit" class="btn btn-info">Search</button>
+    </form> {% endcomment %}
+
+    <div class="row searchFilter">
+        <div class="col-sm-12">
+            <div class="input-group">
+                <div id="filterTab" class="container">	
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a class="nav-link active" href="#1" data-toggle="tab">Course</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#2" data-toggle="tab">Question</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#3" data-toggle="tab">Author</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content ">
+                        <div class="tab-pane active" id="1">
+                            <input type="text" id="courseInput" class="form-control" onkeyup="filterCourseFunction()" placeholder="Search course...">
+                        </div>
+                        <div class="tab-pane" id="2">
+                            <input type="text" id="questionInput" class="form-control" onkeyup="filterQuestionFunction()" placeholder="Search question...">
+                        </div>
+                        <div class="tab-pane" id="3">
+                            <input type="text" id="authorInput" class="form-control" onkeyup="filterAuthorFunction()" placeholder="Search author...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quizzes -->
+    <div id="myItems">
+        {% for quiz in quizzes %}  {% comment %}  {% for quiz in quizzes %} {% for quiz in filter.qs %} {% endcomment %}
+            <div class="card card-signin my-3">
+                <div class="card-body">
+                    <article class="media">
+                        <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
+                        <div class="media-body">
+                            <div class="article-metadata">
+                                <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
+                                <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                            </div>
+                            <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>
+                            <p class="article-content">{{ quiz.course.all|join:", " }}</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    {% comment %} <script>
+        function autoSubmit() {
+            document.getElementById("myFilter2").submit();
+        }
+    </script> {% endcomment %}
+
+    <!-- Filter - JavaScript function -->
+    <script>
+        function filterCourseFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("courseInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body p.article-content");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        function filterQuestionFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("questionInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body a.article-title");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        function filterAuthorFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("authorInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector(".card-body a.mr-2");
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}
