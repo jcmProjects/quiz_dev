@@ -150,7 +150,6 @@ def quiz_upload(request):
     return render(request, template, context)
 
 
-
 @csrf_exempt
 @require_http_methods(["POST"])
 def start_quiz(request, *args, **kwargs):
