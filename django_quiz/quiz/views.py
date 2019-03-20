@@ -1,4 +1,3 @@
-#import csv, io
 from tablib import Dataset  # for Quiz Upload
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -7,13 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.db.models import Q
-from .models import Quiz
+
+from .models import Quiz, Answer, Results
 from .forms import ChooseCourseForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
 from .resources import QuizResource
-#from itertools import chain
 
+# Abade
 import json
 import datetime
 from django.views.decorators.csrf import csrf_exempt
@@ -126,6 +126,26 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 @login_required
+def answer_delete(request):
+    # Deletes all objects from Answer database table
+    Answer.objects.all().delete()
+    template = 'quiz/answer_delete.html'
+    context = {}
+    return render(request, template, context)  # remove template ?
+
+
+@login_required
+def answer_to_results(request):
+
+    answers = get_object_or_404(Answer, student = 65423)
+    print(answers.nmec + ', ' + answers.mac + ', ' + answers.ans)
+
+    context = {}
+    template = 'quiz/answer_to_results.html'
+    return render(request, template, context)
+
+
+@login_required
 def quiz_upload(request):
     template = 'quiz/quiz_upload.html'
     auth_user = request.user
@@ -153,8 +173,21 @@ def quiz_upload(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def start_quiz(request, *args, **kwargs):
+    # Convert from JSON to PYTHON: json.loads(x)
+    # Convert from PYTHON to JSON: json.dumps(x)
+
+    body = request.body
+    print(body)
+    body_unicode = request.body.decode('utf-8')
+    print(body_unicode)
+
+    #todo - Delete this:
+    s = '{"success": "true", "status": 200, "message": "Hello"}'
+    json_data = json.loads(s)
+    print(json_data)
+
     #! study why this returns error:
-    #json_data = json.loads(request.body)
+    # json_data = json.loads(body_unicode) # request.body
     print("Test: ")# + json_data.quiz_id)
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}

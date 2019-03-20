@@ -22,5 +22,5 @@ class QuizUploadForm(forms.ModelForm):
 
     class Meta:
         model = Quiz
-        fields = ['author', 'date_created', 'execution_date']
+        fields = ['author', 'date_created', 'start_date']
         

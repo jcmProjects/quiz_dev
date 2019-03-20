@@ -233,10 +233,10 @@
                 $.ajax({
                     type: "POST",
                     url: "start_quiz/",
-                    data: { "quiz_id": {{ object.id }} },
+                    data: { 'id': '{{ object.id }}' },
                     dataType: 'json',
                     success: function(data, textStatus) {
-                        console.log("test");
+                        console.log(data);
                     }
                 });
                 
