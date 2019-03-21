@@ -1,6 +1,6 @@
 import re   # for Start Quiz
 from tablib import Dataset  # for Quiz Upload
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
@@ -36,7 +36,7 @@ class QuizDetailView(DetailView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    fields = ['question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
 
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
@@ -44,10 +44,11 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
         context['course_form'] = ChooseCourseForm(auth_user)
         return context
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
+    def form_valid(self, course_form):
+        course_form.instance.author = self.request.user
+        course_form.save()
         messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully created.')
-        return super().form_valid(form)
+        return super().form_valid(course_form)
 
 
 class QuizListView(ListView):
@@ -93,7 +94,7 @@ class UserQuizListView(ListView):
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
 
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
@@ -105,6 +106,12 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form.instance.author = self.request.user
         messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully updated.')
         return super().form_valid(form)
+
+    # def form_valid(self, course_form):
+    #     course_form.instance.author = self.request.user
+    #     course_form.save()
+    #     messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully updated.')
+    #     return super().form_valid(course_form)
 
     def test_func(self):
         quiz = self.get_object()
