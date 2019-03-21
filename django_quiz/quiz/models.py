@@ -75,4 +75,4 @@ class Answer(models.Model):
     date_time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.student
+        return self.nmec
