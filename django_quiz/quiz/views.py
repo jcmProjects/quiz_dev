@@ -167,21 +167,17 @@ def start_quiz(request, *args, **kwargs):
         quiz_id = m.group(1)
     print(quiz_id)
 
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-
     #* Update quiz.start_date
+    quiz = get_object_or_404(Quiz, id=quiz_id)
     quiz.start_date = datetime.datetime.now()
     quiz.save()
-
 
     # #? Get 'quiz.id'
     # print("######################################################################")
     # print("request.body:")
     # print(request.body)
-
     # print("request.body.decode('utf-8'):")
     # print(request.body.decode('utf-8'))
-
     # s = '{"id": "7", "start_date": "2019-03-18 17:45:23", "right_ans": "A"}'
     # json_data = json.loads(s)
     # print("How it should be:")
@@ -191,6 +187,47 @@ def start_quiz(request, *args, **kwargs):
     #? Abade:
     # json_data = json.loads(request.body)
     # print(json_data.quiz_id)
+
+    to_return = {'type': 'success', 'msg': 'done', 'code': 200}
+    return HttpResponse(json.dumps(to_return), content_type='application/json')
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def stop_quiz(request, *args, **kwargs):
+    
+    print("QUIZ ENDED")
+
+    #* Get quiz object
+    body = request.body.decode('utf-8')
+    m = re.search('id=(.+?)&', body)
+    if m:
+        quiz_id = m.group(1)
+    print(quiz_id)
+    
+    #* Check 'nmec + mac' on every object of 'Answer' model
+    # Deletes ALL but the last answer from each NMEC
+    lastSeenNMEC = float('-Inf')
+    answers_inverse = Answer.objects.all().order_by('-id')
+    for answer in answers_inverse:
+        if answer.nmec == lastSeenNMEC:
+            answer.delete() # We've seen this MAC in a previous row
+        else: # New id found, save it and check future rows for duplicates.
+            lastSeenNMEC = answer.nmec
+
+    # Deletes ALL but the first answer from each MAC
+    lastSeenMAC = float('-Inf')
+    answers = Answer.objects.all().order_by('id')
+    for answer in answers:
+        if answer.mac == lastSeenMAC:
+            answer.delete()
+        else:
+            lastSeenMAC = answer.mac
+
+    #* Compare time-Answer with time-Quiz (IN DEVELOPMENT)
+    # Get quiz.start_date
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    print(quiz.start_date)
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')

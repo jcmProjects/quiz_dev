@@ -213,19 +213,34 @@
                     diff,
                     minutes,
                     seconds;
+                function stopTimer() {
+                    $.ajax({
+                        type: "POST",
+                        url: "stop_quiz/",
+                        data: { 'id': '{{ object.id }}', 'start_date': '{{ object.start_date }}', 'right_ans': '{{ object.right_ans }}' },
+                        dataType: 'json',
+                        success: function(data, textStatus) {
+                            console.log(data);
+                        }
+                    });
+
+                    console.log("time's up!");
+                    clearInterval(time);
+                }
                 function timer() {
                     // get the number of seconds that have elapsed since 
                     // startTimer() was called
                     diff = duration - (((Date.now() - start) / 1000) | 0);
 
                     if (diff <= 0) {
-                        diff = 0;
+                        diff = 0;  
+                        stopTimer();                  
                     }
                     display.textContent = diff;
                 };
                 // we don't want to wait a full second before the timer starts
                 timer();
-                setInterval(timer, 1000);
+                time = setInterval(timer, 1000);
             }
 
             /* Play_btn (Abade) */
