@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 #from django.db.models import Q
 
 from .models import Quiz, Answer, Results
-from .forms import QuizCreateForm, QuizUploadForm
+from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
 from .resources import QuizResource
@@ -41,7 +41,7 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
         context = super().get_context_data(**kwargs)
-        context['course_form'] = QuizCreateForm(auth_user)
+        context['course_form'] = QuizForm(auth_user)
         return context
 
     def form_valid(self, course_form):
@@ -94,7 +94,7 @@ class UserQuizListView(ListView):
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
 
     def get_context_data(self, **kwargs):
 
@@ -113,7 +113,7 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         }
         context = super().get_context_data(**kwargs)
-        context['course_form'] = QuizCreateForm(auth_user, initial = initial_data)
+        context['course_form'] = QuizForm(auth_user, initial = initial_data)
         return context
 
     def form_valid(self, form):

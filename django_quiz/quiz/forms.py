@@ -3,10 +3,10 @@ from users.models import Course
 from .models import Quiz
 
 
-class QuizCreateForm(forms.ModelForm):
+class QuizForm(forms.ModelForm):
 
     def __init__(self, auth_user, *args, **kwargs):
-        super(QuizCreateForm, self).__init__(*args, **kwargs)
+        super(QuizForm, self).__init__(*args, **kwargs)
         self.fields['course'] = forms.ModelChoiceField( queryset=Course.objects.filter(profile=auth_user.id) )  # ModelChoiceField or ModelMultipleChoiceField (the latter has a bug)
 
     class Meta:
