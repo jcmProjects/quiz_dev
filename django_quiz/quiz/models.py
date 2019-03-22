@@ -64,7 +64,9 @@ class Results(models.Model):
     student = models.CharField(max_length=100)
     mac_address = models.CharField(max_length=100)
     answer = models.CharField(max_length=100)
-    date_time = models.DateTimeField(default=timezone.now)
+    time = models.CharField(max_length=100, default="")
+    evaluation = models.CharField(max_length=100, default="")
+    #date_time = models.DateTimeField(default=timezone.now)
 
 
 class Answer(models.Model):

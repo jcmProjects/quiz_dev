@@ -245,10 +245,27 @@ def stop_quiz(request, *args, **kwargs):
         else:
             lastSeenMAC = answer.mac
 
-    #* Compare time-Answer with time-Quiz (IN DEVELOPMENT)
+    #* Compare time-Answer with time-Quiz and save to 'Results'
     # Get quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
+    quiz_date = quiz.start_date
     print(quiz.start_date)
+
+    for answer in answers:
+        # Time
+        answer_time = answer.date_time - quiz.start_date
+        seconds = answer_time.total_seconds()
+        print(seconds)
+        float_sec = float(seconds)
+        # Answer
+        if answer.ans == quiz.right_ans and float_sec <= quiz.duration:
+            evaluation = "right"
+        else:
+            evaluation = "wrong"
+        print(evaluation)
+        # Save Results
+        result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation)
+        result.save()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
