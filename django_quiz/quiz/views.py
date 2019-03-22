@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 #from django.db.models import Q
 
 from .models import Quiz, Answer, Results
-from .forms import ChooseCourseForm, QuizUploadForm
+from .forms import QuizCreateForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
 from .resources import QuizResource
@@ -41,7 +41,7 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
         context = super().get_context_data(**kwargs)
-        context['course_form'] = ChooseCourseForm(auth_user)
+        context['course_form'] = QuizCreateForm(auth_user)
         return context
 
     def form_valid(self, course_form):
@@ -99,7 +99,7 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
         context = super().get_context_data(**kwargs)
-        context['course_form'] = ChooseCourseForm(auth_user)
+        context['course_form'] = QuizCreateForm(auth_user)
         return context
 
     def form_valid(self, form):
