@@ -97,9 +97,23 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image'] # course
 
     def get_context_data(self, **kwargs):
+
         auth_user = self.request.user;
+        initial_data = {
+            'course': [i.id for i in self.object.course.all()],
+            'question': self.object.question,
+            'ansA': self.object.ansA,
+            'ansB': self.object.ansB,
+            'ansC': self.object.ansC,
+            'ansD': self.object.ansD,
+            'ansE': self.object.ansE,
+            'right_ans': self.object.right_ans,
+            'duration': self.object.duration,
+            'image': self.object.image
+
+        }
         context = super().get_context_data(**kwargs)
-        context['course_form'] = QuizCreateForm(auth_user)
+        context['course_form'] = QuizCreateForm(auth_user, initial = initial_data)
         return context
 
     def form_valid(self, form):
