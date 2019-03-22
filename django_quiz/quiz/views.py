@@ -251,6 +251,9 @@ def stop_quiz(request, *args, **kwargs):
     quiz_date = quiz.start_date
     print(quiz.start_date)
 
+    quiz_pk = float(quiz.id)
+    print(quiz_pk)
+
     for answer in answers:
         # Time
         answer_time = answer.date_time - quiz.start_date
@@ -266,6 +269,9 @@ def stop_quiz(request, *args, **kwargs):
         # Save Results
         result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation)
         result.save()
+
+    #* Reset 'Answer' model
+    Answer.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')

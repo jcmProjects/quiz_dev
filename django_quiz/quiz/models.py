@@ -68,6 +68,9 @@ class Results(models.Model):
     evaluation = models.CharField(max_length=100, default="")
     #date_time = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return f'Question: {self.quiz_id.id}, Student: {self.student}'  # {self.quiz_id.id} to return ID or {self.quiz_id} to return Question
+
 
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
