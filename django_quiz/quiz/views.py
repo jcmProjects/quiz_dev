@@ -282,10 +282,17 @@ def stop_quiz(request, *args, **kwargs):
         result.save()
 
     #* Reset 'AnswerProcessing' model
-    AnswerProcessing.objects.all().delete()
+    # AnswerProcessing.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
+
+
+class ProcessedAnswersView(ListView):
+    model = Results                # AnswerProcessing OR Results
+    template_name = 'quiz/results.html' 
+    context_object_name = 'answers'
+    ordering = ['student']  
 
 
 # Respostas vindas do microcontrolador

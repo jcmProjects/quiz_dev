@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required, permission_required
-from .views import QuizCreateView, QuizDetailView, UserQuizListView, QuizListView, QuizEditView, QuizDeleteView, start_quiz, stop_quiz, quiz_upload
+from .views import QuizCreateView, QuizDetailView, UserQuizListView, QuizListView, QuizEditView, QuizDeleteView, start_quiz, stop_quiz, ProcessedAnswersView, quiz_upload
 from . import views
 
 urlpatterns = [
@@ -12,5 +12,6 @@ urlpatterns = [
     path('quiz/<int:pk>/delete/', login_required(QuizDeleteView.as_view()), name='quiz-delete'),
     path('quiz/<int:pk>/start_quiz/', views.start_quiz, name='start_quiz'),
     path('quiz/<int:pk>/stop_quiz/', views.stop_quiz, name='stop_quiz'),
+    path('quiz/results/', login_required(ProcessedAnswersView.as_view()), name='quiz-results'),
     path('quiz/upload/', views.quiz_upload, name='quiz_upload'),
 ]

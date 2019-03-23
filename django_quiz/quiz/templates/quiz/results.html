@@ -1,0 +1,36 @@
+{% extends "quiz/base.html" %}
+{% load bootstrap %}
+{% block content %}
+
+    <!-- Results -->
+    <div id="myItems">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Course</th>
+                <th>Quiz ID</th>
+                <th>DateTime</th>
+                <th>NMec</th>
+                <th>Answer</th>
+                <th>Time</th>
+                <th>Evaluation</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for answer in answers %}
+                    <tr>
+                        <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
+                        <td>{{ answer.quiz_id.id }}</td>
+                        <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td>
+                        <td>{{ answer.student }}</td>
+                        <td>{{ answer.answer }}</td>
+                        <td>{{ answer.time }}</td>
+                        <td>{{ answer.evaluation }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+
+{% endblock content %}
