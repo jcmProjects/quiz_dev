@@ -181,7 +181,7 @@ void loop(void) {
 
         /* Card Authorized */
         if (authorized) {
-            digitalWrite(ledGreen, HIGH);
+            //digitalWrite(ledGreen, HIGH);
             Serial.println("Card authorized!");
             Serial.print("MAC: ");
             Serial.print(WiFi.macAddress());
@@ -205,6 +205,7 @@ void loop(void) {
 
             /* Card is present */
             if (control <= 2) {
+                digitalWrite(ledGreen, HIGH);
       
                 /* Read Input State */
                 StateQ1 = digitalRead(Q1);
