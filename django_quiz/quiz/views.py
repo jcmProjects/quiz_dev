@@ -8,11 +8,12 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.db.models import Q
 
-from .models import Quiz, Answer, Results
+from .models import Quiz, Answer, Results, AnswerProcessing
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile
 from .resources import QuizResource
+from datetime import datetime
 
 # Abade
 import json
@@ -178,8 +179,9 @@ def start_quiz(request, *args, **kwargs):
     # Convert from JSON to PYTHON: json.loads(x)
     # Convert from PYTHON to JSON: json.dumps(x)
 
-    #* Reset 'Answer' model
+    #* Reset 'Answer' and 'AnswerProcessing' models
     Answer.objects.all().delete()
+    AnswerProcessing.objects.all().delete()
 
     #* Get quiz object
     body = request.body.decode('utf-8')
@@ -190,6 +192,7 @@ def start_quiz(request, *args, **kwargs):
 
     #* Update quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
+    #quiz.start_date = datetime.datetime.now()
     quiz.start_date = datetime.datetime.now()
     quiz.save()
 
@@ -219,6 +222,15 @@ def stop_quiz(request, *args, **kwargs):
     
     print("QUIZ ENDED")
 
+    #* Copy Answer to AnswerProcessing
+    answers = Answer.objects.all().order_by('id')
+    for answer in answers:
+        copy = AnswerProcessing(nmec=answer.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)
+        copy.save()
+
+    #* Reset 'Answer' model
+    #Answer.objects.all().delete()
+
     #* Get quiz object
     body = request.body.decode('utf-8')
     m = re.search('id=(.+?)&', body)
@@ -226,11 +238,11 @@ def stop_quiz(request, *args, **kwargs):
         quiz_id = m.group(1)
     print(quiz_id)
     
-    #* Check 'nmec + mac' on every object of 'Answer' model
+    #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
     # Deletes ALL but the last answer from each NMEC
     lastSeenNMEC = float('-Inf')
-    answers_inverse = Answer.objects.all().order_by('-id')
-    for answer in answers_inverse:
+    answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
+    for answer in answers_processing_inverse:
         if answer.nmec == lastSeenNMEC:
             answer.delete() # We've seen this MAC in a previous row
         else: # New id found, save it and check future rows for duplicates.
@@ -238,25 +250,23 @@ def stop_quiz(request, *args, **kwargs):
 
     # Deletes ALL but the first answer from each MAC
     lastSeenMAC = float('-Inf')
-    answers = Answer.objects.all().order_by('id')
-    for answer in answers:
+    answers_processing = AnswerProcessing.objects.all().order_by('id')
+    for answer in answers_processing:
         if answer.mac == lastSeenMAC:
             answer.delete()
         else:
             lastSeenMAC = answer.mac
 
-    #* Compare time-Answer with time-Quiz and save to 'Results'
+    #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
     # Get quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
     quiz_date = quiz.start_date
     print(quiz.start_date)
 
-    quiz_pk = float(quiz.id)
-    print(quiz_pk)
-
-    for answer in answers:
+    for answer in answers_processing:
         # Time
         answer_time = answer.date_time - quiz.start_date
+        print(answer.date_time)
         seconds = answer_time.total_seconds()
         print(seconds)
         float_sec = float(seconds)
@@ -270,8 +280,8 @@ def stop_quiz(request, *args, **kwargs):
         result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation)
         result.save()
 
-    #* Reset 'Answer' model
-    Answer.objects.all().delete()
+    #* Reset 'AnswerProcessing' model
+    #AnswerProcessing.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')

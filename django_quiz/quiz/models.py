@@ -8,6 +8,8 @@ from users.models import Course, ProfileCourse
 from datetime import datetime
 from time import strftime
 
+from unixtimestampfield.fields import UnixTimeStampField
+
 class UnixTimestampField(models.DateTimeField):
     # UnixTimestampField: creates a DateTimeField that is represented on the
     # database as a TIMESTAMP field rather than the usual DATETIME field.
@@ -53,7 +55,9 @@ class Quiz(models.Model):
     ansE = models.CharField(max_length=50)
     duration = models.IntegerField()
     date_created = models.DateTimeField(default=timezone.now)
-    start_date = models.DateTimeField(default=timezone.now)
+    #start_date = models.DateTimeField(default=timezone.now)
+    start_date = UnixTimestampField(auto_created=True)
+    #start_date = UnixTimeStampField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
 
@@ -115,6 +119,18 @@ class Answer(models.Model):
     ans = models.CharField(max_length=100)
     # date_time = models.DateTimeField(auto_now_add=True)   # 'auto_now_add=True' OR 'default=timezone.now'
     date_time = UnixTimestampField(auto_created=True)
+    # date_time = UnixTimeStampField(auto_created=True)
+
+    def __str__(self):
+        return self.nmec
+
+
+class AnswerProcessing(models.Model):
+    id = models.AutoField(primary_key=True)
+    nmec = models.CharField(max_length=100)
+    mac = models.CharField(max_length=100)
+    ans = models.CharField(max_length=100)
+    date_time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.nmec
