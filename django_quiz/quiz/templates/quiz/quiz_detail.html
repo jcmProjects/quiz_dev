@@ -232,14 +232,14 @@
                     // startTimer() was called
                     diff = duration - (((Date.now() - start) / 1000) | 0);
 
-                    if (diff <= 0) {
+                    if (diff < 0) { // <= OR < to fix the last second answer issue
                         diff = 0;  
-                        stopTimer();                  
+                        stopTimer();                
                     }
                     display.textContent = diff;
                 };
                 // we don't want to wait a full second before the timer starts
-                timer();
+                timer();  // comment OR uncomment to fix the last second answer issue
                 time = setInterval(timer, 1000);
             }
 

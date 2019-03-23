@@ -217,7 +217,7 @@ void loop(void) {
 
                     insert_db(nmec, mac, "A");
                     digitalWrite(ledGreen, LOW);
-                    DEBUG_btn_pressed(1);
+                    //DEBUG_btn_pressed(1);
                     clear_var();
                     break;
                 }
@@ -227,7 +227,7 @@ void loop(void) {
 
                     insert_db(nmec, mac, "B");
                     digitalWrite(ledGreen, LOW);
-                    DEBUG_btn_pressed(2);
+                    //DEBUG_btn_pressed(2);
                     clear_var();
                     break;
                 }
@@ -237,7 +237,7 @@ void loop(void) {
 
                     insert_db(nmec, mac, "C");
                     digitalWrite(ledGreen, LOW);
-                    DEBUG_btn_pressed(3);
+                    //DEBUG_btn_pressed(3);
                     clear_var();
                     break;
                 }
@@ -247,7 +247,7 @@ void loop(void) {
 
                     insert_db(nmec, mac, "D");
                     digitalWrite(ledGreen, LOW);
-                    DEBUG_btn_pressed(4);
+                    //DEBUG_btn_pressed(4);
                     clear_var();
                     break;
                 }
@@ -257,7 +257,7 @@ void loop(void) {
 
                     insert_db(nmec, mac, "E");
                     digitalWrite(ledGreen, LOW);
-                    DEBUG_btn_pressed(5);
+                    //DEBUG_btn_pressed(5);
                     clear_var();
                     break;
                 }

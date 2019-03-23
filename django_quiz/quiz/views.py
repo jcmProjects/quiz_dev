@@ -179,6 +179,8 @@ def start_quiz(request, *args, **kwargs):
     # Convert from JSON to PYTHON: json.loads(x)
     # Convert from PYTHON to JSON: json.dumps(x)
 
+    print("QUIZ STARTED")
+
     #* Reset 'Answer' and 'AnswerProcessing' models
     Answer.objects.all().delete()
     AnswerProcessing.objects.all().delete()
@@ -188,13 +190,13 @@ def start_quiz(request, *args, **kwargs):
     m = re.search('id=(.+?)&', body)
     if m:
         quiz_id = m.group(1)
-    print(quiz_id)
 
     #* Update quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
-    #quiz.start_date = datetime.datetime.now()
     quiz.start_date = datetime.datetime.now()
     quiz.save()
+    print(quiz.id)
+    print(quiz.start_date)
 
     # #? Get 'quiz.id'
     # print("######################################################################")
@@ -229,7 +231,7 @@ def stop_quiz(request, *args, **kwargs):
         copy.save()
 
     #* Reset 'Answer' model
-    #Answer.objects.all().delete()
+    Answer.objects.all().delete()
 
     #* Get quiz object
     body = request.body.decode('utf-8')
@@ -260,7 +262,6 @@ def stop_quiz(request, *args, **kwargs):
     #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
     # Get quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
-    quiz_date = quiz.start_date
     print(quiz.start_date)
 
     for answer in answers_processing:
@@ -281,7 +282,7 @@ def stop_quiz(request, *args, **kwargs):
         result.save()
 
     #* Reset 'AnswerProcessing' model
-    #AnswerProcessing.objects.all().delete()
+    AnswerProcessing.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
