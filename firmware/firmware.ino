@@ -17,6 +17,7 @@ uint8_t is_card_present(uint8_t control);
 void clear_var(void);
 void DEBUG_btn_pressed(int btn);
 long query_db(char UID[], row_values *row, long nmec);
+void insert_db(long nmec, String mac, String ans);
 
 
 /*
@@ -26,6 +27,7 @@ long query_db(char UID[], row_values *row, long nmec);
  */
 MFRC522 mfrc522(SS_PIN, RST_PIN);           /* Create MFRC522 instance. */
 bool authorized = false;                    /**< TRUE if card was authorized. FALSE if not. */ 
+long nmec = 0;                              /**< variable read from Database (Student ID). */
 
 
 /*
@@ -75,6 +77,7 @@ MySQL_Cursor cur = MySQL_Cursor(&conn);     /**< MySQL cursor. */
 
 // Sample query
 const char QUERY_POP[] = "SELECT nmec FROM authentication.students WHERE uid = '%s';";
+char INSERT_DATA[] = "INSERT INTO quiz_project.quiz_answer (nmec, mac, ans) VALUES ('%s','%s','%s')";   // '%s' or %s ??
 char query[128];
 
 
@@ -95,6 +98,8 @@ void setup(void) {
     pinMode(Q1, INPUT);
     pinMode(ledGreen, OUTPUT);
     pinMode(ledRed, OUTPUT);
+
+    digitalWrite(ledRed, HIGH);
     
     /* SPI - MFRC522 */
     SPI.begin();          // Initiate  SPI bus
@@ -124,6 +129,8 @@ void setup(void) {
         Serial.println("Connection failed.");
     }
     // conn.close();
+
+    digitalWrite(ledRed, LOW);
 }
 
 
@@ -142,7 +149,9 @@ void loop(void) {
     char UID[] = "";                        /**< UID of the RFID card. */
 
     row_values *row = NULL;                 /**< Database return rows. */
-    long nmec = 0;                          /**< variable read from Database (Student ID). */
+//    long nmec = 0;                          /**< variable read from Database (Student ID). */
+
+    String mac = WiFi.macAddress();         /**< MAC address. */
 
     delay(100);
     /* Read RFID Card */
@@ -205,7 +214,8 @@ void loop(void) {
         
                 /* Button 1 */
                 if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {    
-                
+
+                    insert_db(nmec, mac, "A");
                     digitalWrite(ledGreen, LOW);
                     DEBUG_btn_pressed(1);
                     clear_var();
@@ -214,7 +224,8 @@ void loop(void) {
         
                 /* Button 2 */
                 else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == LOW)) {
-    
+
+                    insert_db(nmec, mac, "B");
                     digitalWrite(ledGreen, LOW);
                     DEBUG_btn_pressed(2);
                     clear_var();
@@ -223,7 +234,8 @@ void loop(void) {
     
                 /* Button 3 */
                 else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == HIGH)) {
-    
+
+                    insert_db(nmec, mac, "C");
                     digitalWrite(ledGreen, LOW);
                     DEBUG_btn_pressed(3);
                     clear_var();
@@ -232,7 +244,8 @@ void loop(void) {
     
                 /* Button 4 */
                 else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == LOW)) { 
-                    
+
+                    insert_db(nmec, mac, "D");
                     digitalWrite(ledGreen, LOW);
                     DEBUG_btn_pressed(4);
                     clear_var();
@@ -241,7 +254,8 @@ void loop(void) {
     
                 /* Button 5 */
                 else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {
-                    
+
+                    insert_db(nmec, mac, "E");
                     digitalWrite(ledGreen, LOW);
                     DEBUG_btn_pressed(5);
                     clear_var();
@@ -289,6 +303,7 @@ uint8_t is_card_present(uint8_t control) {
 void clear_var(void) {
     
     authorized = false;
+    nmec = 0;
 }
 
 
@@ -354,18 +369,45 @@ long query_db(char UID[], row_values *row, long nmec) {
     } 
     else {
         conn.close();
+        digitalWrite(ledRed, HIGH);
 
         Serial.println("Connecting...");
             
         if (conn.connect(server_addr, 3306, userSQL, passwordSQL)) {
             delay(500);
             Serial.println("Successful reconnect!");
+            digitalWrite(ledRed, LOW);
         } 
         else
             Serial.println("Cannot reconnect! Drat.");
 
         return 0;
     }
+}
+
+
+/**
+ * @brief Insert into the database.
+ * 
+ */
+void insert_db(long nmec, String mac, String ans) {
+
+    delay(100);
+    
+    // Initiate the query class instance
+    MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
+
+    String string_nmec = String(nmec);
+    
+    // Save
+    sprintf(query, INSERT_DATA, string_nmec.c_str(), mac.c_str(), ans.c_str());
+    
+    // Execute the query
+    cur_mem->execute(query);
+    
+    // Note: since there are no results, we do not need to read any data
+    // Deleting the cursor also frees up memory used
+    delete cur_mem;
 }
 
 

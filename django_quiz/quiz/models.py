@@ -5,6 +5,42 @@ from django.urls import reverse
 from PIL import Image
 from users.models import Course, ProfileCourse
 
+from datetime import datetime
+from time import strftime
+
+class UnixTimestampField(models.DateTimeField):
+    # UnixTimestampField: creates a DateTimeField that is represented on the
+    # database as a TIMESTAMP field rather than the usual DATETIME field.
+    # https://stackoverflow.com/questions/11332107/timestamp-fields-in-django/11332150
+
+    def __init__(self, null=False, blank=False, **kwargs):
+        super(UnixTimestampField, self).__init__(**kwargs)
+        # default for TIMESTAMP is NOT NULL unlike most fields, so we have to
+        # cheat a little:
+        self.blank, self.isnull = blank, null
+        self.null = True # To prevent the framework from shoving in "not null".
+
+    def db_type(self, connection):
+        typ=['TIMESTAMP']
+        # See above!
+        if self.isnull:
+            typ += ['NULL']
+        if self.auto_created:
+            typ += ['default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP']
+        return ' '.join(typ)
+
+    def to_python(self, value):
+        if isinstance(value, int):
+            return datetime.fromtimestamp(value)
+        else:
+            return models.DateTimeField.to_python(self, value)
+
+    def get_db_prep_value(self, value, connection, prepared=False):
+        if value==None:
+            return None
+        # Use '%Y%m%d%H%M%S' for MySQL < 4.1
+        return strftime('%Y-%m-%d %H:%M:%S',value.timetuple())
+
 
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
@@ -77,7 +113,8 @@ class Answer(models.Model):
     nmec = models.CharField(max_length=100)
     mac = models.CharField(max_length=100)
     ans = models.CharField(max_length=100)
-    date_time = models.DateTimeField(default=timezone.now)
+    # date_time = models.DateTimeField(auto_now_add=True)   # 'auto_now_add=True' OR 'default=timezone.now'
+    date_time = UnixTimestampField(auto_created=True)
 
     def __str__(self):
         return self.nmec
