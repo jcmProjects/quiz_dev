@@ -6,6 +6,7 @@
 /* Includes */
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <MySQL_Connection.h>
@@ -18,6 +19,7 @@ void clear_var(void);
 void DEBUG_btn_pressed(int btn);
 long query_db(char UID[], row_values *row, long nmec);
 void insert_db(long nmec, String mac, String ans);
+void post_request(void);
 
 
 /*
@@ -217,6 +219,7 @@ void loop(void) {
                 if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {    
 
                     insert_db(nmec, mac, "A");
+                    //post_request();
                     digitalWrite(ledGreen, LOW);
                     //DEBUG_btn_pressed(1);
                     clear_var();
@@ -409,6 +412,30 @@ void insert_db(long nmec, String mac, String ans) {
     // Note: since there are no results, we do not need to read any data
     // Deleting the cursor also frees up memory used
     delete cur_mem;
+}
+
+
+/**
+ * @brief Send HTTP POST Request.
+ * 
+ */
+void post_request(void) {
+
+    if (WiFi.status() == WL_CONNECTED) {
+        HTTPClient http;
+    
+        http.begin("http://192.168.10.2:8000/quiz/response/");
+        http.addHeader("Content-Type", "text/plain");
+    
+        int httpCode = http.POST("Message from ESP8266");
+        String payload = http.getString();
+    
+        Serial.println(httpCode);
+        Serial.println(payload);
+    }
+    else {
+        Serial.println("Error in WiFi connection");
+    }
 }
 
 

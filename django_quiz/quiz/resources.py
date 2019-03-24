@@ -1,6 +1,6 @@
 from import_export import resources
 from import_export.fields import Field
-from .models import Quiz
+from .models import Quiz, Results
 
 class QuizResource(resources.ModelResource):
 
@@ -8,5 +8,11 @@ class QuizResource(resources.ModelResource):
         model = Quiz
         #fields = ('id', 'course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'duration', 'date_created', 'start_date', 'author', 'image', 'right_ans')
         fields = ('id', 'course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'duration', 'image', 'right_ans')
-        
+
+
+class ResultsResource(resources.ModelResource):
+
+    class Meta:
+        model = Results
+        fields = ('id', 'quiz_id', 'student', 'mac_address', 'answer', 'time', 'evaluation', 'date_time', 'session')
 

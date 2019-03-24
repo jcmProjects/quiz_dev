@@ -4,7 +4,7 @@
 
     <!-- Results -->
     <div id="myItems">
-        <table class="table table-striped">
+        <table class="table table-hover table-striped">
             <thead>
             <tr>
                 <th>Course</th>
@@ -18,7 +18,11 @@
             </thead>
             <tbody>
                 {% for answer in answers %}
-                    <tr>
+                    {% if answer.evaluation == "right" %}
+                    <tr class="table-success">
+                    {% else %}
+                    <tr class="table-danger">
+                    {% endif %}
                         <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
                         <td>{{ answer.quiz_id.id }}</td>
                         <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td>

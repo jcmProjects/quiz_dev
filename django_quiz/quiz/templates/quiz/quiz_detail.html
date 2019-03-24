@@ -103,6 +103,7 @@
                         <!-- Timer -->
                         <div class="row justify-content-end">
                             <div class="col text-center font-weight-bold timer-text2"><span id="time">{{ object.duration }}</span></div>
+                            <div class="col text-center font-weight-bold timer-text2" style="display: none;"><span id="time2">{{ object.duration }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -213,6 +214,27 @@
                     diff,
                     minutes,
                     seconds;
+                function timer() {
+                    // get the number of seconds that have elapsed since 
+                    // startTimer() was called
+                    diff = duration - (((Date.now() - start) / 1000) | 0);
+
+                    if (diff < 0) { // <= OR < to fix the last second answer issue
+                        diff = 0;           
+                    }
+                    display.textContent = diff;
+                };
+                // we don't want to wait a full second before the timer starts
+                timer();  // comment OR uncomment to fix the last second answer issue
+                time = setInterval(timer, 1000);
+            }
+
+            // give 3 extra seconds to receive answers
+            function startTimer2(duration, display) {
+                var start = Date.now(),
+                    diff,
+                    minutes,
+                    seconds;
                 function stopTimer() {
                     $.ajax({
                         type: "POST",
@@ -232,8 +254,8 @@
                     // startTimer() was called
                     diff = duration - (((Date.now() - start) / 1000) | 0);
 
-                    if (diff < 0) { // <= OR < to fix the last second answer issue
-                        diff = 0;  
+                    if (diff < -3) { // <= OR < to fix the last second answer issue
+                        diff = -3;  
                         stopTimer();                
                     }
                     display.textContent = diff;
@@ -258,6 +280,11 @@
                 var timeRemaining = {{ object.duration }},
                     display = document.querySelector('#time');
                 startTimer(timeRemaining, display);
+
+                var timeRemaining2 = {{ object.duration }},
+                    display2 = document.querySelector('#time2');
+                startTimer2(timeRemaining2, display2);
+                
             });
         </script>
 

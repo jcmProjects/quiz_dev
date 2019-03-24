@@ -11,8 +11,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Quiz, Answer, Results, AnswerProcessing
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
-from users.models import Course, ProfileCourse, Profile
-from .resources import QuizResource
+from users.models import Course, ProfileCourse, Profile, Session
+from .resources import QuizResource, ResultsResource
 from datetime import datetime
 
 # Abade
@@ -198,6 +198,10 @@ def start_quiz(request, *args, **kwargs):
     print(quiz.id)
     print(quiz.start_date)
 
+    # #* Create Session
+    # session = Session(quiz=quiz)
+    # session.save()
+
     # #? Get 'quiz.id'
     # print("######################################################################")
     # print("request.body:")
@@ -239,11 +243,27 @@ def stop_quiz(request, *args, **kwargs):
     if m:
         quiz_id = m.group(1)
     print(quiz_id)
+
+    #* Get quiz.start_date
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    print(quiz.start_date)
+
+    #* Create Session
+    session = Session(quiz=quiz)
+    session.save()
+
+    #* Check valid_ans (from 'Profile')
+    profile = get_object_or_404(Profile, user_id=quiz.author)
+    print(profile.valid_ans)
     
     #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
     # Deletes ALL but the last answer from each NMEC
     lastSeenNMEC = float('-Inf')
-    answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
+    if profile.valid_ans == "Last":
+        answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
+    else:
+        answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
+
     for answer in answers_processing_inverse:
         if answer.nmec == lastSeenNMEC:
             answer.delete() # We've seen this MAC in a previous row
@@ -259,11 +279,8 @@ def stop_quiz(request, *args, **kwargs):
         else:
             lastSeenMAC = answer.mac
 
-    #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
-    # Get quiz.start_date
-    quiz = get_object_or_404(Quiz, id=quiz_id)
-    print(quiz.start_date)
 
+    #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
     for answer in answers_processing:
         # Time
         answer_time = answer.date_time - quiz.start_date
@@ -278,11 +295,11 @@ def stop_quiz(request, *args, **kwargs):
             evaluation = "wrong"
         print(evaluation)
         # Save Results
-        result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation)
+        result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session)
         result.save()
 
     #* Reset 'AnswerProcessing' model
-    # AnswerProcessing.objects.all().delete()
+    AnswerProcessing.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
@@ -292,7 +309,28 @@ class ProcessedAnswersView(ListView):
     model = Results                # AnswerProcessing OR Results
     template_name = 'quiz/results.html' 
     context_object_name = 'answers'
-    ordering = ['student']  
+    ordering = ['-date_time']  
+
+    def get_queryset(self):
+        auth_user = self.request.user;
+
+        # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
+        q0 = Session.objects.latest('id')   # to show only the results of the latest quiz
+        q1 = Quiz.objects.filter(author=auth_user.id)
+        q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=q0.id)
+
+        return q2.order_by('-date_time')  # order_by('-date_time', 'session_id')
+
+
+@login_required
+def results_export(request):
+    template = 'quiz/export.html'
+    auth_user = request.user
+
+    dataset = ResultsResource().export()
+    print(dataset.csv)
+
+    return render(request, template)
 
 
 # Respostas vindas do microcontrolador

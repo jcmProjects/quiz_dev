@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
-from users.models import Course, ProfileCourse
+from users.models import Course, ProfileCourse, Session
 
 from datetime import datetime
 from time import strftime
@@ -107,6 +107,7 @@ class Results(models.Model):
     time = models.CharField(max_length=100, default="")
     evaluation = models.CharField(max_length=100, default="")
     date_time = models.DateTimeField(default=timezone.now)
+    session = models.ForeignKey(Session, default=1, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f'Question: {self.quiz_id.id}, Student: {self.student}'  # {self.quiz_id.id} to return ID or {self.quiz_id} to return Question

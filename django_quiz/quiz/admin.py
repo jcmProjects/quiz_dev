@@ -7,8 +7,10 @@ from .models import Quiz, Answer, Results, AnswerProcessing
 class QuizAdmin(ImportExportModelAdmin):
     pass
 
-admin.site.register(Results)
+#admin.site.register(Results)
+@admin.register(Results)
+class QuizAdmin(ImportExportModelAdmin):
+    pass
 
 admin.site.register(Answer)
-
 admin.site.register(AnswerProcessing)
