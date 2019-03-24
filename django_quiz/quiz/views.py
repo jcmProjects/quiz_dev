@@ -257,7 +257,7 @@ def stop_quiz(request, *args, **kwargs):
     print(profile.valid_ans)
     
     #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
-    # Deletes ALL but the last answer from each NMEC
+    # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
     lastSeenNMEC = float('-Inf')
     if profile.valid_ans == "Last":
         answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
