@@ -9,10 +9,3 @@ class QuizResource(resources.ModelResource):
         #fields = ('id', 'course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'duration', 'date_created', 'start_date', 'author', 'image', 'right_ans')
         fields = ('id', 'course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'duration', 'image', 'right_ans')
 
-
-class ResultsResource(resources.ModelResource):
-
-    class Meta:
-        model = Results
-        fields = ('id', 'quiz_id', 'student', 'mac_address', 'answer', 'time', 'evaluation', 'date_time', 'session')
-

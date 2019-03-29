@@ -12,7 +12,7 @@ from .models import Quiz, Answer, Results, AnswerProcessing
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile, Session
-from .resources import QuizResource, ResultsResource
+from .resources import QuizResource
 from datetime import datetime
 
 # Abade
@@ -322,22 +322,10 @@ class ProcessedAnswersView(ListView):
         return q2.order_by('-date_time')  # order_by('-date_time', 'session_id')
 
 
-@login_required
-def results_export(request):
-    template = 'quiz/export.html'
-    auth_user = request.user
+def quiz_response(request, *args, **kwargs):
 
-    dataset = ResultsResource().export()
-    print(dataset.csv)
+    print("RESPONSE VIEW")
 
-    return render(request, template)
-
-
-# Respostas vindas do microcontrolador
-@csrf_exempt
-@require_http_methods(["POST"])
-def receive_response(request):
-    date_now = datetime.datetime.now()
-
-    json_data = json.loads(request.body)
+    # to_return = {'type': 'success', 'msg': 'done', 'code': 200}
+    # return HttpResponse(json.dumps(to_return), content_type='application/json')
 

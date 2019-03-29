@@ -157,7 +157,7 @@
             });
         </script>
 
-        <!-- Detect Mobile - JavaScript Function -->
+        {% comment %} <!-- Detect Mobile - JavaScript Function -->
         <script>
             $(document).ready(function(){
                 if( navigator.userAgent.match(/Android/i)
@@ -170,7 +170,7 @@
                     document.getElementById("start_btn").style.visibility = "hidden";
                 }
             })
-        </script>
+        </script> {% endcomment %}
         
         <!-- Go Fullscreen - JavaScript Function -->
         <script>
@@ -254,8 +254,8 @@
                     // startTimer() was called
                     diff = duration - (((Date.now() - start) / 1000) | 0);
 
-                    if (diff < -3) { // <= OR < to fix the last second answer issue
-                        diff = -3;  
+                    if (diff < -1) { // <= OR < to fix the last second answer issue
+                        diff = -1;  
                         stopTimer();                
                     }
                     display.textContent = diff;

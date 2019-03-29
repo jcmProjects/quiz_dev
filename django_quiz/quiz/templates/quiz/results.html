@@ -9,11 +9,11 @@
             <tr>
                 <th>Course</th>
                 <th>Quiz ID</th>
-                <th>DateTime</th>
+                {% comment %} <th>DateTime</th> {% endcomment %}
                 <th>NMec</th>
                 <th>Answer</th>
                 <th>Time</th>
-                <th>Evaluation</th>
+                {% comment %} <th>Evaluation</th> {% endcomment %}
             </tr>
             </thead>
             <tbody>
@@ -25,11 +25,11 @@
                     {% endif %}
                         <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
                         <td>{{ answer.quiz_id.id }}</td>
-                        <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td>
+                        {% comment %} <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td> {% endcomment %}
                         <td>{{ answer.student }}</td>
                         <td>{{ answer.answer }}</td>
                         <td>{{ answer.time }}</td>
-                        <td>{{ answer.evaluation }}</td>
+                        {% comment %} <td>{{ answer.evaluation }}</td> {% endcomment %}
                     </tr>
                 {% endfor %}
             </tbody>
