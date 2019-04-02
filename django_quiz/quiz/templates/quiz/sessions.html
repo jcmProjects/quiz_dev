@@ -41,21 +41,31 @@
 
     <!-- Quizzes -->
     <div id="myItems">
-        {% for session in sessions %}  {% comment %}  {% for quiz in quizzes %} {% for quiz in filter.qs %} {% endcomment %}
-            <div class="card card-signin my-3">
-                <div class="card-body">
-                    <article class="media">
-                        <img class="rounded-circle article-img" src="{{ session.quiz.image.url }}">
-                        <div class="media-body">
-                            <div class="article-metadata">
-                                <a class="article-content">{{ session.quiz.course.all|join:", " }}</a>
-                                <small class="text-muted">{{ session.date_created|date:"F d, Y - H:i:s" }}</small>    <!-- see DJANGO date formatting template documentation -->
+        {% for session in sessions %}
+            {% ifchanged session.quiz %}
+                <div class="card card-signin my-3">
+                    <div class="card-body">
+                        <article class="media">
+                            <img class="rounded-circle article-img" src="{{ session.quiz.image.url }}">
+                            <div class="media-body">
+                                <div class="article-metadata">
+                                    <h2><a class="article-title" href="{% url 'quiz-detail' session.quiz.id %}">{{ session.quiz.question }}</a></h2>
+                                    <a class="article-content">{{ session.quiz.course.all|join:", " }}</a>
+                                </div>
+                                {% with quiz_question=session.quiz.question %} 
+                                    {% for session in sessions %}
+                                        {% if session.quiz.question ==  quiz_question %}
+                                            <li style="list-style-type:none;">
+                                                <small><a class="text-muted" href="{% url 'quiz-results' session.id %}">{{ session.date_created|date:"F d, Y - H:i:s" }}</a></small>    <!-- see DJANGO date formatting template documentation -->
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
                             </div>
-                            <h2><a class="article-title" href="{% url 'quiz-results' session.id %}">{{ session.quiz.question }}</a></h2>
-                        </div>
-                    </article>
+                        </article>
+                    </div>
                 </div>
-            </div>
+            {% endifchanged %}
         {% endfor %}
     </div>
     

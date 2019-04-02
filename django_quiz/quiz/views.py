@@ -306,7 +306,7 @@ def stop_quiz(request, *args, **kwargs):
     return HttpResponse(json.dumps(to_return), content_type='application/json')
 
 
-class ProcessedAnswersView(ListView):
+class ResultsListView(ListView):
     model = Results                # AnswerProcessing OR Results
     template_name = 'quiz/results.html' 
     context_object_name = 'answers'
@@ -315,11 +315,9 @@ class ProcessedAnswersView(ListView):
     def get_queryset(self):
         auth_user = self.request.user;
         session_id = self.kwargs['session']
-        print(self.kwargs['session'])
 
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
         #q0 = Session.objects.latest('id')   # to show only the results of the latest quiz
-        #q0 = Session.objects.filter(id=session_id)
         q1 = Quiz.objects.filter(author=auth_user.id)
         q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=session_id)#.filter(session_id=q0.id)
 
