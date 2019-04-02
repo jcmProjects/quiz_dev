@@ -74,7 +74,7 @@
         <!-- Quiz -->
         <div class="container align-items-start bg-white" style="display: none;" id="myQuiz"> <!-- align-items-center -->
             <div class="row justify-content-center">  <!-- quiz-body  -->
-                {% if quiz.image != "no_image.jpg" %}
+                {% comment %} {% if quiz.image != "no_image.jpg" %} {% endcomment %}
                 <!-- Question -->
                 <div class="container">
                     <div class="row justify-content-center" style="margin-top: 4vh;">
@@ -107,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-                {% else %}
+                {% comment %} {% else %}
                 <!-- Question -->
                 <div class="container">
                     <div class="row justify-content-center" style="margin-top: 12.5vh;">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
+                {% endif %} {% endcomment %}
                 <!-- Footer Buttons -->
                 <div class"container">
                     <div class="quiz-footer" id="btn_footer">

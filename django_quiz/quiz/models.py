@@ -115,7 +115,8 @@ class Results(models.Model):
 
 class Answer(models.Model):
     id = models.AutoField(primary_key=True)
-    nmec = models.CharField(max_length=100)
+    #nmec = models.CharField(max_length=100)
+    uid = models.CharField(max_length=100, default='00 00 00 00 00 00 00')
     mac = models.CharField(max_length=100)
     ans = models.CharField(max_length=100)
     # date_time = models.DateTimeField(auto_now_add=True)   # 'auto_now_add=True' OR 'default=timezone.now'
@@ -123,7 +124,7 @@ class Answer(models.Model):
     # date_time = UnixTimeStampField(auto_created=True)
 
     def __str__(self):
-        return self.nmec
+        return f'{self.uid}, {self.ans}'
 
 
 class AnswerProcessing(models.Model):
@@ -137,7 +138,7 @@ class AnswerProcessing(models.Model):
         return self.nmec
 
 
-class UID(models.Model):
+class Student(models.Model):
     id = models.AutoField(primary_key=True)
     uid = models.CharField(max_length=100)
     nmec = models.CharField(max_length=100)

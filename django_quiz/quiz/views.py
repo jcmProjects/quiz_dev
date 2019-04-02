@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.db.models import Q
 
-from .models import Quiz, Answer, Results, AnswerProcessing
+from .models import Quiz, Answer, Results, AnswerProcessing, Student
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile, Session
@@ -231,7 +231,8 @@ def stop_quiz(request, *args, **kwargs):
     #* Copy Answer to AnswerProcessing
     answers = Answer.objects.all().order_by('id')
     for answer in answers:
-        copy = AnswerProcessing(nmec=answer.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)
+        student = Student.objects.get(uid=answer.uid)
+        copy = AnswerProcessing(nmec=student.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)   #nmec=answer.nmec
         copy.save()
 
     #* Reset 'Answer' model
@@ -255,7 +256,7 @@ def stop_quiz(request, *args, **kwargs):
     #* Check valid_ans (from 'Profile')
     profile = get_object_or_404(Profile, user_id=quiz.author)
     print(profile.valid_ans)
-    
+ 
     #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
     # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
     lastSeenNMEC = float('-Inf')
