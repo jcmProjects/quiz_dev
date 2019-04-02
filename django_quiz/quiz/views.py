@@ -323,6 +323,22 @@ class ProcessedAnswersView(ListView):
         return q2.order_by('-date_time')  # order_by('-date_time', 'session_id')
 
 
+class SessionsListView(ListView):
+    model = Session
+    template_name = 'quiz/sessions.html'   # <app>/<model>_<viewtype>.html
+    context_object_name = 'sessions'
+    ordering = ['-date_created']            # - to inverse ordering
+
+    def get_queryset(self):
+        auth_user = self.request.user;
+
+        # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
+        q2 = Quiz.objects.filter(author=auth_user)
+        q3 = Session.objects.filter(quiz_id__in=q2)
+
+        return q3.order_by('-date_created').distinct()
+        
+
 def quiz_response(request, *args, **kwargs):
 
     print("RESPONSE VIEW")
