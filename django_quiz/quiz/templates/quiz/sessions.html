@@ -49,7 +49,7 @@
                         <div class="media-body">
                             <div class="article-metadata">
                                 <a class="article-content">{{ session.quiz.course.all|join:", " }}</a>
-                                <small class="text-muted">{{ session.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
+                                <small class="text-muted">{{ session.date_created|date:"F d, Y - H:i:s" }}</small>    <!-- see DJANGO date formatting template documentation -->
                             </div>
                             <h2><a class="article-title" href="{% url 'quiz-results' session.id %}">{{ session.quiz.question }}</a></h2>
                         </div>
