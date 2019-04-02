@@ -71,7 +71,7 @@
                             <a class="nav-item nav-link" href="{% url 'quiz-create' %}">Create New</a>
                             <a class="nav-item nav-link" href="{% url 'user-quiz' user.username %}">Quizzes</a>
                             <a class="nav-item nav-link" href="{% url 'quiz-sessions' %}">Sessions</a>
-                            <a class="nav-item nav-link" href="{% url 'quiz-results' %}">Results</a>
+                            {% comment %} <a class="nav-item nav-link" href="{% url 'quiz-results' %}">Results</a> {% endcomment %}
                             <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                         {% else %}

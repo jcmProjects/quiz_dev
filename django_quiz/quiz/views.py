@@ -314,11 +314,14 @@ class ProcessedAnswersView(ListView):
 
     def get_queryset(self):
         auth_user = self.request.user;
+        session_id = self.kwargs['session']
+        print(self.kwargs['session'])
 
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
-        q0 = Session.objects.latest('id')   # to show only the results of the latest quiz
+        #q0 = Session.objects.latest('id')   # to show only the results of the latest quiz
+        #q0 = Session.objects.filter(id=session_id)
         q1 = Quiz.objects.filter(author=auth_user.id)
-        q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=q0.id)
+        q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=session_id)#.filter(session_id=q0.id)
 
         return q2.order_by('-date_time')  # order_by('-date_time', 'session_id')
 
