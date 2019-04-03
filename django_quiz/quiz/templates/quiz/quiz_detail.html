@@ -254,8 +254,8 @@
                     // startTimer() was called
                     diff = duration - (((Date.now() - start) / 1000) | 0);
 
-                    if (diff < -1) { // <= OR < to fix the last second answer issue
-                        diff = -1;  
+                    if (diff <= 0) { // -1 or 0 (on both lines), < or <=
+                        diff = 0;  
                         stopTimer();                
                     }
                     display.textContent = diff;

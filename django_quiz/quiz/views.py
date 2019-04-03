@@ -291,7 +291,7 @@ def stop_quiz(request, *args, **kwargs):
         print(seconds)
         float_sec = float(seconds)
         # Answer
-        if answer.ans == quiz.right_ans and float_sec <= quiz.duration:
+        if answer.ans == quiz.right_ans: # and float_sec <= quiz.duration:
             evaluation = "right"
         else:
             evaluation = "wrong"
