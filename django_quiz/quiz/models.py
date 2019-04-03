@@ -119,9 +119,8 @@ class Answer(models.Model):
     uid = models.CharField(max_length=100, default='00 00 00 00 00 00 00')
     mac = models.CharField(max_length=100)
     ans = models.CharField(max_length=100)
-    # date_time = models.DateTimeField(auto_now_add=True)   # 'auto_now_add=True' OR 'default=timezone.now'
-    date_time = UnixTimestampField(auto_created=True)
-    # date_time = UnixTimeStampField(auto_created=True)
+    date_time = models.DateTimeField(default=timezone.now)
+    #date_time = UnixTimestampField(auto_created=True)
 
     def __str__(self):
         return f'{self.uid}, {self.ans}'

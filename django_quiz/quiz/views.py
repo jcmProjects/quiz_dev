@@ -198,6 +198,7 @@ def start_quiz(request, *args, **kwargs):
     print(quiz.id)
     print(quiz.start_date)
 
+
     # #* Create Session
     # session = Session(quiz=quiz)
     # session.save()
@@ -339,11 +340,31 @@ class SessionsListView(ListView):
 
         return q3.order_by('-date_created').distinct()
         
-
+@csrf_exempt
+@require_http_methods(["POST"])
 def quiz_response(request, *args, **kwargs):
 
     print("RESPONSE VIEW")
 
-    # to_return = {'type': 'success', 'msg': 'done', 'code': 200}
-    # return HttpResponse(json.dumps(to_return), content_type='application/json')
+    #* Get quiz object
+    body = request.body.decode('utf-8')
+    print(body)
+    m = re.search('uid: (.+?),', body)
+    if m:
+        card_id = m.group(1)
+        print(card_id)
+    m = re.search('mac: (.+?),', body)
+    if m:
+        mac_id = m.group(1)
+        print(mac_id)
+    m = re.search('ans: (.+?)}', body)
+    if m:
+        ans = m.group(1)
+        print(ans)
+
+    answer = Answer(uid=card_id, mac=mac_id, ans=ans, date_time=datetime.datetime.now())
+    answer.save()
+
+    to_return = {'type': 'success', 'msg': 'done', 'code': 200}
+    return HttpResponse(json.dumps(to_return), content_type='application/json')
 

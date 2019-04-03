@@ -92,10 +92,8 @@ class ProfileCourse(models.Model):
 
 class Session(models.Model):
     id = models.AutoField(primary_key=True)
-    #author = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey('quiz.Quiz', on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
-    #date_created = UnixTimestampField(auto_created=True)
 
     def __str__(self):
         return f'Quiz ID: {self.quiz.id}, User: {self.quiz.author}, Date: {self.date_created}'

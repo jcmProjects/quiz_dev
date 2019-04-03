@@ -85,7 +85,7 @@
             cards = cardContainer.getElementsByClassName("card");
             /* Course */
             for (i = 0; i < cards.length; i++) {
-                title = cards[i].querySelector(".card-body p.article-content");
+                title = cards[i].querySelector(".card-body a.article-content");
                 if (title.innerText.toUpperCase().indexOf(filter) > -1) {
                     cards[i].style.display = "";
                 } else {
