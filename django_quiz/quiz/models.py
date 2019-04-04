@@ -100,14 +100,14 @@ class Quiz(models.Model):
 
 class Results(models.Model):
     id = models.AutoField(primary_key=True)
-    quiz_id = models.ForeignKey('Quiz', on_delete=models.DO_NOTHING)
+    quiz_id = models.ForeignKey('Quiz', on_delete=models.DO_NOTHING)            # DO_NOTHING
     student = models.CharField(max_length=100)
     mac_address = models.CharField(max_length=100)
     answer = models.CharField(max_length=100)
     time = models.CharField(max_length=100, default="")
     evaluation = models.CharField(max_length=100, default="")
     date_time = models.DateTimeField(default=timezone.now)
-    session = models.ForeignKey(Session, default=1, on_delete=models.DO_NOTHING)
+    session = models.ForeignKey(Session, default=1, on_delete=models.CASCADE)   # DO_NOTHING
 
     def __str__(self):
         return f'Question: {self.quiz_id.id}, Student: {self.student}'  # {self.quiz_id.id} to return ID or {self.quiz_id} to return Question

@@ -55,9 +55,11 @@
                                 {% with quiz_question=session.quiz.question %} 
                                     {% for session in sessions %}
                                         {% if session.quiz.question ==  quiz_question %}
+                                            <ul class="list-group">
                                             <li style="list-style-type:none;">
-                                                <small><a class="text-muted" href="{% url 'quiz-results' session.id %}">{{ session.date_created|date:"F d, Y - H:i:s" }}</a></small>    <!-- see DJANGO date formatting template documentation -->
+                                                <small><a class="text-muted" id="session_date" href="{% url 'quiz-results' session.id %}">{{ session.date_created|date:"F d, Y - H:i:s" }}</a></small>    <!-- see DJANGO date formatting template documentation -->
                                             </li>
+                                            </ul>
                                         {% endif %}
                                     {% endfor %}
                                 {% endwith %}
@@ -109,7 +111,7 @@
                 }
             }
         }
-        function filterDateFunction() {
+        {% comment %} function filterDateFunction() {
             var input, filter, cards, cardContainer, p, title, i;
             input = document.getElementById("dateInput");
             filter = input.value.toUpperCase();
@@ -122,6 +124,25 @@
                     cards[i].style.display = "";
                 } else {
                     cards[i].style.display = "none";
+                }
+            }
+        } {% endcomment %}
+        function filterDateFunction() {
+            var input, filter, cards, cardContainer, p, title, i;
+            input = document.getElementById("dateInput");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("myItems");
+            cards = cardContainer.getElementsByClassName("card");
+            /* Course */
+            for (i = 0; i < cards.length; i++) {
+                sessions = cards[i].getElementsByClassName("list-group");
+                for (j = 0; j < sessions.length; j++) {
+                    title = sessions[j].querySelector(".list-group small");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        sessions[j].style.display = "";
+                    } else {
+                        sessions[j].style.display = "none";
+                    }
                 }
             }
         }

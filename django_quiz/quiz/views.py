@@ -152,7 +152,7 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 def quiz_upload(request):
     template = 'quiz/quiz_upload.html'
     auth_user = request.user
-    form = QuizUploadForm(auth_user)
+    #form = QuizUploadForm(auth_user)
 
     if request.method == "POST":
         quiz_resource = QuizResource()
@@ -167,7 +167,7 @@ def quiz_upload(request):
             quiz_resource.import_data(dataset, dry_run=False)       # Actually import now
 
     context = {
-        'form': form,
+        #'form': form,
     }
 
     return render(request, template, context)
@@ -232,9 +232,13 @@ def stop_quiz(request, *args, **kwargs):
     #* Copy Answer to AnswerProcessing
     answers = Answer.objects.all().order_by('id')
     for answer in answers:
-        student = Student.objects.get(uid=answer.uid)
-        copy = AnswerProcessing(nmec=student.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)   #nmec=answer.nmec
-        copy.save()
+        try:
+            student = Student.objects.get(uid=answer.uid)
+            copy = AnswerProcessing(nmec=student.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)   #nmec=answer.nmec
+            copy.save()
+        except Student.DoesNotExist:
+            pass
+        
 
     #* Reset 'Answer' model
     Answer.objects.all().delete()
