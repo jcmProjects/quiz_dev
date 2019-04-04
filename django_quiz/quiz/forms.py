@@ -1,6 +1,8 @@
 from django import forms
 from users.models import Course
 from .models import Quiz
+from datetime import datetime
+from django.utils import timezone
 
 
 class QuizForm(forms.ModelForm):
@@ -20,6 +22,8 @@ class QuizUploadForm(forms.ModelForm):
     def __init__(self, auth_user, *args, **kwargs):
         super(QuizUploadForm, self).__init__(*args, **kwargs)
         self.fields['author'] = forms.IntegerField(widget=forms.HiddenInput(), initial=auth_user.id)
+        self.fields['date_created'] = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now())
+        self.fields['start_date'] = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now())
 
     class Meta:
         model = Quiz

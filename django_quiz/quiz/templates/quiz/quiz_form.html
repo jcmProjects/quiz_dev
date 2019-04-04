@@ -1,15 +1,24 @@
 {% extends "quiz/base.html" %}
 {% load bootstrap %}
 {% block content %}
+
+    <!-- https://redstapler.co/sheetjs-tutorial-convert-excel-html-table/ -->
+    <table class="table" id="hiddenTable" style="display: none;">
+    </table>
+
     <div class="card card-signin my-3">
         <div class="card-body">
             <div class="quiz-content-section">
-                <form method="POST" enctype="multipart/form-data">    <!-- enctype="multipart/form-data" IS NECESSARY for images !! -->
+                <form id="quiz_form" method="POST" enctype="multipart/form-data">    <!-- enctype="multipart/form-data" IS NECESSARY for images !! -->
                     {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">
                             Create a Quiz
                         </legend>
+                        <!-- https://redstapler.co/sheetjs-tutorial-convert-excel-html-table/ -->
+                        Import from Excel (images need to be selected manually):&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="input-excel"/>
+                        <p></p>
+                        
                         {{ course_form|bootstrap }}
                         {% comment %} {{ form|bootstrap }} {% endcomment %}
                     </fieldset>
@@ -21,4 +30,52 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $('#input-excel').change(function(e){
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(e.target.files[0]);
+            reader.onload = function(e) {
+                var data = new Uint8Array(reader.result);
+                var wb = XLSX.read(data,{type:'array'});
+                var htmlstr = XLSX.write(wb,{sheet:"Sheet1", type:'binary',bookType:'html'});
+                $('#hiddenTable')[0].innerHTML += htmlstr;
+
+                console.log(htmlstr)
+                fillForm(htmlstr);
+            }
+        });
+
+        function fillForm(data) {
+            // Course - maybe remove this?
+            var course_text = document.getElementById("sjs-C4").textContent;
+            document.getElementById("id_course").value = course_text;
+            // Question
+            var question = document.getElementById("sjs-D4").textContent;
+            document.getElementById("id_question").value = question;
+            // AnsA
+            var ansA = document.getElementById("sjs-E4").textContent;
+            document.getElementById("id_ansA").value = ansA;
+            // AnsB
+            var ansB = document.getElementById("sjs-F4").textContent;
+            document.getElementById("id_ansB").value = ansB;
+            // AnsC
+            var ansC = document.getElementById("sjs-G4").textContent;
+            document.getElementById("id_ansC").value = ansC;
+            // AnsD
+            var ansD = document.getElementById("sjs-H4").textContent;
+            document.getElementById("id_ansD").value = ansD;
+            // AnsE
+            var ansE = document.getElementById("sjs-I4").textContent;
+            document.getElementById("id_ansE").value = ansE;
+            // Right_ans
+            var right_ans = document.getElementById("sjs-J4").textContent;
+            document.getElementById("id_right_ans").value = right_ans;    
+            // Duration
+            var duration = document.getElementById("sjs-K4").textContent;
+            document.getElementById("id_duration").value = duration;
+        }
+    </script>
+    
+
 {% endblock content %}

@@ -148,31 +148,6 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return False
 
 
-@login_required
-def quiz_upload(request):
-    template = 'quiz/quiz_upload.html'
-    auth_user = request.user
-    #form = QuizUploadForm(auth_user)
-
-    if request.method == "POST":
-        quiz_resource = QuizResource()
-        dataset = Dataset()
-        json_file = request.FILES['file']
-
-        imported_data = dataset.load(json_file.read())
-        print( imported_data )
-        result = quiz_resource.import_data(dataset, dry_run=True)   # Test the data import
-
-        if not result.has_errors():
-            quiz_resource.import_data(dataset, dry_run=False)       # Actually import now
-
-    context = {
-        #'form': form,
-    }
-
-    return render(request, template, context)
-
-
 @csrf_exempt
 @require_http_methods(["POST"])
 def start_quiz(request, *args, **kwargs):
