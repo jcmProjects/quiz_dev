@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Quiz, Answer, Results, AnswerProcessing, Student
+from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal
 
 # admin.site.register(Quiz)
 @admin.register(Quiz)
@@ -13,6 +13,10 @@ class QuizAdmin(ImportExportModelAdmin):
     pass
 
 @admin.register(Student)
+class QuizAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Terminal)
 class QuizAdmin(ImportExportModelAdmin):
     pass
 

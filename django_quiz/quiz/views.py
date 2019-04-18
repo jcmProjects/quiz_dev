@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.db.models import Q
 
-from .models import Quiz, Answer, Results, AnswerProcessing, Student
+from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile, Session
@@ -59,12 +59,6 @@ class QuizListView(ListView):
     ordering = ['-date_created']        # - to inverse ordering
     # paginate_by = 3                     # number of quizzes per page
 
-    # Filter -> Method 1
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['filter'] = QuizFilter(self.request.GET, queryset=self.get_queryset())
-    #     return context
-
     def get_queryset(self):
         auth_user = self.request.user;
 
@@ -110,7 +104,8 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             'ansE': self.object.ansE,
             'right_ans': self.object.right_ans,
             'duration': self.object.duration,
-            'image': self.object.image
+            'image': self.object.image,
+            'anonymous': self.object.anonymous
 
         }
         context = super().get_context_data(**kwargs)
@@ -121,12 +116,6 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form.instance.author = self.request.user
         messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully updated.')
         return super().form_valid(form)
-
-    # def form_valid(self, course_form):
-    #     course_form.instance.author = self.request.user
-    #     course_form.save()
-    #     messages.add_message(self.request, messages.INFO, 'Your Quiz has been successfully updated.')
-    #     return super().form_valid(course_form)
 
     def test_func(self):
         quiz = self.get_object()
@@ -173,27 +162,6 @@ def start_quiz(request, *args, **kwargs):
     print(quiz.id)
     print(quiz.start_date)
 
-
-    # #* Create Session
-    # session = Session(quiz=quiz)
-    # session.save()
-
-    # #? Get 'quiz.id'
-    # print("######################################################################")
-    # print("request.body:")
-    # print(request.body)
-    # print("request.body.decode('utf-8'):")
-    # print(request.body.decode('utf-8'))
-    # s = '{"id": "7", "start_date": "2019-03-18 17:45:23", "right_ans": "A"}'
-    # json_data = json.loads(s)
-    # print("How it should be:")
-    # print(json_data)
-    # print("######################################################################")
-
-    #? Abade:
-    # json_data = json.loads(request.body)
-    # print(json_data.quiz_id)
-
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
 
@@ -209,9 +177,12 @@ def stop_quiz(request, *args, **kwargs):
     for answer in answers:
         try:
             student = Student.objects.get(uid=answer.uid)
-            copy = AnswerProcessing(nmec=student.nmec, mac=answer.mac, ans=answer.ans, date_time=answer.date_time)   #nmec=answer.nmec
+            mac_id = Terminal.objects.get(mac=answer.mac)
+            copy = AnswerProcessing(nmec=student.nmec, mac=mac_id, ans=answer.ans, date_time=answer.date_time)   #nmec=answer.nmec, mac=answer.mac
             copy.save()
         except Student.DoesNotExist:
+            pass
+        except Terminal.DoesNotExist:
             pass
         
 
@@ -237,32 +208,48 @@ def stop_quiz(request, *args, **kwargs):
     profile = get_object_or_404(Profile, user_id=quiz.author)
     print(profile.valid_ans)
  
-    #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
-    # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
-    lastSeenNMEC = float('-Inf')
-    if profile.valid_ans == "Last":
-        answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
-    else:
-        answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
+    #? Anonymous = TRUE
+    if quiz.anonymous == True:
+        print("ANONYMOUS QUIZ")
+        # Deletes ALL but the first answer from each MAC
+        lastSeenMAC = float('-Inf')
+        answers_processing = AnswerProcessing.objects.all().order_by('id')
+        for answer in answers_processing:
+            if answer.mac == lastSeenMAC:
+                answer.delete()
+            else:
+                lastSeenMAC = answer.mac
 
-    for answer in answers_processing_inverse:
-        if answer.nmec == lastSeenNMEC:
-            answer.delete() # We've seen this MAC in a previous row
-        else: # New id found, save it and check future rows for duplicates.
-            lastSeenNMEC = answer.nmec
-
-    # Deletes ALL but the first answer from each MAC
-    lastSeenMAC = float('-Inf')
-    answers_processing = AnswerProcessing.objects.all().order_by('id')
-    for answer in answers_processing:
-        if answer.mac == lastSeenMAC:
-            answer.delete()
+    #? Anonymous = FALSE
+    if quiz.anonymous == False:
+        print("NOT anonymous")
+        #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
+        # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
+        lastSeenNMEC = float('-Inf')
+        if profile.valid_ans == "Last":
+            answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
         else:
-            lastSeenMAC = answer.mac
+            answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
 
+        for answer in answers_processing_inverse:
+            if answer.nmec == lastSeenNMEC:
+                answer.delete() # We've seen this MAC in a previous row
+            else: # New id found, save it and check future rows for duplicates.
+                lastSeenNMEC = answer.nmec
+
+        # Deletes ALL but the first answer from each MAC
+        lastSeenMAC = float('-Inf')
+        answers_processing = AnswerProcessing.objects.all().order_by('id')
+        for answer in answers_processing:
+            if answer.mac == lastSeenMAC:
+                answer.delete()
+            else:
+                lastSeenMAC = answer.mac
 
     #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
-    for answer in answers_processing:
+    answers_processed = AnswerProcessing.objects.all().order_by('id')
+
+    for answer in answers_processed:
         # Time
         answer_time = answer.date_time - quiz.start_date
         print(answer.date_time)

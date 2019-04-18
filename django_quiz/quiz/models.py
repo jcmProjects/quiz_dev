@@ -60,6 +60,7 @@ class Quiz(models.Model):
     #start_date = UnixTimeStampField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
+    anonymous = models.BooleanField(default=False)
 
     # Right Answer
     A = 'A'
@@ -144,3 +145,11 @@ class Student(models.Model):
 
     def __str__(self):
         return self.nmec
+
+
+class Terminal(models.Model):
+    id = models.AutoField(primary_key=True)
+    mac = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.mac

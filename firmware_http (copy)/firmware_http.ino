@@ -98,7 +98,7 @@ void setup(void) {
     Serial.println("\nConnection Established!");
     delay(200);
 
-    /* Connection to Server */
+    // Connection to Server
     Serial.print("Starting connection...");
     Serial.print("...");
     if (client.connect(server_ip, 8000)) {
@@ -122,86 +122,42 @@ void setup(void) {
  */
 void loop(void) {
 
+    //String mac = WiFi.macAddress();         /**< MAC address. */
+    //String card_id = "04 43 C6 32 34 31 80";
+    //String ans = "A";
+
+    //post_request(card_id, mac, ans);
+    //delay(1000);
+
+    /* ###################################################################################################################### */
+
     uint8_t control = 0;                    /**< Variable used to check if the card is still present. */
-    String mac = WiFi.macAddress();         /**< MAC address. */ 
+    String mac = WiFi.macAddress();         /**< MAC address. */
 
+        
     if (card_read == 0) {
-
-        digitalWrite(ledGreen, LOW);
-
-        /* Read Input State */
-        StateQ1 = digitalRead(Q1);
-        StateQ0 = digitalRead(Q0);
-        StateQ2 = analogRead(Q2);
-
-
-        /* Button 1 */
-        if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
-            Serial.println("A");   
-
-            digitalWrite(ledGreen, HIGH);
-            post_request("00 00 00 00 00 00 00", mac, "A");
-            digitalWrite(ledGreen, LOW);
-            clear_var();
-        }
-
-        /* Button 2 */
-        else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == LOW)) {
-            Serial.println("B");   
-
-            digitalWrite(ledGreen, HIGH);
-            post_request("00 00 00 00 00 00 00", mac, "B");
-            digitalWrite(ledGreen, LOW);
-            clear_var();
-        }
-
-        /* Button 3 */
-        else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == HIGH)) {
-            Serial.println("C");   
-
-            digitalWrite(ledGreen, HIGH);
-            post_request("00 00 00 00 00 00 00", mac, "C");
-            digitalWrite(ledGreen, LOW);
-            clear_var();
-        }
-
-        /* Button 4 */
-        else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == LOW)) { 
-            Serial.println("D");   
-
-            digitalWrite(ledGreen, HIGH);
-            post_request("00 00 00 00 00 00 00", mac, "D");
-            digitalWrite(ledGreen, LOW);
-            clear_var();
-        }
-
-        /* Button 5 */
-        else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {
-            Serial.println("E");   
-
-            digitalWrite(ledGreen, HIGH);
-            post_request("00 00 00 00 00 00 00", mac, "E");
-            digitalWrite(ledGreen, LOW);
-            clear_var();
-        }       
-    
         card_id = read_card();
         if (card_id != "")
             card_read = 1;
-    }   
+    }    
     
     else {
         /* Check if the card is still present */
         control = is_card_present(control);
-    
+   
         /* Card is present */
-        if (control <= 2) {        
+        if (control <= 2) {     // control <= 2
             digitalWrite(ledGreen, HIGH);
-            
+    
             /* Read Input State */
             StateQ1 = digitalRead(Q1);
             StateQ0 = digitalRead(Q0);
             StateQ2 = analogRead(Q2);
+            //delay(100);
+            //Serial.println(analogRead(A0));
+            //Serial.println(digitalRead(15));
+            //Serial.println(digitalRead(16));
+
     
             /* Button 1 */
             if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
@@ -258,14 +214,73 @@ void loop(void) {
                 }
             }
         }
-
+    
         /* Card was removed */
-        else {
+        else {// if (control >=3) { 
             digitalWrite(ledGreen, LOW);
-            clear_var();
+
+            /* Read Input State */
+            StateQ1 = digitalRead(Q1);
+            StateQ0 = digitalRead(Q0);
+            StateQ2 = analogRead(Q2);
+
+    
+            /* Button 1 */
+            if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
+                Serial.println("A");   
+    
+                digitalWrite(ledGreen, HIGH);
+                post_request("00 00 00 00 00 00 00", mac, "A");
+                digitalWrite(ledGreen, LOW);
+                clear_var();
+            }
+    
+            /* Button 2 */
+            else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == LOW)) {
+                Serial.println("B");   
+    
+                digitalWrite(ledGreen, HIGH);
+                post_request("00 00 00 00 00 00 00", mac, "B");
+                digitalWrite(ledGreen, LOW);
+                clear_var();
+            }
+    
+            /* Button 3 */
+            else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == HIGH)) {
+                Serial.println("C");   
+    
+                digitalWrite(ledGreen, HIGH);
+                post_request("00 00 00 00 00 00 00", mac, "C");
+                digitalWrite(ledGreen, LOW);
+                clear_var();
+            }
+    
+            /* Button 4 */
+            else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == LOW)) { 
+                Serial.println("D");   
+    
+                digitalWrite(ledGreen, HIGH);
+                post_request("00 00 00 00 00 00 00", mac, "D");
+                digitalWrite(ledGreen, LOW);
+                clear_var();
+            }
+    
+            /* Button 5 */
+            else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {
+                Serial.println("E");   
+
+                digitalWrite(ledGreen, HIGH);
+                post_request("00 00 00 00 00 00 00", mac, "E");
+                digitalWrite(ledGreen, LOW);
+                clear_var();
+            }
+
+
+            
+            //clear_var();
+            //digitalWrite(ledGreen, LOW);
         }
     }
-        
 }
 
 
