@@ -70,12 +70,6 @@
             {% endifchanged %}
         {% endfor %}
     </div>
-    
-    {% comment %} <script>
-        function autoSubmit() {
-            document.getElementById("myFilter2").submit();
-        }
-    </script> {% endcomment %}
 
     <!-- Filter - JavaScript function -->
     <script>
@@ -111,22 +105,6 @@
                 }
             }
         }
-        {% comment %} function filterDateFunction() {
-            var input, filter, cards, cardContainer, p, title, i;
-            input = document.getElementById("dateInput");
-            filter = input.value.toUpperCase();
-            cardContainer = document.getElementById("myItems");
-            cards = cardContainer.getElementsByClassName("card");
-            /* Course */
-            for (i = 0; i < cards.length; i++) {
-                title = cards[i].querySelector(".card-body small");
-                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
-        } {% endcomment %}
         function filterDateFunction() {
             var input, filter, cards, cardContainer, p, title, i;
             input = document.getElementById("dateInput");

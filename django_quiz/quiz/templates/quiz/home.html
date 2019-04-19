@@ -48,7 +48,7 @@
                         <img class="rounded-circle article-img" src="{{ quiz.image.url }}">
                         <div class="media-body">
                             <div class="article-metadata">
-                                <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author }}</a>
+                                <a class="mr-2" href="{% url 'user-quiz' quiz.author.username %}">{{ quiz.author.first_name }} {{ quiz.author.last_name }}</a>
                                 <small class="text-muted">{{ quiz.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
                             </div>
                             <h2><a class="article-title" href="{% url 'quiz-detail' quiz.id %}">{{ quiz.question }}</a></h2>

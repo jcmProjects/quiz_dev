@@ -12,7 +12,7 @@
                             <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
                             <div class="media-body">
                                 <div class="article-metadata">
-                                    <a class="mr-2" href="{% url 'user-quiz' object.author.username %}">{{ object.author }}</a>
+                                    <a class="mr-2" href="{% url 'user-quiz' object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a>
                                     <small class="text-muted">{{ object.date_created|date:"F d, Y" }}</small>    <!-- see DJANGO date formatting template documentation -->
                                     <!-- Options -->
                                     {% if object.author == user %}
