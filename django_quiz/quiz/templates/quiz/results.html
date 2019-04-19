@@ -46,7 +46,7 @@
                 </thead>
                 <tbody>
                     {% for answer in answers %}
-                        <tr class="table-success">
+                        <tr class="table-striped">
                                 <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
                             <td>{{ answer.quiz_id.id }}</td>
                             <td>{{ answer.answer }}</td>
