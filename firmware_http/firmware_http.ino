@@ -351,6 +351,33 @@ void post_request(String card_id, String mac, String ans) {
         Serial.println(payload);
     }
     else {
+        digitalWrite(ledRed, HIGH);
         Serial.println("Error in WiFi connection");
-    }
+
+        /* WiFi */
+        Serial.print("\nConnecting to router...");
+        WiFi.begin(ssid, password);
+        
+        /* Wait for Connection */
+        while (WiFi.status() != WL_CONNECTED) {
+            delay(200);
+            Serial.print(".");
+        }
+        
+        /* Connection Established */
+        Serial.println("\nConnection Established!");
+        delay(200);
+    
+        /* Connection to Server */
+        Serial.print("Starting connection...");
+        Serial.print("...");
+        if (client.connect(server_ip, 8000)) {
+            digitalWrite(ledRed, LOW);
+            Serial.print("\nClient connected to server ");
+            Serial.print(server_ip);
+            Serial.print(", on port 8000.\n"); 
+            delay(500);
+        }
+        Serial.println();
+        }
 }

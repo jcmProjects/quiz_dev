@@ -89,7 +89,7 @@ class Quiz(models.Model):
         (N, 'No'),
     )
     anonymous = models.CharField(
-        max_length=1,
+        max_length=3,
         choices=ANONYMOUS_CHOICES,
         default=N,
     )
