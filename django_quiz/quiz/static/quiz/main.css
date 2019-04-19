@@ -376,3 +376,22 @@ body {
   .mt-10{
     margin-top: 100px;
   }
+
+  .btn-huge{
+    padding-top:40px;
+    padding-bottom:40px;
+    padding-right:100px;
+    padding-left:100px;
+    margin-left: -75px; /* margin is -0.5 * dimension */
+    margin-top: -50px;
+  }
+
+  .center {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px; /* margin is -0.5 * dimension */
+    margin-top: -25px; 
+  }​

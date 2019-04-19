@@ -74,13 +74,18 @@
         <!-- Quiz -->
         <div class="container align-items-start bg-white" style="display: none;" id="myQuiz"> <!-- align-items-center -->
             <div class="row justify-content-center">  <!-- quiz-body  -->
-                {% comment %} {% if quiz.image != "no_image.jpg" %} {% endcomment %}
                 <!-- Question -->
                 <div class="container" id="quiz_question">
                     <div class="row justify-content-center" style="margin-top: 4vh;">
                         <div class="col text-center font-weight-bold question-text2" style="height: 15vh; word-wrap: break-word;">{{ object.question }}</div>
                     </div>
                 </div>
+                <!-- GIANT BUTTON -->
+
+                    <div class="center" id="btn_footer">
+                        <button class="btn btn-outline-info btn-huge mb-1 mr-1" type="button" id="play_btn">Play</button>
+                    </div>
+
                 <!-- Image -->
                 <div class="container" id="quiz_img">
                     <div class="row justify-content-center quiz-detail-img" style="margin-top: 1vh;">
@@ -107,41 +112,14 @@
                         </div>
                     </div>
                 </div>
-                {% comment %} {% else %}
-                <!-- Question -->
-                <div class="container">
-                    <div class="row justify-content-center" style="margin-top: 12.5vh;">
-                        <div class="col text-center font-weight-bold question-text3" style="height: 25vh; word-wrap: break-word;">{{ object.question }}</div>
-                    </div>
-                </div>
-                 <!-- Answers / Timer -->
-                <div class="container">
-                    <div class="row justify-content-start align-items-center" style="margin-top: 7.5vh;">
-                        <!-- Answers -->
-                        <div class="col-sm" style="height: 35vh;">
-                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>a)    </b>{{ object.ansA }}</div>
-                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>b)    </b>{{ object.ansB }}</div>
-                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>c)    </b>{{ object.ansC }}</div>
-                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>d)    </b>{{ object.ansD }}</div>
-                            <div class="col ans-text4 text-left" style="height: 7vh; word-wrap: break-word;"><b>e)    </b>{{ object.ansE }}</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Timer -->
-                <div class="container">
-                    <div class="row justify-content-center align-items-center" style="margin-top: 5vh;">
-                        <div class="row justify-content-end" style="height: 15vh;">
-                            <div class="col text-center font-weight-bold timer-text3"><span id="time">{{ object.duration }}</span></div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %} {% endcomment %}
                 <!-- Footer Buttons -->
+                {% comment %}
                 <div class"container">
                     <div class="quiz-footer" id="btn_footer">
                         <button class="btn btn-outline-info btn-sm mb-1 mr-1" type="button" id="play_btn">Play</button>
                     </div>
                 </div>
+                {% endcomment %}
             </div>
         </div>
 
@@ -156,22 +134,7 @@
                 }
             });
         </script>
-
-        {% comment %} <!-- Detect Mobile - JavaScript Function -->
-        <script>
-            $(document).ready(function(){
-                if( navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i)
-                || navigator.userAgent.match(/iPad/i)
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i) ) {
-                    document.getElementById("start_btn").style.visibility = "hidden";
-                }
-            })
-        </script> {% endcomment %}
-        
+       
         <!-- Go Fullscreen - JavaScript Function -->
         <script>
             document.getElementById("start_btn").addEventListener("click", function goFullscreen() {
@@ -270,7 +233,8 @@
 
             /* Play_btn*/
             document.getElementById("play_btn").addEventListener("click", function () {
-                document.getElementById("play_btn").disabled = true;
+                //document.getElementById("play_btn").disabled = true;
+                document.getElementById("play_btn").style.display = "none";
                 document.getElementById("quiz_question").style.display = "block";
                 document.getElementById("quiz_img").style.display = "block";
                 document.getElementById("quiz_ans_timer").style.display = "block";
