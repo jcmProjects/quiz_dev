@@ -129,6 +129,7 @@ void loop(void) {
 
         digitalWrite(ledGreen, LOW);
 
+        delay(100);
         /* Read Input State */
         StateQ1 = digitalRead(Q1);
         StateQ0 = digitalRead(Q0);

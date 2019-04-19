@@ -111,12 +111,11 @@ void loop(void) {
 
     String mac = WiFi.macAddress();         /**< MAC address. */ 
 
-
+    delay(100);
     /* Read Input State */
     StateQ1 = digitalRead(Q1);
     StateQ0 = digitalRead(Q0);
     StateQ2 = analogRead(Q2);
-
 
     /* Button 1 */
     if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
