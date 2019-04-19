@@ -16,7 +16,7 @@
                             Create a Quiz
                         </legend>
                         <!-- https://redstapler.co/sheetjs-tutorial-convert-excel-html-table/ -->
-                        Import from Excel (images need to be selected manually):&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="input-excel"/>
+                        Import from Excel (course and images need to be selected manually):&nbsp;&nbsp;&nbsp;&nbsp;<input type="file" id="input-excel"/>
                         <p></p>
                         
                         {{ course_form|bootstrap }}
@@ -48,8 +48,8 @@
 
         function fillForm(data) {
             // Course - maybe remove this?
-            var course_text = document.getElementById("sjs-C4").textContent;
-            document.getElementById("id_course").value = course_text;
+            //var course_text = document.getElementById("sjs-C4").textContent;
+            //document.getElementById("id_course").value = course_text;
             // Question
             var question = document.getElementById("sjs-D4").textContent;
             document.getElementById("id_question").value = question;
@@ -74,6 +74,12 @@
             // Duration
             var duration = document.getElementById("sjs-K4").textContent;
             document.getElementById("id_duration").value = duration;
+            // Image
+            //var duration = document.getElementById("sjs-L4").textContent;
+            //document.getElementById("id_image").value = duration;
+            // Anonymous
+            var duration = document.getElementById("sjs-M4").textContent;
+            document.getElementById("id_anonymous").value = duration;
         }
     </script>
     

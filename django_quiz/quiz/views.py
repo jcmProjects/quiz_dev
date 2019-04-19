@@ -89,7 +89,7 @@ class UserQuizListView(ListView):
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
+    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
 
     def get_context_data(self, **kwargs):
 
@@ -140,8 +140,6 @@ class QuizDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @csrf_exempt
 @require_http_methods(["POST"])
 def start_quiz(request, *args, **kwargs):
-    # Convert from JSON to PYTHON: json.loads(x)
-    # Convert from PYTHON to JSON: json.dumps(x)
 
     print("QUIZ STARTED")
 
@@ -209,7 +207,7 @@ def stop_quiz(request, *args, **kwargs):
     print(profile.valid_ans)
  
     #? Anonymous = TRUE
-    if quiz.anonymous == True:
+    if quiz.anonymous == "Yes":
         print("ANONYMOUS QUIZ")
         # Deletes ALL but the first answer from each MAC
         lastSeenMAC = float('-Inf')
@@ -221,7 +219,7 @@ def stop_quiz(request, *args, **kwargs):
                 lastSeenMAC = answer.mac
 
     #? Anonymous = FALSE
-    if quiz.anonymous == False:
+    if quiz.anonymous == "No":
         print("NOT anonymous")
         #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
         # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
@@ -232,7 +230,9 @@ def stop_quiz(request, *args, **kwargs):
             answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
 
         for answer in answers_processing_inverse:
-            if answer.nmec == lastSeenNMEC:
+            if answer.nmec == "00000":
+                answer.delete()
+            elif answer.nmec == lastSeenNMEC:
                 answer.delete() # We've seen this MAC in a previous row
             else: # New id found, save it and check future rows for duplicates.
                 lastSeenNMEC = answer.nmec

@@ -60,7 +60,7 @@ class Quiz(models.Model):
     #start_date = UnixTimeStampField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='no_image.jpg', upload_to='quiz_img')
-    anonymous = models.BooleanField(default=False)
+    #anonymous = models.BooleanField(default=False)
 
     # Right Answer
     A = 'A'
@@ -79,6 +79,19 @@ class Quiz(models.Model):
         max_length=1,
         choices=RIGHT_ANSWER_CHOICES,
         default=A,
+    )
+
+    # ANONYMOUS
+    Y = 'Yes'
+    N = 'No'
+    ANONYMOUS_CHOICES = (
+        (Y, 'Yes'),
+        (N, 'No'),
+    )
+    anonymous = models.CharField(
+        max_length=1,
+        choices=ANONYMOUS_CHOICES,
+        default=N,
     )
 
     def __str__(self):

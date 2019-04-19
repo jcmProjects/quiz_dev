@@ -5,37 +5,60 @@
     <!-- Results -->
     <div id="myTable">
         <table class="table table-hover table-striped">
-            <thead>
-            <tr>
-                <th>Course</th>
-                <th>Quiz ID</th>
-                {% comment %} <th>DateTime</th> {% endcomment %}
-                <th>NMec</th>
-                <th>Answer</th>
-                <th>Time</th>
-                {% comment %} <th>Evaluation</th> {% endcomment %}
-            </tr>
-            </thead>
-            <tbody>
-                {% for answer in answers %}
-                    {% if answer.evaluation == "right" %}
-                    <tr class="table-success">
-                    {% else %}
-                    <tr class="table-danger">
-                    {% endif %}
-                        <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
-                        <td>{{ answer.quiz_id.id }}</td>
-                        {% comment %} <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td> {% endcomment %}
-                        <td>{{ answer.student }}</td>
-                        <td>{{ answer.answer }}</td>
-                        <td>{{ answer.time }}</td>
-                        {% comment %} <td>{{ answer.evaluation }}</td> {% endcomment %}
-                    </tr>
-                {% endfor %}
-            </tbody>
+            <!-- NOT anonymous -->
+            {% if answer.quiz_id.anonymous == "No" %}
+                <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Quiz ID</th>
+                    {% comment %} <th>DateTime</th> {% endcomment %}
+                    <th>NMec</th>
+                    <th>Answer</th>
+                    <th>Time</th>
+                    <th>Evaluation</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for answer in answers %}
+                        {% if answer.evaluation == "right" %}
+                        <tr class="table-success">
+                        {% else %}
+                        <tr class="table-danger">
+                        {% endif %}
+                            <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
+                            <td>{{ answer.quiz_id.id }}</td>
+                            {% comment %} <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td> {% endcomment %}
+                            <td>{{ answer.student }}</td>
+                            <td>{{ answer.answer }}</td>
+                            <td>{{ answer.time }}</td>
+                            <td>{{ answer.evaluation }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Quiz ID</th>
+                    <th>Answer</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for answer in answers %}
+                        <tr class="table-success">
+                                <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
+                            <td>{{ answer.quiz_id.id }}</td>
+                            <td>{{ answer.answer }}</td>
+                            <td>{{ answer.time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% endif %}
         </table>
         <button class="btn btn-outline-info" id="export_btn">Export to Excel</button>
     </div>
+    
 
     <!-- https://redstapler.co/sheetjs-tutorial-html-table-to-excel/ -->
     <script>

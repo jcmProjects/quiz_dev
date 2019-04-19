@@ -76,13 +76,13 @@
             <div class="row justify-content-center">  <!-- quiz-body  -->
                 {% comment %} {% if quiz.image != "no_image.jpg" %} {% endcomment %}
                 <!-- Question -->
-                <div class="container">
+                <div class="container" id="quiz_question">
                     <div class="row justify-content-center" style="margin-top: 4vh;">
                         <div class="col text-center font-weight-bold question-text2" style="height: 15vh; word-wrap: break-word;">{{ object.question }}</div>
                     </div>
                 </div>
                 <!-- Image -->
-                <div class="container">
+                <div class="container" id="quiz_img">
                     <div class="row justify-content-center quiz-detail-img" style="margin-top: 1vh;">
                         {% if quiz.image != "no_image.jpg" %}
                             <img class="quiz-show-img" src="{{ object.image.url }}">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 <!-- Answers / Timer -->
-                <div class="container">
+                <div class="container" id="quiz_ans_timer">
                     <div class="row justify-content-start align-items-center" style="margin-top: 1vh; margin-bottom: 1vh;">
                         <!-- Answers -->
                         <div class="col-sm" style="height: 25vh;">
@@ -191,6 +191,9 @@
 
                 document.getElementById("btn_footer").style.display = "block";
                 document.getElementById("myQuiz").style.display = "block";
+                document.getElementById("quiz_question").style.display = "none";
+                document.getElementById("quiz_img").style.display = "none";
+                document.getElementById("quiz_ans_timer").style.display = "none";
             });
         </script>
 
@@ -265,8 +268,12 @@
                 time = setInterval(timer, 1000);
             }
 
-            /* Play_btn (Abade) */
+            /* Play_btn*/
             document.getElementById("play_btn").addEventListener("click", function () {
+                document.getElementById("play_btn").disabled = true;
+                document.getElementById("quiz_question").style.display = "block";
+                document.getElementById("quiz_img").style.display = "block";
+                document.getElementById("quiz_ans_timer").style.display = "block";
                 $.ajax({
                     type: "POST",
                     url: "start_quiz/",
