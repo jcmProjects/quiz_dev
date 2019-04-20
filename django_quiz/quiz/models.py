@@ -122,6 +122,7 @@ class Results(models.Model):
     evaluation = models.CharField(max_length=100, default="")
     date_time = models.DateTimeField(default=timezone.now)
     session = models.ForeignKey(Session, default=1, on_delete=models.CASCADE)   # DO_NOTHING
+    anonymous = models.CharField(max_length=3, default="No")
 
     def __str__(self):
         return f'Question: {self.quiz_id.id}, Student: {self.student}'  # {self.quiz_id.id} to return ID or {self.quiz_id} to return Question

@@ -211,7 +211,10 @@ def stop_quiz(request, *args, **kwargs):
         print("ANONYMOUS QUIZ")
         # Deletes ALL but the first answer from each MAC
         lastSeenMAC = float('-Inf')
-        answers_processing = AnswerProcessing.objects.all().order_by('id')
+        if profile.valid_ans == "Last":
+            answers_processing = AnswerProcessing.objects.all().order_by('-id')
+        else:
+            answers_processing = AnswerProcessing.objects.all().order_by('id')
         for answer in answers_processing:
             if answer.mac == lastSeenMAC:
                 answer.delete()
@@ -263,7 +266,10 @@ def stop_quiz(request, *args, **kwargs):
             evaluation = "wrong"
         print(evaluation)
         # Save Results
-        result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session)
+        if quiz.anonymous == "No":
+            result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="No")
+        else:
+            result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student="00000", mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="Yes")
         result.save()
 
     #* Reset 'AnswerProcessing' model
