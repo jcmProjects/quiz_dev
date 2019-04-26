@@ -49,7 +49,7 @@
                             <img class="rounded-circle article-img" src="{{ session.quiz.image.url }}">
                             <div class="media-body">
                                 <div class="article-metadata">
-                                    <h2><a class="article-title" href="{% url 'quiz-detail' session.quiz.id %}">{{ session.quiz.question }}</a></h2>
+                                    <h2><a class="article-title" href="{% url 'quiz-detail' session.quiz.id %}">{{ session.quiz.title }}</a></h2>
                                     <a class="article-content">{{ session.quiz.course.all|join:", " }}</a>
                                 </div>
                                 {% with quiz_question=session.quiz.question %} 

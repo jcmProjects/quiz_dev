@@ -73,6 +73,10 @@ body {
     color: #444444;
   }
   
+  .article-title-grayed-out {
+    color: #4c4c4c;
+  }
+
   a.article-title:hover {
     color: #428bca;
     text-decoration: none;

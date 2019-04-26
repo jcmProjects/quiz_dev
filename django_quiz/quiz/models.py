@@ -47,6 +47,7 @@ class UnixTimestampField(models.DateTimeField):
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
     course = models.ManyToManyField(Course)
+    title = models.CharField(max_length=100, default=' ')
     question = models.CharField(max_length=100)
     ansA = models.CharField(max_length=50)
     ansB = models.CharField(max_length=50)

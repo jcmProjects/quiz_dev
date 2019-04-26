@@ -14,7 +14,7 @@ class QuizForm(forms.ModelForm):
     class Meta:
         model = Quiz
         # fields = ['course']
-        fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
+        fields = ['course', 'title', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
 
 
 class QuizUploadForm(forms.ModelForm):
