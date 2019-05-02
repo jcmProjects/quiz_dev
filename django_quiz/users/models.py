@@ -58,7 +58,8 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return f'{self.user}'
+        #return f'{self.user}'
+        return f'{self.user.first_name} {self.user.last_name}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -90,10 +91,10 @@ class ProfileCourse(models.Model):
         return f'Course: {self.course}, User: {self.profile}'
 
 
-class Session(models.Model):
-    id = models.AutoField(primary_key=True)
-    quiz = models.ForeignKey('quiz.Quiz', on_delete=models.CASCADE)
-    date_created = models.DateTimeField(default=timezone.now)
+# class Session(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     quiz = models.ForeignKey('quiz.Quiz', on_delete=models.CASCADE)
+#     date_created = models.DateTimeField(default=timezone.now)
 
-    def __str__(self):
-        return f'Quiz ID: {self.quiz.id}, User: {self.quiz.author}, Date: {self.date_created}'
+#     def __str__(self):
+#         return f'Quiz ID: {self.quiz.id}, User: {self.quiz.author}, Date: {self.date_created}'

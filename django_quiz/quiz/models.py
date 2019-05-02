@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
-from users.models import Course, ProfileCourse, Session
+from users.models import Course, ProfileCourse#, Session
 
 from datetime import datetime
 from time import strftime
@@ -111,6 +111,15 @@ class Quiz(models.Model):
             output_size = (768, 768)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Session(models.Model):
+    id = models.AutoField(primary_key=True)
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'Quiz ID: {self.quiz.id}, User: {self.quiz.author}, Date: {self.date_created}'
 
 
 class Results(models.Model):

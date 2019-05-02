@@ -8,10 +8,10 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 #from django.db.models import Q
 
-from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal
+from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal, Session
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
-from users.models import Course, ProfileCourse, Profile, Session
+from users.models import Course, ProfileCourse, Profile #, Session
 from .resources import QuizResource
 from datetime import datetime
 
