@@ -96,6 +96,7 @@ class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         auth_user = self.request.user;
         initial_data = {
             'course': [i.id for i in self.object.course.all()],
+            'title': self.object.title,
             'question': self.object.question,
             'ansA': self.object.ansA,
             'ansB': self.object.ansB,

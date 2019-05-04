@@ -6,17 +6,16 @@
 /* Includes */
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
-#include <MySQL_Connection.h>
-#include <MySQL_Cursor.h>
 
 
 /* Prototypes */
 String read_card(void);
 uint8_t is_card_present(uint8_t control);
 void clear_var(void);
-void insert_db(String card_id, String mac, String ans);
+void post_request(String card_id, String mac, String ans);
 
 
 /*
@@ -25,17 +24,8 @@ void insert_db(String card_id, String mac, String ans);
  * ----------------------------------------------------- 
  */
 MFRC522 mfrc522(SS_PIN, RST_PIN);           /* Create MFRC522 instance. */
-uint8_t card_read = 0;
-String card_id = "";                    /**< UID of the RFID card (string format). */
-
-
-/*
- * -----------------------------------------------------
- * -                        Router                     -
- * ----------------------------------------------------- 
- */
-char ssid[] = "DLink-782A77";               /**< Network SSID. */
-char password[] = "password";               /**< Network Password. */
+uint8_t card_read = 0;                      /**< Indicates if a card is read (1) or not (0). */
+String card_id = "";                        /**< UID of the RFID card (string format). */
 
 
 /*
@@ -56,19 +46,16 @@ int StateQ2 = 0;                            /**< State of input 2. */
 
 /* 
  * -----------------------------------------------------
- * -                       Database                    -
+ * -                        TCP/IP                     -
  * ----------------------------------------------------- 
  */
-IPAddress server_addr(192,168,10,2);        /**< IP of the MySQL *server*. */
-char userSQL[] = "terminal";                /**< MySQL user login username. */
-char passwordSQL[] = "password";            /**< MySQL user login password. */
-
 WiFiClient client;
-MySQL_Connection conn( (Client *)&client ); /**< MySQL connection. */
-MySQL_Cursor cur = MySQL_Cursor(&conn);     /**< MySQL cursor. */
+char server_ip[] = "192.168.0.2";           /**< Server IP. */
+char ssid[] = "CLASSQUIZ";                  /**< Network SSID. */
+char password[] = "password";               /**< Network Password. */
 
 // Sample query
-char INSERT_DATA[] = "INSERT INTO quiz_project.quiz_answer (uid, mac, ans) VALUES ('%s','%s','%s')";   // '%s' or %s ??
+char INSERT_DATA[] = "{uid: %s, mac: %s, ans: %s}";
 char query[128];
 
 
@@ -83,7 +70,7 @@ char query[128];
 void setup(void) {
     
     Serial.begin(9600);
-    
+
     /* Set NodeMCU I/O's */
     pinMode(Q0, INPUT);
     pinMode(Q1, INPUT);
@@ -91,7 +78,7 @@ void setup(void) {
     pinMode(ledRed, OUTPUT);
 
     digitalWrite(ledRed, HIGH);
-    
+
     /* SPI - MFRC522 */
     SPI.begin();          // Initiate  SPI bus
     delay(100);
@@ -111,16 +98,17 @@ void setup(void) {
     Serial.println("\nConnection Established!");
     delay(200);
 
-    /* Connection to Database */
-    Serial.println("Connecting to database...");
-    if ( conn.connect(server_addr, 3306, userSQL, passwordSQL) ) {
+    /* Connection to Server */
+    Serial.print("Starting connection...");
+    Serial.print("...");
+    if (client.connect(server_ip, 8000)) {
         digitalWrite(ledRed, LOW);
-        delay(1000);
+        Serial.print("\nClient connected to server ");
+        Serial.print(server_ip);
+        Serial.print(", on port 8000.\n"); 
+        delay(500);
     }
-    else {
-        Serial.println("Connection failed.");
-    }
-    // conn.close();
+    Serial.println();
 }
 
 
@@ -135,40 +123,93 @@ void setup(void) {
 void loop(void) {
 
     uint8_t control = 0;                    /**< Variable used to check if the card is still present. */
-    String mac = WiFi.macAddress();         /**< MAC address. */
-    //delay(100);
-
+    String mac = WiFi.macAddress();         /**< MAC address. */ 
 
     if (card_read == 0) {
+
+        digitalWrite(ledGreen, LOW);
+
+        delay(100);
+        /* Read Input State */
+        StateQ1 = digitalRead(Q1);
+        StateQ0 = digitalRead(Q0);
+        StateQ2 = analogRead(Q2);
+
+
+        /* Button 1 */
+        if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
+            Serial.println("A");   
+
+            digitalWrite(ledGreen, HIGH);
+            post_request("00 00 00 00 00 00 00", mac, "A");
+            digitalWrite(ledGreen, LOW);
+            clear_var();
+        }
+
+        /* Button 2 */
+        else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == LOW)) {
+            Serial.println("B");   
+
+            digitalWrite(ledGreen, HIGH);
+            post_request("00 00 00 00 00 00 00", mac, "B");
+            digitalWrite(ledGreen, LOW);
+            clear_var();
+        }
+
+        /* Button 3 */
+        else if ((StateQ2 < 500) && (StateQ1 == HIGH) && (StateQ0 == HIGH)) {
+            Serial.println("C");   
+
+            digitalWrite(ledGreen, HIGH);
+            post_request("00 00 00 00 00 00 00", mac, "C");
+            digitalWrite(ledGreen, LOW);
+            clear_var();
+        }
+
+        /* Button 4 */
+        else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == LOW)) { 
+            Serial.println("D");   
+
+            digitalWrite(ledGreen, HIGH);
+            post_request("00 00 00 00 00 00 00", mac, "D");
+            digitalWrite(ledGreen, LOW);
+            clear_var();
+        }
+
+        /* Button 5 */
+        else if ((StateQ2 >= 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) {
+            Serial.println("E");   
+
+            digitalWrite(ledGreen, HIGH);
+            post_request("00 00 00 00 00 00 00", mac, "E");
+            digitalWrite(ledGreen, LOW);
+            clear_var();
+        }       
+    
         card_id = read_card();
         if (card_id != "")
             card_read = 1;
-    }
+    }   
     
     else {
         /* Check if the card is still present */
         control = is_card_present(control);
     
         /* Card is present */
-        if (control <= 2) {     // control <= 2
+        if (control <= 2) {        
             digitalWrite(ledGreen, HIGH);
-    
+            
             /* Read Input State */
             StateQ1 = digitalRead(Q1);
             StateQ0 = digitalRead(Q0);
             StateQ2 = analogRead(Q2);
-            //delay(100);
-            Serial.println(analogRead(A0));
-            Serial.println(digitalRead(15));
-            Serial.println(digitalRead(16));
-
     
             /* Button 1 */
             if ((StateQ2 < 500) && (StateQ1 == LOW) && (StateQ0 == HIGH)) { 
                 Serial.println("A");   
     
                 if (card_id != "") {
-                    insert_db(card_id, mac, "A");
+                    post_request(card_id, mac, "A");
                     digitalWrite(ledGreen, LOW);
                     clear_var();
                 }
@@ -179,7 +220,7 @@ void loop(void) {
                 Serial.println("B");   
     
                 if (card_id != "") {
-                    insert_db(card_id, mac, "B");
+                    post_request(card_id, mac, "B");
                     digitalWrite(ledGreen, LOW);
                     clear_var();
                 }
@@ -190,7 +231,7 @@ void loop(void) {
                 Serial.println("C");   
     
                 if (card_id != "") {
-                    insert_db(card_id, mac, "C");
+                    post_request(card_id, mac, "C");
                     digitalWrite(ledGreen, LOW);
                     clear_var();
                 }
@@ -201,7 +242,7 @@ void loop(void) {
                 Serial.println("D");   
     
                 if (card_id != "") {
-                    insert_db(card_id, mac, "D");
+                    post_request(card_id, mac, "D");
                     digitalWrite(ledGreen, LOW);
                     clear_var();
                 };
@@ -212,20 +253,20 @@ void loop(void) {
                 Serial.println("E");   
     
                 if (card_id != "") {
-                    insert_db(card_id, mac, "E");
+                    post_request(card_id, mac, "E");
                     digitalWrite(ledGreen, LOW);
                     clear_var();
                 }
             }
         }
-    
+
         /* Card was removed */
-        else if (control >=3) { 
-            
-            clear_var();
+        else {
             digitalWrite(ledGreen, LOW);
+            clear_var();
         }
     }
+        
 }
 
 
@@ -234,7 +275,7 @@ void loop(void) {
  ? =                     Functions                     =
  ? ===================================================== 
  */
-/**
+ /**
  * @brief Reads card UID.
  */
 String read_card(void) {
@@ -256,7 +297,7 @@ String read_card(void) {
     (content.substring(1)).toCharArray(UID, 21);
    
     String card_id(UID);
-    Serial.println(card_id);
+    //Serial.println(card_id);
 
     return card_id;
 }
@@ -288,23 +329,56 @@ void clear_var(void) {
 
 
 /**
- * @brief Insert into the database.
+ * @brief Send HTTP POST Request.
  * 
  */
-void insert_db(String card_id, String mac, String ans) {
+void post_request(String card_id, String mac, String ans) {
 
-    delay(100);
+    if (WiFi.status() == WL_CONNECTED) {
+        HTTPClient http;
     
-    // Initiate the query class instance
-    MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
+        http.begin("http://192.168.0.2:8000/quiz/response/");
+        http.addHeader("Content-Type", "text/plain");
 
-    // Save
-    sprintf(query, INSERT_DATA, card_id.c_str(), mac.c_str(), ans.c_str());
+        sprintf(query, INSERT_DATA, card_id.c_str(), mac.c_str(), ans.c_str());
     
-    // Execute the query
-    cur_mem->execute(query);
+        //int httpCode = http.POST("Message from ESP8266");
+        int httpCode = http.POST(query);
+        String payload = http.getString();
+
+        Serial.print("httpCode:");
+        Serial.println(httpCode);
+        Serial.print("payload:");
+        Serial.println(payload);
+    }
+    else {
+        digitalWrite(ledRed, HIGH);
+        Serial.println("Error in WiFi connection");
+
+        /* WiFi */
+        Serial.print("\nConnecting to router...");
+        WiFi.begin(ssid, password);
+        
+        /* Wait for Connection */
+        while (WiFi.status() != WL_CONNECTED) {
+            delay(200);
+            Serial.print(".");
+        }
+        
+        /* Connection Established */
+        Serial.println("\nConnection Established!");
+        delay(200);
     
-    // Note: since there are no results, we do not need to read any data
-    // Deleting the cursor also frees up memory used
-    delete cur_mem;
+        /* Connection to Server */
+        Serial.print("Starting connection...");
+        Serial.print("...");
+        if (client.connect(server_ip, 8000)) {
+            digitalWrite(ledRed, LOW);
+            Serial.print("\nClient connected to server ");
+            Serial.print(server_ip);
+            Serial.print(", on port 8000.\n"); 
+            delay(500);
+        }
+        Serial.println();
+        }
 }

@@ -15,10 +15,15 @@
                     {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">
+                            Account Info
+                        </legend>
+                        {{ a_form|bootstrap }}      <!-- Account form -->
+                        {{ pass_form|bootstrap }}   <!-- Password form -->
+                        <legend class="border-bottom mb-4">
                             Profile Info
                         </legend>
-                        {{ u_form|bootstrap }} <!-- User form -->
-                        {{ p_form|bootstrap }} <!-- Profile form -->
+                        {{ u_form|bootstrap }}      <!-- User form -->
+                        {{ p_form|bootstrap }}      <!-- Profile form -->
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Update</button>
