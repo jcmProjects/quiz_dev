@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from PIL import Image
-from users.models import Course, ProfileCourse#, Session
+from users.models import Course, ProfileCourse
 
 from datetime import datetime
 from time import strftime
