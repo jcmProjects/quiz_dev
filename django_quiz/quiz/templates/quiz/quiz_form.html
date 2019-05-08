@@ -20,7 +20,6 @@
                         <p></p>
                         
                         {{ course_form|bootstrap }}
-                        {% comment %} {{ form|bootstrap }} {% endcomment %}
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Submit</button>
@@ -47,9 +46,6 @@
         });
 
         function fillForm(data) {
-            // Course - maybe remove this?
-            //var course_text = document.getElementById("sjs-B4").textContent;
-            //document.getElementById("id_course").value = course_text;
             // Question
             var title = document.getElementById("sjs-C4").textContent;
             document.getElementById("id_title").value = title;
@@ -77,14 +73,10 @@
             // Duration
             var duration = document.getElementById("sjs-K4").textContent;
             document.getElementById("id_duration").value = duration;
-            // Image
-            //var duration = document.getElementById("sjs-L4").textContent;
-            //document.getElementById("id_image").value = duration;
             // Anonymous
             var duration = document.getElementById("sjs-M4").textContent;
             document.getElementById("id_anonymous").value = duration;
         }
     </script>
-    
 
 {% endblock content %}

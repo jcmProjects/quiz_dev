@@ -351,12 +351,6 @@ body {
     width: auto;
     object-fit: contain;
   }
-  /* .quiz-show-img {
-    width: 100%;
-    max-width: 768px;
-    height: auto;
-    object-fit: contain;
-  } */
   .quiz-body {
     height: 98vh;
   }

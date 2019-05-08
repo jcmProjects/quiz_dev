@@ -1,13 +1,12 @@
 {% extends "quiz/base.html" %}
 {% block content %}
+
     {% for quiz in quizzes %}
         {% ifchanged quiz.author %}
             <h1 class="mb-3">Quizzes by {{ quiz.author.first_name }} {{ quiz.author.last_name }}</h1>
         {% endifchanged %}
     {% endfor %}
-    {% comment %}
-    <h1 class="mb-3">Quizzes by {{ view.kwargs.username }}</h1>
-    {% endcomment %}
+    
     <!-- Filter / Search -->
     <div class="row searchFilter">
         <div class="col-sm-12">

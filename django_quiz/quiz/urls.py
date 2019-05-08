@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .views import QuizCreateView, QuizDetailView, UserQuizListView, QuizListView, QuizEditView, QuizDeleteView, start_quiz, stop_quiz, ResultsListView, SessionsListView, quiz_response
 from . import views
 
+
 urlpatterns = [
     path('', login_required(QuizListView.as_view()), name='quiz-home'),
     path('quiz/<str:username>', login_required(UserQuizListView.as_view()), name='user-quiz'),

@@ -17,7 +17,6 @@
                         <tr>
                             <th>Course</th>
                             <th>Quiz ID</th>
-                            {% comment %} <th>DateTime</th> {% endcomment %}
                             <th>NMec</th>
                             <th>Answer</th>
                             <th>Time</th>
@@ -33,7 +32,6 @@
                                 {% endif %}
                                     <td>{{ answer.quiz_id.course.all|join:", "  }}</td>
                                     <td>{{ answer.quiz_id.id }}</td>
-                                    {% comment %} <td>{{ answer.date_time|date:"F d, Y - H:i:s" }}</td> {% endcomment %}
                                     <td>{{ answer.student }}</td>
                                     <td>{{ answer.answer }}</td>
                                     <td>{{ answer.time }}</td>

@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-#from django.db.models import Q
 
 from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal, Session
 from .forms import QuizForm, QuizUploadForm
@@ -15,7 +14,6 @@ from users.models import Course, ProfileCourse, Profile #, Session
 from .resources import QuizResource
 from datetime import datetime
 
-# Abade
 import json
 import datetime
 from django.views.decorators.csrf import csrf_exempt
@@ -144,17 +142,17 @@ def start_quiz(request, *args, **kwargs):
 
     print("QUIZ STARTED")
 
-    #* Reset 'Answer' and 'AnswerProcessing' models
+    # Reset 'Answer' and 'AnswerProcessing' models
     Answer.objects.all().delete()
     AnswerProcessing.objects.all().delete()
 
-    #* Get quiz object
+    # Get quiz object
     body = request.body.decode('utf-8')
     m = re.search('id=(.+?)&', body)
     if m:
         quiz_id = m.group(1)
 
-    #* Update quiz.start_date
+    # Update quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
     quiz.start_date = datetime.datetime.now()
     quiz.save()
@@ -171,7 +169,7 @@ def stop_quiz(request, *args, **kwargs):
     
     print("QUIZ ENDED")
 
-    #* Copy Answer to AnswerProcessing
+    # Copy Answer to AnswerProcessing
     answers = Answer.objects.all().order_by('id')
     for answer in answers:
         try:
@@ -185,29 +183,29 @@ def stop_quiz(request, *args, **kwargs):
             pass
         
 
-    #* Reset 'Answer' model
+    # Reset 'Answer' model
     Answer.objects.all().delete()
 
-    #* Get quiz object
+    # Get quiz object
     body = request.body.decode('utf-8')
     m = re.search('id=(.+?)&', body)
     if m:
         quiz_id = m.group(1)
     print(quiz_id)
 
-    #* Get quiz.start_date
+    # Get quiz.start_date
     quiz = get_object_or_404(Quiz, id=quiz_id)
     print(quiz.start_date)
 
-    #* Create Session
+    # Create Session
     session = Session(quiz=quiz)
     session.save()
 
-    #* Check valid_ans (from 'Profile')
+    # Check valid_ans (from 'Profile')
     profile = get_object_or_404(Profile, user_id=quiz.author)
     print(profile.valid_ans)
  
-    #? Anonymous = TRUE
+    # Anonymous = TRUE
     if quiz.anonymous == "Yes":
         print("ANONYMOUS QUIZ")
         # Deletes ALL but the first answer from each MAC
@@ -222,10 +220,10 @@ def stop_quiz(request, *args, **kwargs):
             else:
                 lastSeenMAC = answer.mac
 
-    #? Anonymous = FALSE
+    # Anonymous = FALSE
     if quiz.anonymous == "No":
         print("NOT anonymous")
-        #* Check 'nmec + mac' on every object of 'AnswerProcessing' model
+        # Check 'nmec + mac' on every object of 'AnswerProcessing' model
         # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
         lastSeenNMEC = float('-Inf')
         if profile.valid_ans == "Last":
@@ -237,8 +235,8 @@ def stop_quiz(request, *args, **kwargs):
             if answer.nmec == "00000":
                 answer.delete()
             elif answer.nmec == lastSeenNMEC:
-                answer.delete() # We've seen this MAC in a previous row
-            else: # New id found, save it and check future rows for duplicates.
+                answer.delete()     # We've seen this MAC in a previous row
+            else:                   # New id found, save it and check future rows for duplicates.
                 lastSeenNMEC = answer.nmec
 
         # Deletes ALL but the first answer from each MAC
@@ -250,7 +248,7 @@ def stop_quiz(request, *args, **kwargs):
             else:
                 lastSeenMAC = answer.mac
 
-    #* Compare time-AnswerProcessing with time-Quiz and save to 'Results'
+    # Compare time-AnswerProcessing with time-Quiz and save to 'Results'
     answers_processed = AnswerProcessing.objects.all().order_by('id')
 
     for answer in answers_processed:
@@ -273,7 +271,7 @@ def stop_quiz(request, *args, **kwargs):
             result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student="00000", mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="Yes")
         result.save()
 
-    #* Reset 'AnswerProcessing' model
+    # Reset 'AnswerProcessing' model
     AnswerProcessing.objects.all().delete()
 
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
@@ -291,11 +289,10 @@ class ResultsListView(ListView):
         session_id = self.kwargs['session']
 
         # SubQueries - https://stackoverflow.com/questions/8556297/how-to-subquery-in-queryset-in-django
-        #q0 = Session.objects.latest('id')   # to show only the results of the latest quiz
         q1 = Quiz.objects.filter(author=auth_user.id)
-        q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=session_id)#.filter(session_id=q0.id)
+        q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=session_id)
 
-        return q2.order_by('-date_time')  # order_by('-date_time', 'session_id')
+        return q2.order_by('-date_time')
 
 
 class SessionsListView(ListView):
@@ -313,13 +310,14 @@ class SessionsListView(ListView):
 
         return q3.order_by('-date_created').distinct()
         
+        
 @csrf_exempt
 @require_http_methods(["POST"])
 def quiz_response(request, *args, **kwargs):
 
     print("RESPONSE VIEW")
 
-    #* Get quiz object
+    # Get quiz object
     body = request.body.decode('utf-8')
     print(body)
     m = re.search('uid: (.+?),', body)

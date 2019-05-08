@@ -50,14 +50,3 @@ def profile(request):
     }
 
     return render(request, 'users/profile.html', context)
-
-
-
-
-
-# MESSAGES:
-# messages.debug
-# messages.info
-# messages.success
-# messages.warning
-# messages.error
