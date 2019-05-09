@@ -129,7 +129,7 @@ class Results(models.Model):
     time = models.CharField(max_length=100, default="")
     evaluation = models.CharField(max_length=100, default="")
     date_time = models.DateTimeField(default=timezone.now)
-    session = models.ForeignKey(Session, default=1, on_delete=models.CASCADE)   # DO_NOTHING
+    session = models.ForeignKey('Session', default=1, on_delete=models.CASCADE)   # DO_NOTHING
     anonymous = models.CharField(max_length=3, default="No")
 
     def __str__(self):

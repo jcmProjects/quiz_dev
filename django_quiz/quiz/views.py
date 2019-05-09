@@ -35,7 +35,7 @@ class QuizDetailView(DetailView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
+    fields = ['course', 'title', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
 
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
@@ -87,7 +87,7 @@ class UserQuizListView(ListView):
 
 class QuizEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Quiz
-    fields = ['course', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
+    fields = ['course', 'title', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
 
     def get_context_data(self, **kwargs):
 
