@@ -34,7 +34,7 @@ pip3 install -r requirements.txt
 
 ## Migrations
 
-With all the above set up, navigate to `quiz_dev/` folder, containing the file `manage.py` and run the following:
+With all the above set up, navigate to `quiz_dev/django_quiz/` directory, containing the file `manage.py`, and run the following:
 ```bash
 python3 manage.py makemigrations
 python3 manage.py migrate
@@ -81,7 +81,7 @@ PASSWORD: password
 
 ## Terminal Firmware Installation
 
-To upload `firmware/firmware.ino` to the terminal through Arduino IDE, you'll need to do the following:
+To upload `quiz_dev/firmware/firmware.ino` to the terminal through Arduino IDE, you'll need to do the following:
 
 1) Install Arduino IDE and open it
 
@@ -95,13 +95,18 @@ To upload `firmware/firmware.ino` to the terminal through Arduino IDE, you'll ne
 
 6) Choose your ESP8266 board from Tools > Board > NodeMCU 1.0 (ESP-12E Module)
 
-7) Install the package MFRC522 by GithubCommunity from Sketch > Include Libraries > Manage Libraries
+7) Install the package MFRC522 *by GithubCommunity* from Sketch > Include Libraries > Manage Libraries
 
-8) Following the previous step, install the package ESP8266RestClient by fabianofranca
+8) Following the previous step, install the package ESP8266RestClient *by fabianofranca*
 
 7) Finally, re-open your Arduino IDE
 
 *NOTE:* Existing terminals are already updated.
+
+
+## Additional Notes
+
+Since this project works without an Internet connection, JavaScript and CSS libraries usually obtained through CDN are already installed within the directory `django_quiz/quiz/static/quiz/`.
 
 
 ## ClassQuiz Development Blog
