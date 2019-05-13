@@ -20,10 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+#SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'p#jcau(y13o=f(bss$4s8=ddy&1k$r$*3k8no2=(xv98)cqrq1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
+#DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
+DEBUG = 'True'
 
 ALLOWED_HOSTS = ['*']
 # Access Django from another device: 
@@ -83,24 +85,35 @@ WSGI_APPLICATION = 'quiz_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-if (os.environ.get('DATABASE_USED') == 'MySQL'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql', 
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASS'),
-            'HOST': os.environ.get('DB_HOST'),          # Or an IP Address that your DB is hosted on
-            'PORT': os.environ.get('DB_PORT'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'quiz_project',
+        'USER': 'classquiz',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',          # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    } 
+}
+
+# if (os.environ.get('DATABASE_USED') == 'MySQL'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql', 
+#             'NAME': os.environ.get('DB_NAME'),
+#             'USER': os.environ.get('DB_USER'),
+#             'PASSWORD': os.environ.get('DB_PASS'),
+#             'HOST': os.environ.get('DB_HOST'),          # Or an IP Address that your DB is hosted on
+#             'PORT': os.environ.get('DB_PORT'),
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         }
+#     } 
 
 
 # Password validation
