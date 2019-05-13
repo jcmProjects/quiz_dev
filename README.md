@@ -86,7 +86,7 @@ SSID: CLASSQUIZ
 PASSWORD: password
 
 
-# ClassQuiz development blog
+# ClassQuiz Development Blog
 
 https://classquiz.wordpress.com/
 
