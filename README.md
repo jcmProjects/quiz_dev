@@ -30,7 +30,7 @@ To activate the Virtual Environment:
 source venv/bin/activate
 ```
 
-**Requirements**
+**Requirements:**
 After activating the Virtual Environment, run the following command to install the required packages:
 ```bash
 pip3 install -r requirements.txt
