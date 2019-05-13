@@ -1,11 +1,6 @@
 # CLASSQUIZ
 
-**Thesis Title:** Desenvolvimento e implementação em contexto realista do sistema CLASSQUIZ
-
-**Author:** João Carlos da Silva moreira (jcmoreira@ua.pt)
-
-
-# Installation
+## Installation
 
 *This project requires Python 3.6 or higher.*
 
@@ -37,7 +32,7 @@ After activating the Virtual Environment, run the following command to install t
 pip3 install -r requirements.txt
 ```
 
-# Migrations
+## Migrations
 
 With all the above set up, navigate to `quiz_dev/` folder, containing the file `manage.py` and run the following:
 ```bash
@@ -53,7 +48,7 @@ python3 manage.py makemigrations quiz
 python3 manage.py migrate quiz
 ```
 
-# Usage
+## Usage
 
 The commands required the Virtual Environment to be activated.
 
@@ -84,7 +79,7 @@ SSID: CLASSQUIZ
 PASSWORD: password
 
 
-# Terminal Firmware Installation
+## Terminal Firmware Installation
 
 To upload `firmware/firmware.ino` to the terminal through Arduino IDE, you'll need to do the following:
 
@@ -109,10 +104,15 @@ To upload `firmware/firmware.ino` to the terminal through Arduino IDE, you'll ne
 *NOTE:* Existing terminals are already updated.
 
 
-# ClassQuiz Development Blog
+## ClassQuiz Development Blog
 
 https://classquiz.wordpress.com/
 
 
-# FIXME
+## Credits
+
+**Author:** João Carlos da Silva moreira (jcmoreira@ua.pt)
+
+
+## FIXME
 
