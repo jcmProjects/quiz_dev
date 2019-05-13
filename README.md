@@ -2,7 +2,7 @@
 
 CLASSQUIZ is a system that aims to increase the participation of students within high attendance classes, through the carrying of surveys.
 
-The system developed consists of 3 mains parts:
+The system developed consists of 3 main parts:
 
 - Individual Terminals, through which the students can answer the surveys;
 
