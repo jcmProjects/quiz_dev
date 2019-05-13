@@ -52,6 +52,36 @@ python3 manage.py makemigrations quiz
 python3 manage.py migrate quiz
 ```
 
+# Usage
+
+The commands required the Virtual Environment to be activated.
+
+To create a new Super User:
+```bash
+python3 manage.py createsuperuser
+```
+
+To start the web application:
+```bash
+python3 manage.py runserver 0.0.0.0:8000
+```
+
+To access the main page, open the browser and navigate to `localhost:8000`.
+
+To access the admin page, open the browser and navigate to `localhost:8000/admin`.
+
+You'll need to create a new `Course` within the admin page. After that, you'll need to associate it with an existing `User` by creating a new `ProfileCourse`. 
+
+When creating a new `ProfileCourse`, if the `Profile` option appears to be blank, you'll need to add a first and last name to the `User`. This can be done by editing it's `Profile`.
+
+The CLASSQUIZ system will only work with it's dedicated terminals, and when connected to it's dedicated network.
+
+Network credentials:
+
+SSID: CLASSQUIZ
+
+PASSWORD: password
+
 
 # ClassQuiz development blog
 
