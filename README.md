@@ -119,6 +119,8 @@ To upload `quiz_dev/firmware/firmware.ino` to the terminal through Arduino IDE, 
 
 Since this project works without an Internet connection, JavaScript and CSS libraries usually obtained through CDN are already installed within the directory `django_quiz/quiz/static/quiz/`.
 
+The file `upload_template.xlsx` is merely a template to help users upload previously created quizzes.
+
 
 ## ClassQuiz Development Blog
 
