@@ -1,10 +1,8 @@
 # CLASSQUIZ
 
-**Tema:** Desenvolvimento e implementação em contexto realista do sistema CLASSQUIZ
+**Thesis Title:** Desenvolvimento e implementação em contexto realista do sistema CLASSQUIZ
 
-**Orientador:** Vítor Manuel Ferreira dos Santos
-
-**Autor:** João Carlos da Silva moreira (jcmoreira@ua.pt)
+**Author:** João Carlos da Silva moreira (jcmoreira@ua.pt)
 
 
 # Installation
