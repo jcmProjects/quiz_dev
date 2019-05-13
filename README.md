@@ -79,7 +79,7 @@ When creating a new `ProfileCourse`, if the `Profile` option appears to be blank
 
 The CLASSQUIZ system will only work with it's dedicated terminals, and when connected to it's dedicated network.
 
-Network credentials:
+**Network credentials:**
 
 SSID: CLASSQUIZ
 
