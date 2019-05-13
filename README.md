@@ -1,5 +1,16 @@
 # CLASSQUIZ
 
+CLASSQUIZ is a system that aims to increase the participation of students within high attendance classes, through the carrying of surveys.
+
+The system developed consists of 3 mains parts:
+
+- Individual Terminals, through which the students can answer the surveys;
+
+- A server, located within the classroom, which validates the students ID, their answers;
+
+- A web application, which allows the creating and execution of the surveys.
+
+
 ## Installation
 
 *This project requires Python 3.6 or higher.*
@@ -83,23 +94,23 @@ PASSWORD: password
 
 To upload `quiz_dev/firmware/firmware.ino` to the terminal through Arduino IDE, you'll need to do the following:
 
-1) Install Arduino IDE and open it
+1. Install Arduino IDE and open it
 
-2) Go to File > Preferences
+2. Go to File > Preferences
 
-3) Enter `http://arduino.esp8266.com/stable/package_esp8266com_index.json` into the “Additional Board Manager URLs” field, then click ”OK”
+3. Enter `http://arduino.esp8266.com/stable/package_esp8266com_index.json` into the “Additional Board Manager URLs” field, then click ”OK”
 
-4) Go to Tools > Board > Board Manager
+4. Go to Tools > Board > Board Manager
 
-5) Scroll down, select the ESP8266 board menu and install “esp8266”
+5. Scroll down, select the ESP8266 board menu and install “esp8266”
 
-6) Choose your ESP8266 board from Tools > Board > NodeMCU 1.0 (ESP-12E Module)
+6. Choose your ESP8266 board from Tools > Board > NodeMCU 1.0 (ESP-12E Module)
 
-7) Install the package MFRC522 *by GithubCommunity* from Sketch > Include Libraries > Manage Libraries
+7. Install the package MFRC522 *by GithubCommunity* from Sketch > Include Libraries > Manage Libraries
 
-8) Following the previous step, install the package ESP8266RestClient *by fabianofranca*
+8. Following the previous step, install the package ESP8266RestClient *by fabianofranca*
 
-7) Finally, re-open your Arduino IDE
+7. Finally, re-open your Arduino IDE
 
 *NOTE:* Existing terminals are already updated.
 
