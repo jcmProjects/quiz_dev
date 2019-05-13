@@ -12,11 +12,13 @@
 *This project requires Python 3.6 or higher.*
 
 **MySQL:**
+
 To install MySQL (version 5.6 or higher) on Ubuntu 18.04: https://dev.mysql.com/downloads/mysql/
 
 During installation, setup root's password as: password
 
 **Virtual Environment:**
+
 ```bash
 pip3 install virtualenv
 ```
@@ -31,6 +33,7 @@ source venv/bin/activate
 ```
 
 **Requirements:**
+
 After activating the Virtual Environment, run the following command to install the required packages:
 ```bash
 pip3 install -r requirements.txt
