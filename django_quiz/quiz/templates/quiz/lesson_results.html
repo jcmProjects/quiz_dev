@@ -1,0 +1,59 @@
+{% extends "quiz/base.html" %}
+{% load bootstrap %}
+{% block content %}
+
+    <!-- Results -->
+    <div id="myTable">
+        <table class="table table-hover table-striped">
+            <!-- NOT anonymous -->
+            {% for ans in answers %}
+                {% ifchanged ans.quiz_id.id %}
+                    <thead>
+                    <tr>
+                        <th>NMec</th>
+                        <th>Right Answers</th>
+                        <th>Wrong Answers</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for answer in answers %}
+                            {% if answer.right_ans == 0 and answer.wrong_ans == 0%}
+                             {% ifchanged answer.student %}
+                                {% if answer.total_right > answer.total_wrong %}
+                                <tr class="table-success">
+                                {% elif answer.total_right == answer.total_wrong %}
+                                <tr class="table-stripped">
+                                {% else %}
+                                <tr class="table-danger">
+                                {% endif %}
+                                    <td>{{ answer.student }}</td>
+                                    <td>{{ answer.total_right }}</td>
+                                    <td>{{ answer.total_wrong }}</td>
+                                </tr>
+                            {% endifchanged %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                {% endifchanged %}
+            {% endfor %}
+        </table>
+        <button class="btn btn-outline-info" id="export_btn">Export to Excel</button>
+    </div>
+    
+    <!-- https://redstapler.co/sheetjs-tutorial-html-table-to-excel/ -->
+    <script>
+        var wb = XLSX.utils.table_to_book(document.getElementById('myTable'), {sheet:"Sheet JS"});
+        var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+        function s2ab(s) {
+                        var buf = new ArrayBuffer(s.length);
+                        var view = new Uint8Array(buf);
+                        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+                        return buf;
+        }
+        $("#export_btn").click(function(){
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+        });
+    </script>
+
+
+{% endblock content %}

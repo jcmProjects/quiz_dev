@@ -115,6 +115,7 @@ class Session(models.Model):
     id = models.AutoField(primary_key=True)
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return f'Quiz ID: {self.quiz.id}, User: {self.quiz.author}, Date: {self.date_created}'
@@ -173,3 +174,37 @@ class Terminal(models.Model):
 
     def __str__(self):
         return self.mac
+
+
+class Lesson(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ManyToManyField(Course)
+    datetime = models.DateTimeField(default=timezone.now)
+
+    # Valid Answer
+    First = 'First'
+    Last = 'Last'
+    VALID_ANSWER_CHOICES = (
+        (First, 'First'),
+        (Last, 'Last'),
+    )
+    valid_ans = models.CharField(
+        max_length=10,
+        choices=VALID_ANSWER_CHOICES,
+        default=Last,
+    )
+
+
+class LessonStudent(models.Model):
+    id = models.AutoField(primary_key=True)
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE)
+    course = models.CharField(max_length=100, default='')
+    student = models.CharField(max_length=100)
+    right_ans = models.IntegerField()
+    wrong_ans = models.IntegerField()
+    total_right = models.IntegerField(default=0)
+    total_wrong = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'Course: {self.course}, Lesson: {self.lesson.datetime}, Student: {self.student}'

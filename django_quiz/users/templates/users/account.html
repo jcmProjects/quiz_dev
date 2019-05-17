@@ -9,19 +9,17 @@
                     <div class="media-body">
                         <h2 class="account-heading">{{ user.username }}</h2>
                         <p class="text-secondary">{{ user.email }}</p>
-                        <p class="text-secondary" id="lesson_info">  Active Lesson: {{lesson.course}} nº {{lesson.id}}</p>
-                        <button class="btn btn-primary btn-sm" type="button" id="lesson_btn">New Lesson</button>
                     </div>
                 </div>
                 <form method="POST" enctype="multipart/form-data">  <!-- enctype="multipart/form-data" IS NECESSARY!! -->
                     {% csrf_token %}    <!-- Security Token. It's necessary, otherwise the form won't work. -->
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">
-                            Profile Info
+                            Account Info
                         </legend>
-                        {{ u_form|bootstrap }}      <!-- User form -->
-                        {{ p_form|bootstrap }}      <!-- Profile form -->
-                        {{ quiz_form|bootstrap }}   <!-- Quiz form -->
+                        {{ a_form|bootstrap }}      <!-- Account form -->
+                        {{ pass_form|bootstrap }}   <!-- Password form -->
+                    </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Update</button>
                     </div>
@@ -29,23 +27,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("lesson_btn").addEventListener("click", function () {
-            $.ajax({
-                type: "POST",
-                url: "../../../quiz/new_lesson/",
-                dataType: 'json',
-                success: function(data, textStatus) {
-                    console.log(data);
-                    var course = data['course'];
-                    var id = data['id'];
-                    console.log(course);
-                    console.log(id);
-                    $(lesson_info).text("Active Lesson: " + course + " nº " + id);
-                }
-            });
-        }); 
-    </script>
 {% endblock content %}
-

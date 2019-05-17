@@ -89,7 +89,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'quiz_project',
-        'USER': 'classquiz',
+        'USER': 'root',
         'PASSWORD': 'password',
         'HOST': 'localhost',          # Or an IP Address that your DB is hosted on
         'PORT': '3306',

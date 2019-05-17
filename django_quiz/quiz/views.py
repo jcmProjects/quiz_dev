@@ -6,8 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.db.models import Sum
 
-from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal, Session
+from users.forms import ProfileQuizForm
+from .models import Quiz, Answer, Results, AnswerProcessing, Student, Terminal, Session, Lesson, LessonStudent
 from .forms import QuizForm, QuizUploadForm
 from .filters import QuizFilter
 from users.models import Course, ProfileCourse, Profile #, Session
@@ -198,19 +200,20 @@ def stop_quiz(request, *args, **kwargs):
     print(quiz.start_date)
 
     # Create Session
-    session = Session(quiz=quiz)
+    lesson = Lesson.objects.filter(user=quiz.author).latest('id')
+    session = Session(quiz=quiz, lesson=lesson)
     session.save()
 
-    # Check valid_ans (from 'Profile')
+    # Check valid_ans (from 'Lesson')
     profile = get_object_or_404(Profile, user_id=quiz.author)
-    print(profile.valid_ans)
+    print(lesson.valid_ans)
  
     # Anonymous = TRUE
     if quiz.anonymous == "Yes":
         print("ANONYMOUS QUIZ")
         # Deletes ALL but the first answer from each MAC
         lastSeenMAC = float('-Inf')
-        if profile.valid_ans == "Last":
+        if lesson.valid_ans == "Last":
             answers_processing = AnswerProcessing.objects.all().order_by('-id')
         else:
             answers_processing = AnswerProcessing.objects.all().order_by('id')
@@ -224,9 +227,9 @@ def stop_quiz(request, *args, **kwargs):
     if quiz.anonymous == "No":
         print("NOT anonymous")
         # Check 'nmec + mac' on every object of 'AnswerProcessing' model
-        # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Profile')
+        # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Lesson')
         lastSeenNMEC = float('-Inf')
-        if profile.valid_ans == "Last":
+        if lesson.valid_ans == "Last":
             answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
         else:
             answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
@@ -267,9 +270,39 @@ def stop_quiz(request, *args, **kwargs):
         # Save Results
         if quiz.anonymous == "No":
             result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student=answer.nmec, mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="No")
+            if evaluation == "right":
+                lesson_student = LessonStudent(lesson=lesson, course=quiz.course.last(), student=answer.nmec, right_ans=1, wrong_ans=0)
+            else:
+                lesson_student = LessonStudent(lesson=lesson, course=quiz.course.last(), student=answer.nmec, right_ans=0, wrong_ans=1)
         else:
             result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student="00000", mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="Yes")
         result.save()
+        lesson_student.save()
+
+    # LessonStudent
+    lesson_id = lesson
+    lesson_answers = LessonStudent.objects.filter(lesson=lesson_id).order_by('student')
+    print("Lesson Answers:")
+    print(lesson_answers)
+
+    student_nmec = float('-Inf')
+    for ans in lesson_answers:
+        
+        right_answer = LessonStudent.objects.filter(lesson=lesson_id).filter(student=ans.student).aggregate(Sum('right_ans'))
+        wrong_answer = LessonStudent.objects.filter(lesson=lesson_id).filter(student=ans.student).aggregate(Sum('wrong_ans'))
+        print("Number of right answers:")
+        total_right_ans=right_answer.get('right_ans__sum')  
+        print(total_right_ans) 
+        print("Number of wrong answers:")
+        total_wrong_ans=wrong_answer.get('wrong_ans__sum')
+        print(total_wrong_ans) 
+
+        if ans.student == student_nmec:
+            pass
+        else:
+            student_nmec = ans.student
+            student_score = LessonStudent(lesson=ans.lesson, course = ans.course, student=ans.student, right_ans=0, wrong_ans=0, total_right=total_right_ans, total_wrong=total_wrong_ans)
+            student_score.save()
 
     # Reset 'AnswerProcessing' model
     AnswerProcessing.objects.all().delete()
@@ -339,3 +372,110 @@ def quiz_response(request, *args, **kwargs):
     to_return = {'type': 'success', 'msg': 'done', 'code': 200}
     return HttpResponse(json.dumps(to_return), content_type='application/json')
 
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def new_lesson(request, *args, **kwargs):
+
+    print("NEW LESSON STARTED")
+
+    auth_user = request.user;
+    user_lessons = Lesson.objects.filter(user=auth_user)
+    print(user_lessons)
+
+    try:
+        lesson_id = user_lessons.order_by("-id")[0]
+    except user_lessons.DoesNotExist:
+        lesson_id = None
+
+    lesson = get_object_or_404(Lesson, id=lesson_id.id)
+
+    print(lesson.course.filter(lesson=lesson_id).last())
+
+    to_return = {'type': 'success', 'course': str(lesson.course.filter(lesson=lesson_id).last()), 'id': lesson.id, 'code': 200}
+    return HttpResponse(json.dumps(to_return), content_type='application/json')
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def get_quiz_course(request, *args, **kwargs):
+    
+    quiz_id = 0
+
+    # Get quiz object
+    body = request.body.decode('utf-8')
+    m = re.search('id=(.+?)&', body)
+    if m:
+        quiz_id = m.group(1)
+
+    # Update quiz.start_date
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+
+    print("printing quiz_course")
+    print(quiz.course.filter(quiz=quiz_id).last())
+
+    to_return = {'type': 'success',  'quiz_course': str(quiz.course.filter(quiz=quiz_id).last()), 'code': 200}
+    return HttpResponse(json.dumps(to_return), content_type='application/json')
+
+
+class LessonCreateView(LoginRequiredMixin, CreateView):
+    model = Lesson
+    fields = ['course', 'valid_ans']
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        auth_user = self.request.user;
+        context = super().get_context_data(**kwargs)
+        context['lesson_form'] = ProfileQuizForm(auth_user)
+        return context
+
+    def form_valid(self, lesson_form):
+        lesson_form.instance.user = self.request.user
+        lesson_form.save()
+        messages.add_message(self.request, messages.INFO, 'You have started a new Lesson.')
+        print("aqui")
+        return super().form_valid(lesson_form)
+        #redirect('/')
+
+
+class LessonsListView(ListView):
+    model = Lesson
+    template_name = 'quiz/lessons.html'   # <app>/<model>_<viewtype>.html
+    context_object_name = 'lessons'
+    ordering = ['-date_created']            # - to inverse ordering
+
+    def get_queryset(self):
+        auth_user = self.request.user;
+
+        return Lesson.objects.filter(user=auth_user)
+
+
+class LessonResultsListView(ListView):
+    model = LessonStudent #Results  
+    template_name = 'quiz/lesson_results.html' 
+    context_object_name = 'answers'
+    ordering = ['student']  
+
+    def get_queryset(self):
+        auth_user = self.request.user;
+        #session_id = self.kwargs['session']
+        lesson_id = self.kwargs['lesson']
+        
+        lesson_answers = LessonStudent.objects.filter(lesson=lesson_id).order_by('student', '-id')#.order_by('-id')
+        print("Lesson Answers:")
+        print(lesson_answers)
+
+        #for lesson in lesson_answers:
+            #print(session.id)
+            #print(session.quiz.id)
+
+        
+
+        q1 = Quiz.objects.filter(author=auth_user.id)
+        #q2 = Results.objects.filter(quiz_id_id__in=q1).filter(session_id=session_id)
+
+        #print(sessions)
+        #print(q2)
+        #print(q2)
+
+        return lesson_answers

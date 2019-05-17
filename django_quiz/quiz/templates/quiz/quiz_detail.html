@@ -250,6 +250,46 @@
                 startTimer2(timeRemaining2, display2);
                 
             });
+
+            window.onload = function(e){ 
+                document.getElementById("start_btn").disabled = true;
+
+                $.ajax({
+                    type: "POST",
+                    url: "../../../quiz/new_lesson/",
+                    dataType: 'json',
+                    success: function(data, textStatus) {
+                        console.log(data);
+                        var course = data['course'];
+                        var id = data['id'];
+                        console.log(course);
+                        console.log(id);
+                        var quiz_course = "{{ quiz.course.id }}";
+                        console.log(quiz_course);
+                        if (course == quiz_course) {
+                            document.getElementById("start_btn").disabled = false;
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: "../../../quiz/get_quiz_course/",
+                            data: { 'id': '{{ object.id }}', 'start_date': '{{ object.start_date }}', 'right_ans': '{{ object.right_ans }}' },
+                            dataType: 'json',
+                            success: function(data, textStatus) {
+                                console.log(data);
+                                var quiz_course = data['quiz_course'];
+                                console.log(quiz_course);
+                                if (course == quiz_course) {
+                                    document.getElementById("start_btn").disabled = false;
+                                }
+                            }
+                        });
+                    }
+                });
+
+
+
+            }
         </script>
 
     </main>

@@ -56,10 +56,14 @@
                     <div class="navbar-nav">
                         {% if user.is_authenticated %}
                             <!-- Quiz Dropdown Menu -->
+                            {% comment %} <button class="btn btn-light" type="button" id="lesson_btn">New Lesson</button> {% endcomment %}
                             <a class="nav-item nav-link" href="{% url 'quiz-create' %}">Create New</a>
                             <a class="nav-item nav-link" href="{% url 'user-quiz' user.username %}">Quizzes</a>
+                            <a class="nav-item nav-link" href="{% url 'lesson-create' %}">New Lesson</a>
+                            <a class="nav-item nav-link" href="{% url 'quiz-lessons' %}">Lessons</a>
                             <a class="nav-item nav-link" href="{% url 'quiz-sessions' %}">Results</a>
                             <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                            <a class="nav-item nav-link" href="{% url 'account' %}">Account</a>
                             <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                         {% else %}
                             <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
@@ -87,6 +91,20 @@
             </div>
         </div>
     </main>
+
+    {% comment %} <script>
+    /* Play_btn*/
+    document.getElementById("lesson_btn").addEventListener("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "../../../quiz/new_lesson/",
+            dataType: 'json',
+            success: function(data, textStatus) {
+                console.log(data);
+            }
+        });
+    });
+    </script> {% endcomment %}
 
     </body>
 </html>

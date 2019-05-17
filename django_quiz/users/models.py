@@ -44,18 +44,7 @@ class Profile(models.Model):
     course = models.ManyToManyField('Course', through='ProfileCourse')
     image = models.ImageField(default='default_profile_pic.jpg', upload_to='profile_pics')
 
-    # Valid Answer
-    First = 'First'
-    Last = 'Last'
-    VALID_ANSWER_CHOICES = (
-        (First, 'First'),
-        (Last, 'Last'),
-    )
-    valid_ans = models.CharField(
-        max_length=10,
-        choices=VALID_ANSWER_CHOICES,
-        default=Last,
-    )
+
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
