@@ -37,7 +37,7 @@ class QuizDetailView(DetailView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    fields = ['course', 'title', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image']
+    fields = ['course', 'title', 'question', 'ansA', 'ansB', 'ansC', 'ansD', 'ansE', 'right_ans', 'duration', 'image', 'anonymous']
 
     def get_context_data(self, **kwargs):
         auth_user = self.request.user;
@@ -218,10 +218,10 @@ def stop_quiz(request, *args, **kwargs):
         else:
             answers_processing = AnswerProcessing.objects.all().order_by('id')
         for answer in answers_processing:
-            if answer.mac == lastSeenMAC:
-                answer.delete()
-            else:
-                lastSeenMAC = answer.mac
+           if answer.mac == lastSeenMAC:
+               answer.delete()
+           else:
+               lastSeenMAC = answer.mac
 
     # Anonymous = FALSE
     if quiz.anonymous == "No":
@@ -230,11 +230,11 @@ def stop_quiz(request, *args, **kwargs):
         # Deletes ALL but the last/first answer from each NMEC (based on 'valid_ans' from 'Lesson')
         lastSeenNMEC = float('-Inf')
         if lesson.valid_ans == "Last":
-            answers_processing_inverse = AnswerProcessing.objects.all().order_by('-id')
+            ans_inverse = AnswerProcessing.objects.all().order_by('-id')
         else:
-            answers_processing_inverse = AnswerProcessing.objects.all().order_by('id')
+            ans_inverse = AnswerProcessing.objects.all().order_by('id')
 
-        for answer in answers_processing_inverse:
+        for answer in ans_inverse:
             if answer.nmec == "00000":
                 answer.delete()
             elif answer.nmec == lastSeenNMEC:
@@ -274,10 +274,11 @@ def stop_quiz(request, *args, **kwargs):
                 lesson_student = LessonStudent(lesson=lesson, course=quiz.course.last(), student=answer.nmec, right_ans=1, wrong_ans=0)
             else:
                 lesson_student = LessonStudent(lesson=lesson, course=quiz.course.last(), student=answer.nmec, right_ans=0, wrong_ans=1)
+            lesson_student.save()
         else:
             result = Results(quiz_id=Quiz.objects.get(id=quiz_id), student="00000", mac_address=answer.mac, answer=answer.ans, time=seconds, evaluation=evaluation, session=session, anonymous="Yes")
         result.save()
-        lesson_student.save()
+        #lesson_student.save()
 
     # LessonStudent
     lesson_id = lesson
@@ -447,7 +448,7 @@ class LessonsListView(ListView):
     def get_queryset(self):
         auth_user = self.request.user;
 
-        return Lesson.objects.filter(user=auth_user)
+        return Lesson.objects.filter(user=auth_user).order_by('-id')
 
 
 class LessonResultsListView(ListView):

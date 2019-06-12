@@ -44,8 +44,6 @@ class Profile(models.Model):
     course = models.ManyToManyField('Course', through='ProfileCourse')
     image = models.ImageField(default='default_profile_pic.jpg', upload_to='profile_pics')
 
-
-
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
